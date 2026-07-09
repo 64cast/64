@@ -1,0 +1,15 @@
+# Old bookmarks / links to the previous homepage path
+/home / 301
+/home.html / 301
+
+# Current stock, pre-order, and new-arrivals are now separate physical pages
+# (current-stock/index.html, pre-order/index.html, new-arrivals/index.html).
+# These rules only cover their own brand sub-routes (e.g. /pre-order/mini-gt) —
+# no cross-section redirects between the three.
+/current-stocks /current-stock/ 301
+/pre-orders /pre-order/ 301
+/pre-order/* /pre-order/ 200
+/new-arrivals/* /new-arrivals/ 200
+
+# Everything else (e.g. /mini-gt, /pop-race) is a brand-filtered shop page
+/* /current-stock/ 200
