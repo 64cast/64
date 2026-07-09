@@ -11,5 +11,7 @@
 /pre-order/* /pre-order/ 200
 /new-arrivals/* /new-arrivals/ 200
 
-# Everything else (e.g. /mini-gt, /pop-race) is a brand-filtered shop page
-/* /current-stock/ 200
+# Single-segment paths not otherwise matched (e.g. /mini-gt, /pop-race) are
+# brand-filtered shop pages. Restricted to exactly one segment so this does
+# NOT swallow "/" (the homepage) the way a bare "/*" wildcard would.
+/:brand /current-stock/ 200
