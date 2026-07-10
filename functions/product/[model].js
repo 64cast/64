@@ -1,39 +1,47 @@
 
+const DEFAULT_PRODUCT_API_URL = "https://64cast-products-api.trailsec5.workers.dev";
+const FALLBACK_IMAGE = "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/64_LOGO_Falcon.png";
+
 export async function onRequest(context) {
   const { request, params, env } = context;
   const url = new URL(request.url);
   const model = decodeURIComponent(params.model || "").trim();
 
   const origin = url.origin;
-  const indexUrl = new URL("/current-stock/", origin);
+  // The product catalog is only embedded on the homepage (EMBEDDED_NEW_PRODUCT_LIST) —
+  // current-stock/pre-order/new-arrivals pages fetch it client-side and have nothing to scrape.
+  const indexUrl = new URL("/", origin);
   const indexRes = await env.ASSETS.fetch(new Request(indexUrl.toString(), request));
   let html = await indexRes.text();
 
   const fallback = {
     title: model ? `64CAST — ${model}` : "64CAST",
     description: "64CAST product preview.",
-    image: `${origin}/assets/falcon.png`,
+    image: FALLBACK_IMAGE,
     url: `${origin}/product/${encodeURIComponent(model)}`
   };
 
   let product = null;
 
+  // Try the live API first — it's the freshest source. Fall back to the homepage's
+  // embedded backup catalogue only if the live fetch fails or times out.
+  const apiUrl = env.PRODUCT_API_URL || DEFAULT_PRODUCT_API_URL;
   try {
-    const match =
-      html.match(/EMBEDDED_NEW_PRODUCT_LIST\s*=\s*(\[[\s\S]*?\]);/) ||
-      html.match(/PRODUCTS\s*=\s*(\[[\s\S]*?\]);/);
-    if (match) {
-      const list = JSON.parse(match[1]);
-      product = list.find((p) => productModel(p) === model) || null;
-    }
+    const apiRes = await fetch(apiUrl, { headers: { "Accept": "application/json" } });
+    const data = await apiRes.json();
+    const list = Array.isArray(data) ? data : (data.products || data.data || []);
+    product = list.find((p) => productModel(p) === model) || null;
   } catch (e) {}
 
-  if (!product && env.PRODUCT_API_URL) {
+  if (!product) {
     try {
-      const apiRes = await fetch(env.PRODUCT_API_URL, { headers: { "Accept": "application/json" } });
-      const data = await apiRes.json();
-      const list = Array.isArray(data) ? data : (data.products || data.data || []);
-      product = list.find((p) => productModel(p) === model) || null;
+      const match =
+        html.match(/EMBEDDED_NEW_PRODUCT_LIST\s*=\s*(\[[\s\S]*?\]);/) ||
+        html.match(/PRODUCTS\s*=\s*(\[[\s\S]*?\]);/);
+      if (match) {
+        const list = JSON.parse(match[1]);
+        product = list.find((p) => productModel(p) === model) || null;
+      }
     } catch (e) {}
   }
 
@@ -77,7 +85,7 @@ function productPrice(p) {
 function productImage(p, origin) {
   const base = "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/";
   let img = String((p && (p.IMG1 || p.img1 || p.image || p.imageUrl || p["IMAGE URL"])) || "").trim();
-  if (!img) return `${origin}/assets/falcon.png`;
+  if (!img) return FALLBACK_IMAGE;
   if (/^https?:\/\//i.test(img)) return img;
   return base + img.replace(/^\/+/, "");
 }
