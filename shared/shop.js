@@ -1,4 +1,4 @@
-window.__64CAST_PAGE_SIZE=24;
+// Page size is set responsively further down (25 desktop / 24 mobile) — do not hardcode it here.
 
 
 (function(){

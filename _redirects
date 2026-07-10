@@ -13,6 +13,10 @@
 /admin-8822/ /admin-8822/index.html 200
 /admin-8822/* /admin-8822/index.html 200
 
+# FAQ page
+/faq /faq/index.html 200
+/faq/ /faq/index.html 200
+
 # Current stock, pre-order, and new-arrivals are now separate physical pages
 # (current-stock/index.html, pre-order/index.html, new-arrivals/index.html).
 # These rules only cover their own brand sub-routes (e.g. /pre-order/mini-gt) —
