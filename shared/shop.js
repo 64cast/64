@@ -80,6 +80,7 @@ var CART_KEY = '64cast_cart_v1';
 var cart = loadSavedCart();
 var activeBrand = PAGE_BRAND || 'All';
 var activeCarBrand = 'All';
+var brandFilterManuallySet = false;
 var activeStatusFilter = (PAGE_BRAND_SLUG && !/^\/(current-stock|current-stocks|pre-order|pre-orders|preorders|new-arrivals)(\/|$)/i.test(window.location.pathname)) ? 'All' : (PAGE_PRE_ORDERS ? 'preorder' : 'currentstock');
 var activeSort = 'featured';
 var homeStatusFilter = 'current';
@@ -597,23 +598,16 @@ function buildFilterTabs(){
   document.querySelectorAll('[data-brand]').forEach(function(btn){
     btn.addEventListener('click', function(){
       var selectedBrand = this.dataset.brand || 'All';
-      closeFilterDrawer();
-      if(selectedBrand === 'All'){
-        var allPath = PAGE_PRE_ORDERS ? '/pre-order' : (PAGE_NEW_ARRIVALS ? '/new-arrivals' : '/');
-        if(window.location.pathname !== allPath) window.location.href = allPath;
-        else { activeBrand = 'All'; updateActiveFilterUI(); renderGrid(); }
-        return;
-      }
-      var slug = brandSlug(selectedBrand);
-      if(slug && slug !== PAGE_BRAND_SLUG){
-        window.location.href = PAGE_PRE_ORDERS ? ('/pre-order/' + slug) : (PAGE_NEW_ARRIVALS ? ('/new-arrivals/' + slug) : ('/current-stock/' + slug));
-        return;
-      }
+      // Brand chips filter the current listing in place — no page navigation,
+      // even when the current URL is scoped to a specific brand (e.g. /current-stock/mini-gt).
+      // Selecting a chip here always takes over from the URL-based scope.
+      brandFilterManuallySet = true;
       activeBrand = selectedBrand;
       document.querySelectorAll('[data-brand]').forEach(function(b){b.classList.remove('active');});
       this.classList.add('active');
       updateActiveFilterUI();
       renderGrid();
+      closeFilterDrawer();
     });
   });
 
@@ -693,6 +687,7 @@ function clearAllFilters(){
   activeBrand = PAGE_BRAND || 'All';
   activeCarBrand = 'All';
   activeSort = 'featured';
+  brandFilterManuallySet = false;
   document.querySelectorAll('[data-brand]').forEach(function(b){
     var isActive = !PAGE_BRAND_SLUG ? b.dataset.brand==='All' : brandSlug(b.dataset.brand)===PAGE_BRAND_SLUG;
     b.classList.toggle('active', isActive);
@@ -724,7 +719,7 @@ function getFiltered(){
   var isRootBrandRoute = !!PAGE_BRAND_SLUG && !isExplicitCurrentRoute && !isExplicitPreRoute && !PAGE_NEW_ARRIVALS;
 
   var list = PRODUCTS.filter(function(p){
-    var pageBrandMatch = !PAGE_BRAND_SLUG || brandSlug(p.brand) === PAGE_BRAND_SLUG;
+    var pageBrandMatch = brandFilterManuallySet || !PAGE_BRAND_SLUG || brandSlug(p.brand) === PAGE_BRAND_SLUG;
     var bm = activeBrand==='All' || p.brand===activeBrand;
     var cbm = activeCarBrand==='All' || p.carbrand===activeCarBrand;
     var sm = !q || p.name.toLowerCase().indexOf(q)>=0 || p.brand.toLowerCase().indexOf(q)>=0 || p.model.toLowerCase().indexOf(q)>=0;
