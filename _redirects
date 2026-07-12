@@ -2,13 +2,13 @@
 /home / 301
 /home.html / 301
 
-# Admin login pages — must come before the brand list below, otherwise
+# Admin login page — must come before the brand list below, otherwise
 # "/admin" would match nothing explicit and fall through incorrectly.
 # Both slash variants are listed explicitly: some hosts treat "/admin-8822"
 # and "/admin-8822/" as distinct paths, and a missing rule for either one
 # lets the request fall through to the catch-all shop routes below.
-/admin /admin.html 200
-/admin/ /admin.html 200
+/admin /admin-8822/index.html 200
+/admin/ /admin-8822/index.html 200
 /admin-8822 /admin-8822/index.html 200
 /admin-8822/ /admin-8822/index.html 200
 /admin-8822/* /admin-8822/index.html 200
