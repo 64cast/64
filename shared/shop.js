@@ -83,7 +83,6 @@ var activeCarBrand = 'All';
 var brandFilterManuallySet = false;
 var activeStatusFilter = (PAGE_BRAND_SLUG && !/^\/(current-stock|current-stocks|pre-order|pre-orders|preorders|new-arrivals)(\/|$)/i.test(window.location.pathname)) ? 'All' : (PAGE_PRE_ORDERS ? 'preorder' : 'currentstock');
 var activeSort = 'featured';
-var homeStatusFilter = 'current';
 var admImgs = ['','','',''];
 var admImgPos = ['center','center']; // position preset for Main and Side images only
 var admImgZoom = [100,100]; // zoom percentage for Main and Side images only, 100 = no zoom
@@ -739,9 +738,7 @@ function getFiltered(){
       else if(activeStatusFilter === 'currentstock' || activeStatusFilter === 'currentstock') routeStatusMatch = !isPre;
       else routeStatusMatch = true;
     }else{
-      if(homeStatusFilter === 'preorder') routeStatusMatch = isPre;
-      else if(homeStatusFilter === 'all') routeStatusMatch = true;
-      else routeStatusMatch = !isPre;
+      routeStatusMatch = !isPre;
     }
     return pageBrandMatch && bm && cbm && sm && routeStatusMatch;
   });
@@ -1173,7 +1170,10 @@ async function orderViaWhatsApp(){
 function productShareUrl(p){
   var model = (p && (p.model || p.modelNo || p['MODEL NO.'])) || '';
   try{ if(!model && typeof cartModel === 'function') model = cartModel(p); }catch(e){}
-  return window.location.origin + '/product/' + encodeURIComponent(String(model || '').trim());
+  // Query-string form works with zero server routing (index.html loads directly and
+  // openSharedProductFromUrl() reads ?product=). The old /product/<model> path form
+  // 404'd because there is no matching _redirects rule or SPA fallback for it.
+  return window.location.origin + '/?product=' + encodeURIComponent(String(model || '').trim());
 }
 
 function absoluteUrl(value){
@@ -1397,31 +1397,8 @@ function openSharedProductFromUrl(){
   }catch(e){}
 }
 
-function initStockSwitch(){
-  var el = document.getElementById('stockSwitch');
-  if(!el) return;
-  var isPlainHome = !PAGE_BRAND_SLUG && !PAGE_NEW_ARRIVALS && !PAGE_PRE_ORDERS
-    && !/^\/(current-stock|current-stocks|pre-order|pre-orders|preorders)(\/|$)/i.test(window.location.pathname);
-  if(!isPlainHome){ el.style.display = 'none'; return; }
-  function markActive(view){
-    el.querySelectorAll('.stock-switch-btn').forEach(function(b){
-      b.classList.toggle('active', b.getAttribute('data-stock-view') === view);
-    });
-  }
-  function setActive(view){
-    homeStatusFilter = view;
-    markActive(view);
-    renderGrid();
-  }
-  el.querySelectorAll('.stock-switch-btn').forEach(function(b){
-    b.addEventListener('click', function(){ setActive(this.getAttribute('data-stock-view')); });
-  });
-  markActive(homeStatusFilter);
-}
-
 function initShop(){
   applyPageBrandMeta();
-  initStockSwitch();
   fetchProducts(function(){
     reconcileCartWithProducts();
     updateCartUI();
