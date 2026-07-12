@@ -25,6 +25,9 @@ const DEFAULT_TOKEN_TTL_HOURS = 8;
 const DEFAULT_KV_KEY = 'products';
 const DEFAULT_PENDING_KV_KEY = 'pending_orders';
 const DEFAULT_COMMUNITY_KV_KEY = 'community_signups';
+const MAX_LOGIN_ATTEMPTS = 5;
+const LOGIN_WINDOW_MS = 15 * 60 * 1000;
+const LOGIN_LOCKOUT_MS = 15 * 60 * 1000;
 const PROTECTED_ACTIONS = new Set([
   'update',
   'delete',
@@ -317,18 +320,107 @@ function assertAdminSecrets(env) {
 
 async function handleAdminLogin(body, request, env) {
   assertAdminSecrets(env);
+  const ip = getClientIp(request);
+  await checkLoginRateLimit(env, ip);
   const password = String(body.password || '');
   const ok = timingSafeEqual(password, env.ADMIN_PASSWORD);
   if (!ok) {
+    await recordFailedLogin(env, ip);
     await delay(250);
     return json({ ok: false, error: 'Invalid password' }, 401, request, env);
   }
+  await clearLoginAttempts(env, ip);
   const tokenInfo = await createAdminToken(env);
   return json({ ok: true, token: tokenInfo.token, expiresAt: tokenInfo.expiresAt }, 200, request, env);
 }
 
 function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function getClientIp(request) {
+  return request.headers.get('CF-Connecting-IP') || request.headers.get('cf-connecting-ip') || (request.headers.get('x-forwarded-for') || '').split(',')[0].trim() || 'unknown';
+}
+
+async function ensureLoginAttemptsD1Schema(env) {
+  if (!hasD1(env)) return;
+  await env.DB.prepare(`
+    CREATE TABLE IF NOT EXISTS login_attempts (
+      ip TEXT PRIMARY KEY,
+      count INTEGER DEFAULT 0,
+      window_start TEXT,
+      locked_until TEXT
+    )
+  `).run();
+}
+
+async function getLoginAttempts(env, ip) {
+  if (hasD1(env)) {
+    await ensureLoginAttemptsD1Schema(env);
+    const row = await env.DB.prepare('SELECT count, window_start, locked_until FROM login_attempts WHERE ip = ?').bind(ip).first();
+    return row ? { count: row.count, windowStart: Number(row.window_start), lockedUntil: row.locked_until ? Number(row.locked_until) : null } : null;
+  }
+  if (hasKV(env)) {
+    const raw = await env.PRODUCTS_KV.get('login_attempts:' + ip);
+    return raw ? JSON.parse(raw) : null;
+  }
+  return null;
+}
+
+async function setLoginAttempts(env, ip, data) {
+  if (hasD1(env)) {
+    await ensureLoginAttemptsD1Schema(env);
+    await env.DB.prepare(
+      `INSERT INTO login_attempts (ip, count, window_start, locked_until) VALUES (?, ?, ?, ?)
+       ON CONFLICT(ip) DO UPDATE SET count = excluded.count, window_start = excluded.window_start, locked_until = excluded.locked_until`
+    ).bind(ip, data.count, String(data.windowStart), data.lockedUntil ? String(data.lockedUntil) : null).run();
+    return;
+  }
+  if (hasKV(env)) {
+    await env.PRODUCTS_KV.put('login_attempts:' + ip, JSON.stringify(data), { expirationTtl: 3600 });
+    return;
+  }
+  // No storage binding configured - rate limiting is a no-op (login still works,
+  // just without lockout tracking). Matches the rest of the Worker's graceful
+  // degradation when neither DB nor PRODUCTS_KV is bound.
+}
+
+async function clearLoginAttempts(env, ip) {
+  if (hasD1(env)) {
+    await ensureLoginAttemptsD1Schema(env);
+    await env.DB.prepare('DELETE FROM login_attempts WHERE ip = ?').bind(ip).run();
+    return;
+  }
+  if (hasKV(env)) {
+    await env.PRODUCTS_KV.delete('login_attempts:' + ip);
+    return;
+  }
+}
+
+async function checkLoginRateLimit(env, ip) {
+  const data = await getLoginAttempts(env, ip);
+  if (!data) return;
+  const now = Date.now();
+  if (data.lockedUntil && Number(data.lockedUntil) > now) {
+    const waitMin = Math.max(1, Math.ceil((Number(data.lockedUntil) - now) / 60000));
+    throw new HttpError(429, `Too many failed login attempts. Try again in ${waitMin} minute${waitMin === 1 ? '' : 's'}.`);
+  }
+}
+
+async function recordFailedLogin(env, ip) {
+  const now = Date.now();
+  const existing = await getLoginAttempts(env, ip);
+  const data = existing || { count: 0, windowStart: now, lockedUntil: null };
+  if (now - Number(data.windowStart) > LOGIN_WINDOW_MS) {
+    data.count = 0;
+    data.windowStart = now;
+    data.lockedUntil = null;
+  }
+  data.count = Number(data.count) + 1;
+  if (data.count >= MAX_LOGIN_ATTEMPTS) {
+    data.lockedUntil = now + LOGIN_LOCKOUT_MS;
+  }
+  await setLoginAttempts(env, ip, data);
 }
 
 function hasD1(env) {
