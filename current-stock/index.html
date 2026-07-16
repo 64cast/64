@@ -77,7 +77,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
         <div style="height:1px;background:rgba(255,255,255,.5);margin:14px 0;"></div>
         <div style="font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:8px;">Status</div>
         <label style="display:flex;align-items:center;gap:6px;font-size:.68rem;color:#333;margin-bottom:6px;cursor:pointer;"><input type="checkbox" id="statusInStock" checked> In Stock</label>
-        <label style="display:flex;align-items:center;gap:6px;font-size:.68rem;color:#333;cursor:pointer;"><input type="checkbox" id="statusReady" checked> Ready to Collect</label>
+        <a href="/pre-order" style="display:flex;align-items:center;gap:6px;font-size:.68rem;color:#f0701e;font-weight:600;cursor:pointer;">Pre-Order →</a>
         
       </div>
 
@@ -86,7 +86,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
           <div style="font-size:1.3rem;letter-spacing:1px;text-transform:uppercase;font-weight:400;">Current Stock</div>
           <span id="resultCount" style="font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:#888;">(—)</span>
         </div>
-        <div id="stockGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;padding:8px 24px 28px;"></div>
+        <div id="stockGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:8px 24px 28px;"></div>
+        <div id="loadMoreWrap" style="display:none;justify-content:center;padding:0 24px 28px;"><button id="loadMoreBtn" class="glossW" style="height:44px;padding:0 28px;border-radius:999px;font-size:.66rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;">Load More Models</button></div>
       </div>
 
     </div>
@@ -186,6 +187,8 @@ const brandLogos = {"miniGt":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEQA
 let allProducts = [];
 let activeBrand = 'All';
 let cart = [];
+let visibleCount = 16;
+const PAGE_SIZE = 16;
 
 function resolveImg(p){
   const raw = p['REF IMG'] || p.IMG1 || '';
@@ -201,7 +204,6 @@ function passesStatus(p){
   if (SHOW_STATUS_TOGGLE) {
     const inStockOn = document.getElementById('statusInStock')?.checked;
     const readyOn = document.getElementById('statusReady')?.checked;
-    if (s === 'readytocollect') return readyOn;
     return inStockOn;
   }
   return true;
@@ -211,7 +213,7 @@ function renderBrandRail(){
   const brands = ['All', ...Array.from(new Set(allProducts.filter(p => STATUS_FILTER.includes((p.STATUS||'').toLowerCase())).map(p=>p.BRAND).filter(Boolean))).sort()];
   const wrap = document.getElementById('brandRail');
   wrap.innerHTML = brands.map(b => `<button class="railitem ${activeBrand===b?'active':''}" data-brand="${b}">${b}</button>`).join('');
-  wrap.querySelectorAll('[data-brand]').forEach(btn => btn.addEventListener('click', () => { activeBrand = btn.dataset.brand; renderBrandRail(); renderGrid(); }));
+  wrap.querySelectorAll('[data-brand]').forEach(btn => btn.addEventListener('click', () => { activeBrand = btn.dataset.brand; renderBrandRail(); resetPaging(); }));
 }
 
 function updatePriceLabel(){
@@ -228,8 +230,11 @@ function renderGrid(){
     .filter(p => { const price = Number(p.PRICE||0); return price >= priceMin && price <= priceMax; })
     .filter(p => !q || (p['PRODUCT NAME']||'').toLowerCase().includes(q) || (p.BRAND||'').toLowerCase().includes(q) || (p.CARBRAND||'').toLowerCase().includes(q));
   document.getElementById('resultCount').textContent = '(' + filtered.length + ')';
+  const visible = filtered.slice(0, visibleCount);
+  const loadMoreWrap = document.getElementById('loadMoreWrap');
+  loadMoreWrap.style.display = filtered.length > visibleCount ? 'flex' : 'none';
   const grid = document.getElementById('stockGrid');
-  grid.innerHTML = filtered.length ? filtered.map(p => {
+  grid.innerHTML = visible.length ? visible.map(p => {
     const img = resolveImg(p);
     const name = p['PRODUCT NAME'] || '';
     const qty = Number(p.QTY||0);
@@ -254,6 +259,7 @@ function renderGrid(){
   }).join('') : '<div style="grid-column:1/-1;text-align:center;padding:60px 0;color:#999;font-size:.85rem;">No pieces match that search/filter.</div>';
   grid.querySelectorAll('[data-add]:not([disabled])').forEach(btn => btn.addEventListener('click', () => addToCart(JSON.parse(btn.dataset.add))));
 }
+function resetPaging(){ visibleCount = PAGE_SIZE; renderGrid(); }
 
 function addToCart(product){
   const existing = cart.find(i => i.id === product.id);
@@ -294,18 +300,17 @@ document.getElementById('navOverlay').addEventListener('click', e => { if (e.tar
 document.getElementById('cartToggle').addEventListener('click', openCart);
 document.getElementById('cartClose').addEventListener('click', closeCart);
 document.getElementById('cartOverlay').addEventListener('click', e => { if (e.target.id === 'cartOverlay') closeCart(); });
-document.getElementById('searchInput').addEventListener('input', renderGrid);
+document.getElementById('searchInput').addEventListener('input', resetPaging);
 document.getElementById('priceMin').addEventListener('input', () => {
   if (Number(document.getElementById('priceMin').value) > Number(document.getElementById('priceMax').value)) document.getElementById('priceMin').value = document.getElementById('priceMax').value;
-  updatePriceLabel(); renderGrid();
+  updatePriceLabel(); resetPaging();
 });
 document.getElementById('priceMax').addEventListener('input', () => {
   if (Number(document.getElementById('priceMax').value) < Number(document.getElementById('priceMin').value)) document.getElementById('priceMax').value = document.getElementById('priceMin').value;
-  updatePriceLabel(); renderGrid();
+  updatePriceLabel(); resetPaging();
 });
 if (SHOW_STATUS_TOGGLE) {
-  document.getElementById('statusInStock').addEventListener('change', renderGrid);
-  document.getElementById('statusReady').addEventListener('change', renderGrid);
+  document.getElementById('statusInStock').addEventListener('change', resetPaging);
 }
 document.getElementById('joinBtn').addEventListener('click', () => {
   const num = document.getElementById('newsletterInput').value.trim();
@@ -334,6 +339,7 @@ fetch(API_URL, { method: 'GET', cache: 'no-store' })
     document.getElementById('priceMax').value = maxPrice;
     updatePriceLabel();
     renderBrandRail(); renderGrid();
+    document.getElementById('loadMoreBtn').addEventListener('click', () => { visibleCount += PAGE_SIZE; renderGrid(); });
   })
   .catch(() => {
     document.getElementById('stockGrid').innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 0;color:#999;font-size:.85rem;">Could not load live stock. Please refresh or message us on WhatsApp.</div>';
