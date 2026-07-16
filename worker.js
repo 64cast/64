@@ -43,7 +43,7 @@ const PROTECTED_ACTIONS = new Set([
   'delete-community-signup',
   'upload-image'
 ]);
-const ALLOWED_STATUSES = new Set(['currentstock', 'readytocollect', 'instock', 'preorder', 'sold']);
+const ALLOWED_STATUSES = new Set(['currentstock', 'readytocollect', 'instock', 'preorder', 'sold', 'chase', 'limited', 'new', 'comingsoon', 'lastone']);
 const ALLOWED_POSITIONS = new Set(['center', 'top', 'bottom', 'left', 'right', 'top left', 'top right', 'bottom left', 'bottom right']);
 
 class HttpError extends Error {

@@ -59,10 +59,13 @@ function routeInfo(){
 function routeBrandSlug(){ return routeInfo().brandSlug; }
 
 var PAGE_ROUTE = routeInfo();
-var PAGE_BRAND_SLUG = PAGE_ROUTE.brandSlug;
+// Brand can arrive either as a path slug (/current-stock/mini-gt) or, more simply,
+// as a ?brand=Mini GT query param (used by the homepage brand tiles).
+var QS_BRAND = (new URLSearchParams(window.location.search).get('brand') || '').trim();
+var PAGE_BRAND_SLUG = PAGE_ROUTE.brandSlug || (QS_BRAND ? brandSlug(QS_BRAND) : '');
 var PAGE_NEW_ARRIVALS = PAGE_ROUTE.section === 'new-arrivals';
 var PAGE_PRE_ORDERS = PAGE_ROUTE.section === 'pre-orders';
-var PAGE_BRAND = (window.__64CAST_BRAND || brandTitleFromSlug(PAGE_BRAND_SLUG) || '').toString().trim();
+var PAGE_BRAND = (window.__64CAST_BRAND || QS_BRAND || brandTitleFromSlug(PAGE_BRAND_SLUG) || '').toString().trim();
 var isAdmin = new URLSearchParams(window.location.search).has(ADMIN_KEY);
 setTimeout(function(){
   var t=document.getElementById('listingTitle');
@@ -735,7 +738,7 @@ function getFiltered(){
       routeStatusMatch = !isPre;
     }else if(isRootBrandRoute){
       if(activeStatusFilter === 'preorder') routeStatusMatch = isPre;
-      else if(activeStatusFilter === 'currentstock' || activeStatusFilter === 'currentstock') routeStatusMatch = !isPre;
+      else if(activeStatusFilter === 'currentstock') routeStatusMatch = !isPre;
       else routeStatusMatch = true;
     }else{
       routeStatusMatch = !isPre;
@@ -1214,8 +1217,6 @@ async function shareProduct(model){
 }
 
 function openCheckout(){ orderViaWhatsApp(); }
-function closeCheckout(){}
-function buildMsgWithDetails(items, details){ return buildMsg(items); }
 function submitCheckout(){ orderViaWhatsApp(); }
 
 var previewModel = null;
@@ -1743,7 +1744,7 @@ function admBuildSlots(){
 
       var inp=document.createElement('input');
       inp.type='text';
-      inp.placeholder='https://wdcollect.com/images/example.jpg';
+      inp.placeholder='https://64cast.com/PI/example-01.jpg';
       inp.value=admImgs[idx]||'';
       inp.addEventListener('input',function(){
         admImgs[idx]=this.value.trim();

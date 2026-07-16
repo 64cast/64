@@ -23,6 +23,7 @@
 # no cross-section redirects between the three.
 /current-stocks /current-stock/ 301
 /pre-orders /pre-order/ 301
+/current-stock/* /current-stock/ 200
 /pre-order/* /pre-order/ 200
 /new-arrivals/* /new-arrivals/ 200
 
