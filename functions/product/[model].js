@@ -37,7 +37,8 @@ export async function onRequest(context) {
     try {
       const match =
         html.match(/EMBEDDED_NEW_PRODUCT_LIST\s*=\s*(\[[\s\S]*?\]);/) ||
-        html.match(/PRODUCTS\s*=\s*(\[[\s\S]*?\]);/);
+        html.match(/PRODUCTS\s*=\s*(\[[\s\S]*?\]);/) ||
+        html.match(/allProducts\s*=\s*(\[[\s\S]*?\]);/);
       if (match) {
         const list = JSON.parse(match[1]);
         product = list.find((p) => productModel(p) === model) || null;
