@@ -258,7 +258,9 @@ const fallbackImg = "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.
 
 let allProducts = [];
 const QS_BRAND = (new URLSearchParams(window.location.search).get('brand') || '').trim();
+const QS_SEARCH = (new URLSearchParams(window.location.search).get('q') || '').trim();
 let activeBrand = QS_BRAND || 'All';
+if (QS_SEARCH) document.getElementById('searchInput').value = QS_SEARCH;
 let cart = [];
 let visibleCount = 20;
 const PAGE_SIZE = 20;
@@ -388,12 +390,12 @@ function openProductDetail(product){
   const detailContent = document.getElementById('detailContent');
   const name = product['PRODUCT NAME'] || '';
   const resolveAny = raw => !raw ? '' : (/^https?:|^data:/.test(raw) ? raw : IMAGE_BASE_URL + raw);
-  const imgs = [resolveImg(product), resolveImg2(product), resolveAny(product.IMG3), resolveAny(product.IMG4)].filter(Boolean);
+  const imgs = [...new Set([resolveImg(product), resolveImg2(product), resolveAny(product.IMG3), resolveAny(product.IMG4)].filter(Boolean))];
   let curImg = 0;
   detailContent.innerHTML = `
     <div>
       <div id="detailImgWrap" style="aspect-ratio:1/1;background:#fff;border-radius:12px;overflow:hidden;margin-bottom:20px;position:relative;touch-action:pan-y;">
-        <img id="detailImg" src="${imgs[0]}" alt="${name}" style="width:100%;height:100%;object-fit:cover;">
+        <img id="detailImg" src="${imgs[0]}" alt="${name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.onerror=null;this.src='${fallbackImg}'">
         ${imgs.length > 1 ? `
         <button id="detailPrevBtn" aria-label="Previous image" style="position:absolute;top:50%;left:10px;transform:translateY(-50%);width:30px;height:30px;border-radius:999px;border:none;background:rgba(255,255,255,.8);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15);"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#0a0a0a;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M15 18l-6-6 6-6"></path></svg></button>
         <button id="detailNextBtn" aria-label="Next image" style="position:absolute;top:50%;right:10px;transform:translateY(-50%);width:30px;height:30px;border-radius:999px;border:none;background:rgba(255,255,255,.8);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15);"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#0a0a0a;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M9 18l6-6-6-6"></path></svg></button>

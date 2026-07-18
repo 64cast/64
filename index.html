@@ -200,10 +200,10 @@ button{font-family:var(--font);cursor:pointer}
         </button>
       </div>
       <a href="#" class="navlink" data-jump="top">Home</a>
-      <a href="#newArrivals" class="navlink" data-jump="newArrivals">New Arrivals</a>
+      <a href="https://64cast.com/new-arrivals/" class="navlink">New Arrivals</a>
       <a href="#brands" class="navlink" data-jump="brands">Shop By Brand</a>
-      <a href="#stock" class="navlink" data-jump="stock">Current Stock</a>
-      <a href="#preorder" class="navlink" data-jump="preorder">Pre-Order</a>
+      <a href="https://64cast.com/current-stock/" class="navlink">Current Stock</a>
+      <a href="https://64cast.com/current-stock/?status=preorder" class="navlink">Pre-Order</a>
       <a href="#faq" class="navlink" data-jump="faq">FAQ</a>
     </div>
   </div>
@@ -412,6 +412,11 @@ document.querySelectorAll('[data-filter-brand]').forEach(btn => btn.addEventList
   window.location.href = '/current-stock/?brand=' + encodeURIComponent(btn.dataset.filterBrand);
 }));
 document.getElementById('searchInput').addEventListener('input', renderStock);
+document.getElementById('searchInput').addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  const q = e.target.value.trim();
+  if (q) window.location.href = 'https://64cast.com/current-stock/?q=' + encodeURIComponent(q);
+});
 document.getElementById('joinBtn').addEventListener('click', () => {
   const num = document.getElementById('newsletterInput').value.trim();
   const msg = num ? `Hi! Please add ${num} to the alerts list.` : "Hi! I'd like to get new arrival alerts.";
