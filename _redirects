@@ -1,0 +1,42 @@
+# Old bookmarks / links to the previous homepage path
+/home / 301
+/home.html / 301
+
+# Admin login page — must come before the brand list below, otherwise
+# "/admin" would match nothing explicit and fall through incorrectly.
+# Both slash variants are listed explicitly: some hosts treat "/admin-8822"
+# and "/admin-8822/" as distinct paths, and a missing rule for either one
+# lets the request fall through to the catch-all shop routes below.
+/admin /admin-8822/index.html 200
+/admin/ /admin-8822/index.html 200
+/admin-8822 /admin-8822/index.html 200
+/admin-8822/ /admin-8822/index.html 200
+/admin-8822/* /admin-8822/index.html 200
+
+# FAQ page
+/faq /faq/index.html 200
+/faq/ /faq/index.html 200
+
+# Current stock, pre-order, and new-arrivals are now separate physical pages
+# (current-stock/index.html, pre-order/index.html, new-arrivals/index.html).
+# These rules only cover their own brand sub-routes (e.g. /pre-order/mini-gt) —
+# no cross-section redirects between the three.
+/current-stocks /current-stock/ 301
+/pre-orders /pre-order/ 301
+/pre-order/* /pre-order/ 200
+/new-arrivals/* /new-arrivals/ 200
+
+# Brand-filtered shop pages, listed explicitly (rather than a /:brand
+# wildcard) so there is zero ambiguity about matching "/" (the homepage).
+/bburago /current-stock/ 200
+/tarmac-works /current-stock/ 200
+/bbr-model /current-stock/ 200
+/mini-gt /current-stock/ 200
+/poprace /current-stock/ 200
+/inno64 /current-stock/ 200
+/kaido-house /current-stock/ 200
+/motorhelix /current-stock/ 200
+/american-diorama /current-stock/ 200
+/cm-model /current-stock/ 200
+/lego /current-stock/ 200
+/hobby-japan /current-stock/ 200
