@@ -24,8 +24,11 @@ button{font-family:var(--font);cursor:pointer}
 .product-card{border-radius:20px;overflow:hidden;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.65);box-shadow:0 4px 18px rgba(0,0,0,.05),inset 0 1px 0 rgba(255,255,255,.85);backdrop-filter:none;-webkit-backdrop-filter:none;transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s ease;cursor:pointer;}
 .product-card:hover{transform:translateY(-5px);box-shadow:0 16px 40px rgba(0,0,0,.12),inset 0 1px 0 rgba(255,255,255,.9);}
 .addbtn{width:30px;height:30px;border-radius:999px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.drawer-overlay{position:fixed;inset:0;z-index:200;background:rgba(10,18,32,.6);backdrop-filter:none;display:none;}
+.drawer-overlay{position:fixed;inset:0;z-index:200;background:rgba(6,9,16,.82);backdrop-filter:none;display:none;}
 .drawer-overlay.open{display:block;}
+.drawer-panel-right{transform:translateX(100%);transition:transform .35s cubic-bezier(.22,1,.36,1);}
+.drawer-overlay.open .drawer-panel-right{transform:translateX(0);}
+@media (max-width:760px){ .drawer-panel-right{width:100vw!important;} }
 .navlink{padding:12px 8px;font-size:.9rem;text-transform:uppercase;letter-spacing:1px;text-decoration:none;color:#0a0a0a;display:block;}
 input[type=range]{-webkit-appearance:none;width:100%;height:4px;border-radius:999px;background:rgba(255,255,255,.6);}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#fff;border:2px solid #dd5912;cursor:pointer;margin-top:-5px;}
@@ -91,6 +94,15 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
         <input id="priceMax" type="range" min="0" max="500" value="500" style="margin-top:6px;">
         <div id="priceLabel" style="font-size:.62rem;color:#555;margin-top:8px;">AED 0 – 500</div>
 
+        <div style="height:1px;background:rgba(255,255,255,.5);margin:14px 0;"></div>
+        <div style="font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:8px;">Sort By</div>
+        <select id="sortSelect" style="width:100%;height:34px;border-radius:8px;border:1px solid rgba(0,0,0,.12);background:rgba(255,255,255,.6);font-size:.68rem;text-transform:uppercase;letter-spacing:.5px;padding:0 8px;font-family:inherit;">
+          <option value="default">Default</option>
+          <option value="vehicleBrand">Vehicle Brand (A–Z)</option>
+          <option value="priceLow">Price: Low to High</option>
+          <option value="priceHigh">Price: High to Low</option>
+        </select>
+
         
         <div id="statusSection" style="height:1px;background:rgba(255,255,255,.5);margin:14px 0;"></div>
         <div id="statusTitle" style="font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:8px;">Status</div>
@@ -107,7 +119,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
           <div id="pageHeading" style="font-size:1.3rem;letter-spacing:1px;text-transform:uppercase;font-weight:400;flex:1;">Current Stock</div>
           <span id="resultCount" style="font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:#888;flex-shrink:0;"></span>
         </div>
-        <div style="flex:1;overflow-y:auto;">
+        <div id="stockScrollArea" style="flex:1;overflow-y:auto;">
           <div id="stockGrid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px;padding:8px 24px 28px;"></div>
           <div id="loadMoreWrap" style="display:none;justify-content:center;padding:0 24px 28px;"><button id="loadMoreBtn" class="glossW" style="height:44px;padding:0 28px;border-radius:999px;font-size:.66rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;">Load More Models</button></div>
         </div>
@@ -116,7 +128,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
     </div>
   </div>
 
-  <footer style="margin:20px 20px 20px;border-radius:34px;overflow:hidden;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.7);box-shadow:0 20px 60px rgba(0,0,0,.08),inset 0 1px 0 rgba(255,255,255,.9);backdrop-filter:none;-webkit-backdrop-filter:none;position:relative;z-index:1;">
+  <footer id="siteFooter" style="margin:20px 20px 20px;border-radius:34px;overflow:hidden;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.7);box-shadow:0 20px 60px rgba(0,0,0,.08),inset 0 1px 0 rgba(255,255,255,.9);backdrop-filter:none;-webkit-backdrop-filter:none;position:relative;z-index:1;opacity:0;transform:translateY(16px);transition:opacity .4s ease,transform .4s ease;">
     <div style="padding:22px 48px;display:flex;justify-content:center;border-bottom:1px solid rgba(255,255,255,.5);">
       <div style="display:flex;gap:26px;flex-wrap:wrap;justify-content:center;">
         <span style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#aaa;">Facebook</span>
@@ -176,7 +188,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
   </div>
 
   <div id="cartOverlay" class="drawer-overlay">
-    <div style="position:absolute;top:0;right:0;bottom:0;width:340px;border-radius:0;overflow:hidden;background:rgba(255,255,255,.65);backdrop-filter:none;-webkit-backdrop-filter:none;border-left:1px solid rgba(255,255,255,.55);box-shadow:-12px 0 60px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.9);padding:26px;display:flex;flex-direction:column;">
+    <div class="drawer-panel-right" style="position:absolute;top:0;right:0;bottom:0;width:380px;border-radius:0;overflow:hidden;background:rgba(255,255,255,.97);backdrop-filter:none;-webkit-backdrop-filter:none;border-left:1px solid rgba(255,255,255,.9);box-shadow:-16px 0 70px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.9);padding:26px;display:flex;flex-direction:column;">
       <div style="position:absolute;top:0;left:0;right:0;height:35%;background:linear-gradient(180deg,rgba(255,255,255,.4),transparent);pointer-events:none;"></div>
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;position:relative;">
         <div style="font-size:.85rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;">Your Cart</div>
@@ -195,12 +207,16 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
     </div>
   </div>
 
-  <div id="productDetailOverlay" class="drawer-overlay" style="display:none;z-index:250;">
-    <div style="position:absolute;inset:0;background:rgba(0,0,0,.98);display:flex;flex-direction:column;overflow-y:auto;padding:16px;">
-      <button id="detailClose" class="glossW" style="align-self:flex-end;width:40px;height:40px;border-radius:999px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;background:rgba(255,255,255,.15);margin-bottom:20px;">
-        <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#fff;fill:none;stroke-width:1.6;stroke-linecap:round"><path d="M18 6 6 18M6 6l12 12"></path></svg>
-      </button>
-      <div id="detailContent" style="flex:1;color:#fff;"></div>
+  <div id="productDetailOverlay" class="drawer-overlay" style="z-index:250;">
+    <div id="detailPanel" class="drawer-panel-right" style="position:absolute;top:0;right:0;bottom:0;width:480px;border-radius:0;overflow-y:auto;background:rgba(255,255,255,.97);backdrop-filter:none;-webkit-backdrop-filter:none;border-left:1px solid rgba(255,255,255,.9);box-shadow:-16px 0 70px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.9);padding:26px;display:flex;flex-direction:column;">
+      <div style="position:absolute;top:0;left:0;right:0;height:35%;background:linear-gradient(180deg,rgba(255,255,255,.4),transparent);pointer-events:none;"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;position:relative;flex-shrink:0;">
+        <div style="font-size:.85rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;">Product Details</div>
+        <button id="detailClose" class="glossW" style="width:30px;height:30px;border-radius:999px;display:flex;align-items:center;justify-content:center;">
+          <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:#0a0a0a;fill:none;stroke-width:1.6;stroke-linecap:round"><path d="M18 6 6 18M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      <div id="detailContent" style="flex:1;position:relative;color:#0a0a0a;"></div>
     </div>
   </div>
 
@@ -228,8 +244,8 @@ let allProducts = [];
 const QS_BRAND = (new URLSearchParams(window.location.search).get('brand') || '').trim();
 let activeBrand = QS_BRAND || 'All';
 let cart = [];
-let visibleCount = 16;
-const PAGE_SIZE = 16;
+let visibleCount = 20;
+const PAGE_SIZE = 20;
 
 function resolveImg(p){
   const raw = p['REF IMG'] || p.IMG1 || '';
@@ -268,11 +284,15 @@ function renderGrid(){
   const q = document.getElementById('searchInput').value.trim().toLowerCase();
   const priceMin = Number(document.getElementById('priceMin').value);
   const priceMax = Number(document.getElementById('priceMax').value);
+  const sortBy = document.getElementById('sortSelect').value;
   const filtered = allProducts
     .filter(passesStatus)
     .filter(p => activeBrand === 'All' || p.BRAND === activeBrand)
     .filter(p => { const price = Number(p.PRICE||0); return price >= priceMin && price <= priceMax; })
     .filter(p => !q || (p['PRODUCT NAME']||'').toLowerCase().includes(q) || (p.BRAND||'').toLowerCase().includes(q) || (p.CARBRAND||'').toLowerCase().includes(q));
+  if (sortBy === 'vehicleBrand') filtered.sort((a,b) => (a.CARBRAND||'').localeCompare(b.CARBRAND||''));
+  else if (sortBy === 'priceLow') filtered.sort((a,b) => Number(a.PRICE||0) - Number(b.PRICE||0));
+  else if (sortBy === 'priceHigh') filtered.sort((a,b) => Number(b.PRICE||0) - Number(a.PRICE||0));
   document.getElementById('resultCount').textContent = '(' + filtered.length + ')';
   const visible = filtered.slice(0, visibleCount);
   const loadMoreWrap = document.getElementById('loadMoreWrap');
@@ -350,33 +370,45 @@ function closeCart(){ document.getElementById('cartOverlay').classList.remove('o
 function openProductDetail(product){
   const detailOverlay = document.getElementById('productDetailOverlay');
   const detailContent = document.getElementById('detailContent');
-  const imgs = [product.IMG1, product.IMG2, product.IMG3, product.IMG4].filter(i => i);
+  const name = product['PRODUCT NAME'] || '';
+  const imgs = [resolveImg(product), resolveImg2(product), product.IMG3, product.IMG4].filter(Boolean);
+  let curImg = 0;
   detailContent.innerHTML = `
-    <div style="max-width:600px;margin:0 auto;">
-      <div style="aspect-ratio:1/1;background:#000;border-radius:12px;overflow:hidden;margin-bottom:24px;position:relative;">
-        <img id="detailImg" src="${imgs[0]}" alt="${product.NAME}" style="width:100%;height:100%;object-fit:cover;">
-        ${imgs.length > 1 ? `<div style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px;">${imgs.map((img,i) => `<button onclick="document.getElementById('detailImg').src='${img}'" style="width:8px;height:8px;border-radius:50%;background:${i===0?'#fff':'rgba(255,255,255,.4)'};border:none;cursor:pointer;"></button>`).join('')}</div>` : ''}
+    <div>
+      <div id="detailImgWrap" style="aspect-ratio:1/1;background:#fff;border-radius:12px;overflow:hidden;margin-bottom:20px;position:relative;touch-action:pan-y;">
+        <img id="detailImg" src="${imgs[0]}" alt="${name}" style="width:100%;height:100%;object-fit:cover;">
+        ${imgs.length > 1 ? `<div style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px;">${imgs.map((img,i) => `<button data-dot="${i}" style="width:8px;height:8px;border-radius:50%;background:${i===0?'#0a0a0a':'rgba(10,10,10,.3)'};border:none;cursor:pointer;"></button>`).join('')}</div>` : ''}
       </div>
-      <div style="border-bottom:1px solid rgba(255,255,255,.2);padding-bottom:20px;margin-bottom:20px;">
-        <div style="font-size:.7rem;letter-spacing:2px;text-transform:uppercase;color:#aaa;margin-bottom:6px;">${product.BRAND||''}</div>
-        <div style="font-size:1.4rem;font-weight:400;text-transform:uppercase;line-height:1.4;margin-bottom:12px;">${product.NAME}</div>
-        <div style="font-size:1.2rem;font-weight:500;margin-bottom:12px;">AED ${Number(product.PRICE||0)}</div>
-        <div style="display:inline-block;padding:6px 12px;border-radius:6px;font-size:.65rem;letter-spacing:1px;text-transform:uppercase;font-weight:600;background:rgba(240,112,14,.2);color:#f0701e;">${statusLabel(product.STATUS)}</div>
+      <div style="border-bottom:1px solid rgba(10,10,10,.1);padding-bottom:16px;margin-bottom:16px;">
+        <div style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:6px;">${product.BRAND||''}</div>
+        <div style="font-size:1rem;font-weight:400;text-transform:uppercase;line-height:1.4;margin-bottom:10px;">${name}</div>
+        <div style="font-size:1rem;font-weight:500;margin-bottom:10px;">AED ${Number(product.PRICE||0)}</div>
+        <div style="display:inline-block;padding:5px 10px;border-radius:6px;font-size:.6rem;letter-spacing:1px;text-transform:uppercase;font-weight:600;background:rgba(240,112,14,.15);color:#dd5912;">${statusLabel(product.STATUS)}</div>
       </div>
-      <div style="margin-bottom:24px;">
-        <div style="font-size:.8rem;letter-spacing:1.5px;text-transform:uppercase;color:#aaa;margin-bottom:12px;">Details</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:.85rem;line-height:1.6;">
+      <div style="margin-bottom:20px;">
+        <div style="font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:#888;margin-bottom:10px;">Details</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:.75rem;line-height:1.6;">
           <div><span style="color:#888;">Model</span><br>${product['MODEL NO.']}</div>
           <div><span style="color:#888;">Condition</span><br>Brand New Sealed</div>
           <div><span style="color:#888;">Availability</span><br>${product.STATUS}</div>
         </div>
       </div>
-      <button onclick="addToCart({id:'${product['MODEL NO.']}',name:'${product.NAME}',price:'AED '+Number(product.PRICE||0),priceValue:Number(product.PRICE||0),img:'${product.IMG1}'});closeProductDetail();" class="glossO" style="width:100%;padding:14px;border-radius:12px;font-weight:600;font-size:.85rem;letter-spacing:1.5px;text-transform:uppercase;border:none;color:#fff;cursor:pointer;">Add to Cart</button>
+      <button id="detailAddBtn" class="glossO" style="width:100%;height:48px;border-radius:999px;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;">Add to Cart</button>
     </div>
   `;
-  detailOverlay.style.display = 'flex';
+  document.getElementById('detailAddBtn').addEventListener('click', () => {
+    addToCart({id:product['MODEL NO.'],name,price:'AED '+Number(product.PRICE||0),priceValue:Number(product.PRICE||0),img:imgs[0]});
+    closeProductDetail();
+  });
+  function showImg(i){ curImg=(i+imgs.length)%imgs.length; document.getElementById('detailImg').src=imgs[curImg]; detailContent.querySelectorAll('[data-dot]').forEach(d=>d.style.background=Number(d.dataset.dot)===curImg?'#0a0a0a':'rgba(10,10,10,.3)'); }
+  detailContent.querySelectorAll('[data-dot]').forEach(d => d.addEventListener('click', () => showImg(Number(d.dataset.dot))));
+  const wrap = document.getElementById('detailImgWrap');
+  let sx = 0;
+  wrap.addEventListener('touchstart', e => { sx = e.touches[0].clientX; });
+  wrap.addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 30) showImg(curImg + (dx < 0 ? 1 : -1)); });
+  detailOverlay.classList.add('open');
 }
-function closeProductDetail(){ document.getElementById('productDetailOverlay').style.display = 'none'; }
+function closeProductDetail(){ document.getElementById('productDetailOverlay').classList.remove('open'); }
 
 document.getElementById('mobileFilterBtn').addEventListener('click', () => document.getElementById('filterRail').classList.add('mobileOpen'));
 document.getElementById('railClose').addEventListener('click', () => document.getElementById('filterRail').classList.remove('mobileOpen'));
@@ -387,7 +419,21 @@ document.getElementById('navOverlay').addEventListener('click', e => { if (e.tar
 document.getElementById('cartToggle').addEventListener('click', openCart);
 document.getElementById('cartClose').addEventListener('click', closeCart);
 document.getElementById('cartOverlay').addEventListener('click', e => { if (e.target.id === 'cartOverlay') closeCart(); });
+document.getElementById('productDetailOverlay').addEventListener('click', e => { if (e.target.id === 'productDetailOverlay') closeProductDetail(); });
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if (document.getElementById('productDetailOverlay').classList.contains('open')) closeProductDetail();
+  else if (document.getElementById('cartOverlay').classList.contains('open')) closeCart();
+  else if (document.getElementById('navOverlay').classList.contains('open')) closeNav();
+});
+[['navOverlay',closeNav],['cartOverlay',closeCart],['productDetailOverlay',closeProductDetail]].forEach(([id,close]) => {
+  const ov = document.getElementById(id);
+  let sx = 0;
+  ov.addEventListener('touchstart', e => { if (e.target.id === id) sx = e.touches[0].clientX; else sx = null; });
+  ov.addEventListener('touchend', e => { if (sx === null) return; const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 50) close(); });
+});
 document.getElementById('searchInput').addEventListener('input', resetPaging);
+document.getElementById('sortSelect').addEventListener('change', resetPaging);
 document.getElementById('priceMin').addEventListener('input', () => {
   if (Number(document.getElementById('priceMin').value) > Number(document.getElementById('priceMax').value)) document.getElementById('priceMin').value = document.getElementById('priceMax').value;
   updatePriceLabel(); resetPaging();
@@ -435,6 +481,16 @@ fetch(API_URL, { method: 'GET', cache: 'no-store' })
     document.getElementById('stockGrid').innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 0;color:#999;font-size:.85rem;">Could not load live stock. Please refresh or message us on WhatsApp.</div>';
   });
 renderCart();
+const scrollArea = document.getElementById('stockScrollArea');
+const siteFooter = document.getElementById('siteFooter');
+function checkFooterReveal(){
+  const nearBottom = scrollArea.scrollTop + scrollArea.clientHeight >= scrollArea.scrollHeight - 24;
+  siteFooter.style.opacity = nearBottom ? '1' : '0';
+  siteFooter.style.transform = nearBottom ? 'translateY(0)' : 'translateY(16px)';
+}
+scrollArea.addEventListener('scroll', checkFooterReveal);
+new MutationObserver(checkFooterReveal).observe(document.getElementById('stockGrid'), { childList: true });
+checkFooterReveal();
 </script>
 </body>
 </html>
