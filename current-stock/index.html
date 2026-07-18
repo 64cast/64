@@ -35,9 +35,12 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 @media (max-width:860px){
   nav img[alt="64CAST"]{height:16px!important;}
   #stockGrid{grid-template-columns:repeat(2,1fr)!important;gap:10px!important;padding:8px 16px 24px!important;}
-  .railwrap{position:fixed!important;top:0!important;left:-100%!important;bottom:0!important;z-index:210!important;width:78vw!important;max-width:320px!important;height:100vh!important;transition:left .35s cubic-bezier(.16,1,.3,1)!important;overflow-y:auto!important;border-radius:0!important;background:rgba(255,255,255,.65)!important;backdrop-filter:blur(20px) saturate(1.6)!important;-webkit-backdrop-filter:blur(20px) saturate(1.6)!important;border-right:1px solid rgba(255,255,255,.7)!important;box-shadow:12px 0 60px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.9)!important;}
-  .railwrap.mobileOpen{left:0!important;}
+  .railwrap{position:fixed!important;left:0!important;right:0!important;bottom:0!important;top:auto!important;z-index:210!important;width:100%!important;max-width:none!important;max-height:78vh!important;height:auto!important;transform:translateY(100%)!important;transition:transform .35s cubic-bezier(.16,1,.3,1)!important;overflow-y:auto!important;border-radius:26px 26px 0 0!important;background:rgba(255,255,255,.85)!important;backdrop-filter:blur(24px) saturate(1.6)!important;-webkit-backdrop-filter:blur(24px) saturate(1.6)!important;border:1px solid rgba(255,255,255,.7)!important;border-bottom:none!important;box-shadow:0 -14px 50px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.9)!important;padding:12px 18px 22px!important;}
+  .railwrap.mobileOpen{transform:translateY(0)!important;}
+  #railHandle{display:block!important;}
   #railClose{display:flex!important;}
+  #railSheetScrim{display:none;position:fixed;inset:0;z-index:205;background:rgba(10,14,20,.4);}
+  #railSheetScrim.open{display:block;}
   .mobileFilterBtn{display:flex!important;position:fixed!important;bottom:22px!important;left:50%!important;transform:translateX(-50%)!important;z-index:150!important;box-shadow:0 10px 30px rgba(0,0,0,.25)!important;}
   nav{padding:8px 16px!important;}
   .ann{padding:6px 12px!important;font-size:.56rem!important;}
@@ -74,8 +77,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 
   <div style="padding:24px 5vw 24px;position:relative;z-index:1;">
     <div style="border-radius:28px;overflow:hidden;background:rgba(255,255,255,.28);box-shadow:0 20px 60px rgba(0,0,0,.1);display:flex;height:calc(100vh - 190px);">
+      <div id="railSheetScrim"></div>
 
       <div id="filterRail" class="railwrap" style="width:190px;flex-shrink:0;padding:24px 18px;background:none;backdrop-filter:none;-webkit-backdrop-filter:none;border-right:none;overflow-y:auto;position:relative;">
+        <div id="railHandle" style="display:none;width:36px;height:4px;border-radius:3px;background:rgba(0,0,0,.2);margin:0 auto 14px;"></div>
         <button id="railClose" class="glossW" style="display:none;width:28px;height:28px;border-radius:999px;align-items:center;justify-content:center;margin-bottom:14px;">
           <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:#0a0a0a;fill:none;stroke-width:1.6;stroke-linecap:round"><path d="M18 6 6 18M6 6l12 12"></path></svg>
         </button>
@@ -85,6 +90,12 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
           <input id="searchInput" placeholder="Search..." style="border:none;outline:none;background:none;font-family:var(--font);font-size:.7rem;color:#0a0a0a;width:100%;">
         </div>
 
+        <div id="statusSection" style="height:1px;background:rgba(255,255,255,.5);margin:0 0 14px;"></div>
+        <div id="statusTitle" style="font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:8px;">Status</div>
+        <label id="statusInStockLabel" style="display:flex;align-items:center;gap:6px;font-size:.68rem;color:#333;margin-bottom:6px;cursor:pointer;"><input type="checkbox" id="statusInStock"> Current Stock</label>
+        <label id="statusPreorderLabel" style="display:flex;align-items:center;gap:6px;font-size:.68rem;color:#333;margin-bottom:18px;cursor:pointer;"><input type="checkbox" id="statusPreorder"> Pre-Order</label>
+
+        <div style="height:1px;background:rgba(255,255,255,.5);margin:14px 0;"></div>
         <div style="font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:8px;">Brand</div>
         <div id="brandRail" style="margin-bottom:18px;"></div>
 
@@ -102,13 +113,6 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
           <option value="priceLow">Price: Low to High</option>
           <option value="priceHigh">Price: High to Low</option>
         </select>
-
-        
-        <div id="statusSection" style="height:1px;background:rgba(255,255,255,.5);margin:14px 0;"></div>
-        <div id="statusTitle" style="font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:8px;">Status</div>
-        <label id="statusInStockLabel" style="display:flex;align-items:center;gap:6px;font-size:.68rem;color:#333;margin-bottom:6px;cursor:pointer;"><input type="checkbox" id="statusInStock"> Current Stock</label>
-        <label id="statusPreorderLabel" style="display:flex;align-items:center;gap:6px;font-size:.68rem;color:#333;margin-bottom:6px;cursor:pointer;"><input type="checkbox" id="statusPreorder"> Pre-Order</label>
-        
       </div>
 
       <div style="flex:1;min-width:0;display:flex;flex-direction:column;">
@@ -224,6 +228,18 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 
 <script>
 const API_URL = 'https://64cast-products-api.trailsec5.workers.dev';
+const EMBEDDED_DEMO_PRODUCTS = [
+  {"MODEL NO.":"MGT00456","PRODUCT NAME":"Nissan Skyline GT-R R34 V-Spec II Nur","BRAND":"Mini GT","CARBRAND":"Nissan","PRICE":95,"STATUS":"currentstock","SORTORDER":1,"NEW":true,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/minigt.jpg","IMG2":""},
+  {"MODEL NO.":"INN64-021","PRODUCT NAME":"Honda Civic EG6 SiR-II","BRAND":"Inno64","CARBRAND":"Honda","PRICE":88,"STATUS":"currentstock","SORTORDER":2,"NEW":true,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/inno64.jpg","IMG2":""},
+  {"MODEL NO.":"BBR-F1-16","PRODUCT NAME":"1/43 F1 Ferrari SF-24 #16 Charles Leclerc","BRAND":"Bburago","CARBRAND":"Ferrari","PRICE":50,"STATUS":"currentstock","SORTORDER":3,"NEW":false,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/bburago.jpg","IMG2":""},
+  {"MODEL NO.":"KH-SUP-01","PRODUCT NAME":"Toyota Supra MK4 Kaido Racer","BRAND":"Kaido House","CARBRAND":"Toyota","PRICE":75,"STATUS":"currentstock","SORTORDER":4,"NEW":false,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/kaidohouse.jpg","IMG2":""},
+  {"MODEL NO.":"CM-LFA-01","PRODUCT NAME":"Lexus LFA Nurburgring Edition","BRAND":"CM Model","CARBRAND":"Lexus","PRICE":110,"STATUS":"currentstock","SORTORDER":5,"NEW":false,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/cmmodel.jpg","IMG2":""},
+  {"MODEL NO.":"MH-RX7-01","PRODUCT NAME":"Mazda RX-7 FD3S Veilside","BRAND":"Motorhelix","CARBRAND":"Mazda","PRICE":98,"STATUS":"currentstock","SORTORDER":6,"NEW":false,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/motorhelix.jpg","IMG2":""},
+  {"MODEL NO.":"HJ-R32-01","PRODUCT NAME":"Nissan Skyline GT-R R32 Group A","BRAND":"Hobby Japan","CARBRAND":"Nissan","PRICE":102,"STATUS":"currentstock","SORTORDER":7,"NEW":false,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/hobbyjapan.jpg","IMG2":""},
+  {"MODEL NO.":"LEGO-CIV-01","PRODUCT NAME":"Speed Champions Civic Type R","BRAND":"Lego","CARBRAND":"Honda","PRICE":45,"STATUS":"currentstock","SORTORDER":8,"NEW":false,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/lego.jpg","IMG2":""},
+  {"MODEL NO.":"TW-GR-01","PRODUCT NAME":"Toyota GR Supra Global64 Racing","BRAND":"Tarmac Works","CARBRAND":"Toyota","PRICE":120,"STATUS":"preorder","SORTORDER":9,"NEW":false,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/tarmacworks.jpg","IMG2":""},
+  {"MODEL NO.":"PR-GTR-35","PRODUCT NAME":"Nissan GT-R R35 Liberty Walk","BRAND":"PopRace","CARBRAND":"Nissan","PRICE":105,"STATUS":"preorder","SORTORDER":10,"NEW":false,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/poprace.jpg","IMG2":""}
+];
 const IMAGE_BASE_URL = 'https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/';
 const WA_NUMBER = '971552112588';
 const IS_PREORDER = new URLSearchParams(window.location.search).get('status') === 'preorder';
@@ -371,13 +387,17 @@ function openProductDetail(product){
   const detailOverlay = document.getElementById('productDetailOverlay');
   const detailContent = document.getElementById('detailContent');
   const name = product['PRODUCT NAME'] || '';
-  const imgs = [resolveImg(product), resolveImg2(product), product.IMG3, product.IMG4].filter(Boolean);
+  const resolveAny = raw => !raw ? '' : (/^https?:|^data:/.test(raw) ? raw : IMAGE_BASE_URL + raw);
+  const imgs = [resolveImg(product), resolveImg2(product), resolveAny(product.IMG3), resolveAny(product.IMG4)].filter(Boolean);
   let curImg = 0;
   detailContent.innerHTML = `
     <div>
       <div id="detailImgWrap" style="aspect-ratio:1/1;background:#fff;border-radius:12px;overflow:hidden;margin-bottom:20px;position:relative;touch-action:pan-y;">
         <img id="detailImg" src="${imgs[0]}" alt="${name}" style="width:100%;height:100%;object-fit:cover;">
-        ${imgs.length > 1 ? `<div style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px;">${imgs.map((img,i) => `<button data-dot="${i}" style="width:8px;height:8px;border-radius:50%;background:${i===0?'#0a0a0a':'rgba(10,10,10,.3)'};border:none;cursor:pointer;"></button>`).join('')}</div>` : ''}
+        ${imgs.length > 1 ? `
+        <button id="detailPrevBtn" aria-label="Previous image" style="position:absolute;top:50%;left:10px;transform:translateY(-50%);width:30px;height:30px;border-radius:999px;border:none;background:rgba(255,255,255,.8);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15);"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#0a0a0a;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M15 18l-6-6 6-6"></path></svg></button>
+        <button id="detailNextBtn" aria-label="Next image" style="position:absolute;top:50%;right:10px;transform:translateY(-50%);width:30px;height:30px;border-radius:999px;border:none;background:rgba(255,255,255,.8);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15);"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#0a0a0a;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M9 18l6-6-6-6"></path></svg></button>
+        <div style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px;">${imgs.map((img,i) => `<button data-dot="${i}" style="width:8px;height:8px;border-radius:50%;background:${i===0?'#0a0a0a':'rgba(10,10,10,.3)'};border:none;cursor:pointer;"></button>`).join('')}</div>` : ''}
       </div>
       <div style="border-bottom:1px solid rgba(10,10,10,.1);padding-bottom:16px;margin-bottom:16px;">
         <div style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:6px;">${product.BRAND||''}</div>
@@ -400,18 +420,47 @@ function openProductDetail(product){
     addToCart({id:product['MODEL NO.'],name,price:'AED '+Number(product.PRICE||0),priceValue:Number(product.PRICE||0),img:imgs[0]});
     closeProductDetail();
   });
-  function showImg(i){ curImg=(i+imgs.length)%imgs.length; document.getElementById('detailImg').src=imgs[curImg]; detailContent.querySelectorAll('[data-dot]').forEach(d=>d.style.background=Number(d.dataset.dot)===curImg?'#0a0a0a':'rgba(10,10,10,.3)'); }
+  function showImg(i){ curImg=(i+imgs.length)%imgs.length; window.__detailCurImg=curImg; document.getElementById('detailImg').src=imgs[curImg]; detailContent.querySelectorAll('[data-dot]').forEach(d=>d.style.background=Number(d.dataset.dot)===curImg?'#0a0a0a':'rgba(10,10,10,.3)'); }
+  window.__detailShowImg = showImg;
+  window.__detailCurImg = 0;
   detailContent.querySelectorAll('[data-dot]').forEach(d => d.addEventListener('click', () => showImg(Number(d.dataset.dot))));
+  const prevBtn = document.getElementById('detailPrevBtn');
+  const nextBtn = document.getElementById('detailNextBtn');
+  if (prevBtn) prevBtn.addEventListener('click', () => showImg(curImg - 1));
+  if (nextBtn) nextBtn.addEventListener('click', () => showImg(curImg + 1));
   const wrap = document.getElementById('detailImgWrap');
   let sx = 0;
   wrap.addEventListener('touchstart', e => { sx = e.touches[0].clientX; });
   wrap.addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 30) showImg(curImg + (dx < 0 ? 1 : -1)); });
+  detailImgCount = imgs.length;
   detailOverlay.classList.add('open');
 }
+let detailImgCount = 0;
 function closeProductDetail(){ document.getElementById('productDetailOverlay').classList.remove('open'); }
 
-document.getElementById('mobileFilterBtn').addEventListener('click', () => document.getElementById('filterRail').classList.add('mobileOpen'));
-document.getElementById('railClose').addEventListener('click', () => document.getElementById('filterRail').classList.remove('mobileOpen'));
+document.getElementById('mobileFilterBtn').addEventListener('click', () => { document.getElementById('filterRail').classList.add('mobileOpen'); document.getElementById('railSheetScrim').classList.add('open'); });
+function closeMobileFilter(){ document.getElementById('filterRail').classList.remove('mobileOpen'); document.getElementById('railSheetScrim').classList.remove('open'); }
+document.getElementById('railClose').addEventListener('click', closeMobileFilter);
+document.getElementById('railSheetScrim').addEventListener('click', closeMobileFilter);
+(function(){
+  const sheet = document.getElementById('filterRail');
+  let startY = 0, dragging = false;
+  const handle = document.getElementById('railHandle');
+  handle.addEventListener('touchstart', e => { dragging = true; startY = e.touches[0].clientY; sheet.style.transition = 'none'; });
+  handle.addEventListener('touchmove', e => {
+    if (!dragging) return;
+    const dy = Math.max(0, e.touches[0].clientY - startY);
+    sheet.style.transform = `translateY(${dy}px)`;
+  });
+  handle.addEventListener('touchend', e => {
+    if (!dragging) return;
+    dragging = false;
+    sheet.style.transition = '';
+    const dy = e.changedTouches[0].clientY - startY;
+    sheet.style.transform = '';
+    if (dy > 80) closeMobileFilter();
+  });
+})();
 document.getElementById('detailClose').addEventListener('click', closeProductDetail);
 document.getElementById('navToggle').addEventListener('click', openNav);
 document.getElementById('navClose').addEventListener('click', closeNav);
@@ -425,6 +474,11 @@ document.addEventListener('keydown', e => {
   if (document.getElementById('productDetailOverlay').classList.contains('open')) closeProductDetail();
   else if (document.getElementById('cartOverlay').classList.contains('open')) closeCart();
   else if (document.getElementById('navOverlay').classList.contains('open')) closeNav();
+});
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('productDetailOverlay').classList.contains('open')) return;
+  if (e.key === 'ArrowRight') window.__detailShowImg && window.__detailShowImg((window.__detailCurImg||0)+1);
+  if (e.key === 'ArrowLeft') window.__detailShowImg && window.__detailShowImg((window.__detailCurImg||0)-1);
 });
 [['navOverlay',closeNav],['cartOverlay',closeCart],['productDetailOverlay',closeProductDetail]].forEach(([id,close]) => {
   const ov = document.getElementById(id);
@@ -478,7 +532,19 @@ fetch(API_URL, { method: 'GET', cache: 'no-store' })
     document.getElementById('loadMoreBtn').addEventListener('click', () => { visibleCount += PAGE_SIZE; renderGrid(); });
   })
   .catch(() => {
-    document.getElementById('stockGrid').innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 0;color:#999;font-size:.85rem;">Could not load live stock. Please refresh or message us on WhatsApp.</div>';
+    allProducts = EMBEDDED_DEMO_PRODUCTS.slice();
+    if (QS_BRAND) {
+      const match = allProducts.find(p => (p.BRAND||'').trim().toLowerCase() === QS_BRAND.toLowerCase());
+      activeBrand = match ? match.BRAND : 'All';
+    }
+    const prices = allProducts.filter(passesStatus).map(p => Number(p.PRICE||0));
+    const maxPrice = prices.length ? Math.ceil(Math.max(...prices) / 10) * 10 : 500;
+    document.getElementById('priceMin').max = maxPrice;
+    document.getElementById('priceMax').max = maxPrice;
+    document.getElementById('priceMax').value = maxPrice;
+    updatePriceLabel();
+    renderBrandRail(); renderGrid();
+    document.getElementById('loadMoreBtn').addEventListener('click', () => { visibleCount += PAGE_SIZE; renderGrid(); });
   });
 renderCart();
 const scrollArea = document.getElementById('stockScrollArea');
