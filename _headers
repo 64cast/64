@@ -1,8 +1,0 @@
-/*
-  Cache-Control: public, max-age=0, must-revalidate
-
-/shared/shop.css
-  Cache-Control: public, max-age=300, must-revalidate
-
-/shared/shop.js
-  Cache-Control: public, max-age=300, must-revalidate
