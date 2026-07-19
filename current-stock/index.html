@@ -21,8 +21,9 @@ button{font-family:var(--font);cursor:pointer}
 .glossO{background:linear-gradient(180deg,#f9905a 0%,#ea6a1f 55%,#dd5912 100%);border:1px solid rgba(255,255,255,.5);box-shadow:0 6px 14px rgba(203,80,15,.35),inset 0 1px 1px rgba(255,255,255,.6),inset 0 -2px 3px rgba(0,0,0,.12);color:#fff;}
 .railitem{padding:8px 0;font-size:.7rem;letter-spacing:.3px;text-transform:uppercase;color:#666;font-weight:400;cursor:pointer;background:none;border:none;text-align:left;width:100%;font-family:var(--font);}
 .railitem.active{color:#0a0a0a;font-weight:600;}
-.product-card{border-radius:20px;overflow:hidden;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.65);box-shadow:0 4px 18px rgba(0,0,0,.05),inset 0 1px 0 rgba(255,255,255,.85);backdrop-filter:none;-webkit-backdrop-filter:none;transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s ease;cursor:pointer;}
-.product-card:hover{transform:translateY(-5px);box-shadow:0 16px 40px rgba(0,0,0,.12),inset 0 1px 0 rgba(255,255,255,.9);}
+.product-card{border-radius:14px;overflow:hidden;background:none;border:none;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s ease;cursor:pointer;}
+.product-card:hover img{transform:scale(1.03);}
+.product-card img{transition:transform .4s ease;}
 .addbtn{width:30px;height:30px;border-radius:999px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .drawer-overlay{position:fixed;inset:0;z-index:200;background:rgba(6,9,16,.82);backdrop-filter:none;display:none;}
 .drawer-overlay.open{display:block;}
@@ -42,6 +43,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
   #railSheetScrim{display:none;position:fixed;inset:0;z-index:205;background:rgba(10,14,20,.4);}
   #railSheetScrim.open{display:block;}
   .mobileFilterBtn{display:flex!important;position:fixed!important;bottom:22px!important;left:50%!important;transform:translateX(-50%)!important;z-index:150!important;box-shadow:0 10px 30px rgba(0,0,0,.25)!important;}
+  #mobileSearchRow{display:flex!important;}
   nav{padding:8px 16px!important;}
   .ann{padding:6px 12px!important;font-size:.56rem!important;}
   footer .footer-premium-inner,div[style*="grid-template-columns:1.3fr 1fr 1fr 1fr"]{grid-template-columns:1fr 1fr!important;}
@@ -74,6 +76,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
       </button>
     </div>
   </nav>
+  <div id="mobileSearchRow" style="display:none;position:sticky;top:109px;z-index:99;align-items:center;gap:6px;height:44px;padding:0 16px;background:rgba(255,255,255,.6);border-bottom:1px solid rgba(255,255,255,.6);">
+    <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:#999;fill:none;stroke-width:1.6;flex-shrink:0"><circle cx="11" cy="11" r="8"></circle><line x1="21" x2="16.65" y1="21" y2="16.65"></line></svg>
+    <input id="mobileSearchInput" placeholder="Search current stock…" style="border:none;outline:none;background:none;font-family:var(--font);font-size:.72rem;color:#0a0a0a;width:100%;">
+  </div>
 
   <div style="padding:24px 5vw 24px;position:relative;z-index:1;">
     <div style="border-radius:28px;overflow:hidden;background:rgba(255,255,255,.28);box-shadow:0 20px 60px rgba(0,0,0,.1);display:flex;height:calc(100vh - 190px);">
@@ -97,7 +103,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 
         <div style="height:1px;background:rgba(255,255,255,.5);margin:14px 0;"></div>
         <div style="font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:8px;">Brand</div>
-        <div id="brandRail" style="margin-bottom:18px;"></div>
+        <select id="brandSelect" style="width:100%;height:34px;border-radius:8px;border:1px solid rgba(0,0,0,.12);background:rgba(255,255,255,.6);font-size:.68rem;text-transform:uppercase;letter-spacing:.5px;padding:0 8px;font-family:inherit;margin-bottom:18px;"></select>
 
         <div style="height:1px;background:rgba(255,255,255,.5);margin:14px 0;"></div>
         <div style="font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:10px;">Price</div>
@@ -106,13 +112,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
         <div id="priceLabel" style="font-size:.62rem;color:#555;margin-top:8px;">AED 0 – 500</div>
 
         <div style="height:1px;background:rgba(255,255,255,.5);margin:14px 0;"></div>
-        <div style="font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:8px;">Sort By</div>
-        <select id="sortSelect" style="width:100%;height:34px;border-radius:8px;border:1px solid rgba(0,0,0,.12);background:rgba(255,255,255,.6);font-size:.68rem;text-transform:uppercase;letter-spacing:.5px;padding:0 8px;font-family:inherit;">
-          <option value="default">Default</option>
-          <option value="vehicleBrand">Vehicle Brand (A–Z)</option>
-          <option value="priceLow">Price: Low to High</option>
-          <option value="priceHigh">Price: High to Low</option>
-        </select>
+        <div style="font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:8px;">Vehicle Brand</div>
+        <select id="vehicleBrandSelect" style="width:100%;height:34px;border-radius:8px;border:1px solid rgba(0,0,0,.12);background:rgba(255,255,255,.6);font-size:.68rem;text-transform:uppercase;letter-spacing:.5px;padding:0 8px;font-family:inherit;margin-bottom:18px;"></select>
       </div>
 
       <div style="flex:1;min-width:0;display:flex;flex-direction:column;">
@@ -260,7 +261,8 @@ let allProducts = [];
 const QS_BRAND = (new URLSearchParams(window.location.search).get('brand') || '').trim();
 const QS_SEARCH = (new URLSearchParams(window.location.search).get('q') || '').trim();
 let activeBrand = QS_BRAND || 'All';
-if (QS_SEARCH) document.getElementById('searchInput').value = QS_SEARCH;
+let activeVehicleBrand = 'All';
+if (QS_SEARCH) { document.getElementById('searchInput').value = QS_SEARCH; document.getElementById('mobileSearchInput').value = QS_SEARCH; }
 let cart = [];
 let visibleCount = 20;
 const PAGE_SIZE = 20;
@@ -289,9 +291,15 @@ function passesStatus(p){
 
 function renderBrandRail(){
   const brands = ['All', ...Array.from(new Set(allProducts.filter(passesStatus).map(p=>p.BRAND).filter(Boolean))).sort()];
-  const wrap = document.getElementById('brandRail');
-  wrap.innerHTML = brands.map(b => `<button class="railitem ${activeBrand===b?'active':''}" data-brand="${b}">${b}</button>`).join('');
-  wrap.querySelectorAll('[data-brand]').forEach(btn => btn.addEventListener('click', () => { activeBrand = btn.dataset.brand; renderBrandRail(); resetPaging(); }));
+  const sel = document.getElementById('brandSelect');
+  sel.innerHTML = brands.map(b => `<option value="${b}" ${activeBrand===b?'selected':''}>${b === 'All' ? 'All Brands' : b}</option>`).join('');
+}
+
+function renderVehicleBrandRail(){
+  const pool = allProducts.filter(passesStatus).filter(p => activeBrand === 'All' || p.BRAND === activeBrand);
+  const vehicleBrands = ['All', ...Array.from(new Set(pool.map(p=>p.CARBRAND).filter(Boolean))).sort()];
+  const sel = document.getElementById('vehicleBrandSelect');
+  sel.innerHTML = vehicleBrands.map(b => `<option value="${b}" ${activeVehicleBrand===b?'selected':''}>${b === 'All' ? 'All Vehicle Brands' : b}</option>`).join('');
 }
 
 function updatePriceLabel(){
@@ -302,15 +310,12 @@ function renderGrid(){
   const q = document.getElementById('searchInput').value.trim().toLowerCase();
   const priceMin = Number(document.getElementById('priceMin').value);
   const priceMax = Number(document.getElementById('priceMax').value);
-  const sortBy = document.getElementById('sortSelect').value;
   const filtered = allProducts
     .filter(passesStatus)
     .filter(p => activeBrand === 'All' || p.BRAND === activeBrand)
+    .filter(p => activeVehicleBrand === 'All' || p.CARBRAND === activeVehicleBrand)
     .filter(p => { const price = Number(p.PRICE||0); return price >= priceMin && price <= priceMax; })
     .filter(p => !q || (p['PRODUCT NAME']||'').toLowerCase().includes(q) || (p.BRAND||'').toLowerCase().includes(q) || (p.CARBRAND||'').toLowerCase().includes(q));
-  if (sortBy === 'vehicleBrand') filtered.sort((a,b) => (a.CARBRAND||'').localeCompare(b.CARBRAND||''));
-  else if (sortBy === 'priceLow') filtered.sort((a,b) => Number(a.PRICE||0) - Number(b.PRICE||0));
-  else if (sortBy === 'priceHigh') filtered.sort((a,b) => Number(b.PRICE||0) - Number(a.PRICE||0));
   document.getElementById('resultCount').textContent = '(' + filtered.length + ')';
   const visible = filtered.slice(0, visibleCount);
   const loadMoreWrap = document.getElementById('loadMoreWrap');
@@ -324,19 +329,18 @@ function renderGrid(){
     const disabled = qty <= 0;
     return `
     <div class="product-card" data-product='${JSON.stringify(p).replace(/'/g,"&apos;")}'>
-      <div style="position:relative;aspect-ratio:1/1;background:#fff;overflow:hidden;cursor:pointer;">
+      <div style="position:relative;aspect-ratio:1/1;background:#fff;overflow:hidden;cursor:pointer;border-radius:14px;">
         <img src="${img}" data-img1="${img}" data-img2="${img2}" alt="${name}" style="width:100%;height:100%;object-fit:cover;touch-action:pan-y;" onerror="this.src='${fallbackImg}'"${img2 ? ` onmouseenter="this.src='${img2}'" onmouseleave="this.src='${img}'" ontouchstart="this.dataset.sx=event.touches[0].clientX" ontouchend="var dx=event.changedTouches[0].clientX-this.dataset.sx; if(Math.abs(dx)>30){this.src=(this.src===this.dataset.img2)?this.dataset.img1:this.dataset.img2;}"` : ''}>
-        <div style="position:absolute;top:8px;left:8px;padding:4px 10px;border-radius:999px;font-size:.44rem;letter-spacing:1px;text-transform:uppercase;font-weight:700;background:rgba(255,255,255,.7);backdrop-filter:none;border:1px solid rgba(255,255,255,.8);color:${disabled ? '#999' : '#f0701e'};">${disabled ? 'Sold' : statusLabel(p.STATUS)}</div>
+        <div style="position:absolute;top:8px;left:8px;font-size:.44rem;letter-spacing:1px;text-transform:uppercase;font-weight:700;color:${disabled ? '#c0392b' : '#8a8a8a'};">${disabled ? 'Sold' : (p.BRAND||'')}</div>
       </div>
-      <div style="padding:10px 12px 12px;">
-        <div style="font-size:.52rem;letter-spacing:1.5px;text-transform:uppercase;color:#8a8a8a;margin-bottom:4px;">${p.BRAND||''}</div>
-        <div style="font-size:.76rem;font-weight:400;text-transform:uppercase;line-height:1.3;min-height:2em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${name}</div>
-        <div style="display:flex;align-items:baseline;justify-content:space-between;margin-top:8px;">
-          <div style="font-size:.86rem;font-weight:500;">AED ${Number(p.PRICE||0)}</div>
-          <button class="addbtn glossW" ${disabled?'disabled style="opacity:.4;cursor:not-allowed;"':''} data-add='${JSON.stringify({id:p['MODEL NO.'],name,price:'AED '+Number(p.PRICE||0),priceValue:Number(p.PRICE||0),img}).replace(/'/g,"&apos;")}'>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;gap:8px;">
+        <div style="min-width:0;">
+          <div style="font-size:.76rem;font-weight:400;text-transform:uppercase;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${name}</div>
+          <div style="font-size:.74rem;color:#dd5912;font-weight:600;margin-top:2px;">AED ${Number(p.PRICE||0)}</div>
+        </div>
+        <button class="addbtn" style="background:none;border:1.5px solid ${disabled?'#ccc':'#0a0a0a'};opacity:${disabled?'.5':'1'};" ${disabled?'disabled':''} data-add='${JSON.stringify({id:p['MODEL NO.'],name,price:'AED '+Number(p.PRICE||0),priceValue:Number(p.PRICE||0),img}).replace(/'/g,"&apos;")}'>
             <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:#0a0a0a;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
           </button>
-        </div>
       </div>
     </div>`;
   }).join('') : '<div style="grid-column:1/-1;text-align:center;padding:60px 0;color:#999;font-size:.85rem;">No pieces match that search/filter.</div>';
@@ -489,7 +493,9 @@ document.addEventListener('keydown', e => {
   ov.addEventListener('touchend', e => { if (sx === null) return; const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 50) close(); });
 });
 document.getElementById('searchInput').addEventListener('input', resetPaging);
-document.getElementById('sortSelect').addEventListener('change', resetPaging);
+document.getElementById('mobileSearchInput').addEventListener('input', () => { document.getElementById('searchInput').value = document.getElementById('mobileSearchInput').value; resetPaging(); });
+document.getElementById('brandSelect').addEventListener('change', () => { activeBrand = document.getElementById('brandSelect').value; activeVehicleBrand = 'All'; renderVehicleBrandRail(); resetPaging(); });
+document.getElementById('vehicleBrandSelect').addEventListener('change', () => { activeVehicleBrand = document.getElementById('vehicleBrandSelect').value; resetPaging(); });
 document.getElementById('priceMin').addEventListener('input', () => {
   if (Number(document.getElementById('priceMin').value) > Number(document.getElementById('priceMax').value)) document.getElementById('priceMin').value = document.getElementById('priceMax').value;
   updatePriceLabel(); resetPaging();
@@ -530,7 +536,7 @@ fetch(API_URL, { method: 'GET', cache: 'no-store' })
     document.getElementById('priceMax').max = maxPrice;
     document.getElementById('priceMax').value = maxPrice;
     updatePriceLabel();
-    renderBrandRail(); renderGrid();
+    renderBrandRail(); renderVehicleBrandRail(); renderGrid();
     document.getElementById('loadMoreBtn').addEventListener('click', () => { visibleCount += PAGE_SIZE; renderGrid(); });
   })
   .catch(() => {
@@ -545,7 +551,7 @@ fetch(API_URL, { method: 'GET', cache: 'no-store' })
     document.getElementById('priceMax').max = maxPrice;
     document.getElementById('priceMax').value = maxPrice;
     updatePriceLabel();
-    renderBrandRail(); renderGrid();
+    renderBrandRail(); renderVehicleBrandRail(); renderGrid();
     document.getElementById('loadMoreBtn').addEventListener('click', () => { visibleCount += PAGE_SIZE; renderGrid(); });
   });
 renderCart();
