@@ -35,6 +35,9 @@ button{font-family:var(--font);cursor:pointer}
 .navlink{padding:12px 8px;font-size:.9rem;text-transform:uppercase;letter-spacing:1px;text-decoration:none;color:#0a0a0a;display:block;}
 input[type=range]{-webkit-appearance:none;width:100%;height:4px;border-radius:999px;background:rgba(255,255,255,.6);}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#fff;border:2px solid #dd5912;cursor:pointer;margin-top:-5px;}
+@keyframes addPulse{0%{transform:scale(1);}50%{transform:scale(1.4);}100%{transform:scale(1);}}
+.addbtn.pulse{animation:addPulse .38s cubic-bezier(.34,1.56,.64,1);background:#dd5912!important;border-color:#dd5912!important;}
+.addbtn.pulse svg{stroke:#fff!important;}
 @media (max-width:860px){
   nav img[alt="64CAST"]{height:16px!important;}
   #stockGrid{grid-template-columns:repeat(2,1fr)!important;gap:10px!important;padding:8px 16px 24px!important;}
@@ -348,7 +351,7 @@ function renderGrid(){
       </div>
     </div>`;
   }).join('') : '<div style="grid-column:1/-1;text-align:center;padding:60px 0;color:#999;font-size:.85rem;">No pieces match that search/filter.</div>';
-  grid.querySelectorAll('[data-add]:not([disabled])').forEach(btn => btn.addEventListener('click', () => addToCart(JSON.parse(btn.dataset.add))));
+  grid.querySelectorAll('[data-add]:not([disabled])').forEach(btn => btn.addEventListener('click', () => { addToCart(JSON.parse(btn.dataset.add)); btn.classList.add('pulse'); setTimeout(() => btn.classList.remove('pulse'), 400); }));
   grid.querySelectorAll('.product-card[data-product]').forEach(card => {
     card.addEventListener('click', (e) => {
       if(e.target.closest('[data-add]')) return;
@@ -366,7 +369,6 @@ function addToCart(product){
   if (existing) existing.qty++;
   else cart.push({ ...product, qty: 1 });
   renderCart();
-  openCart();
 }
 function removeFromCart(id){ cart = cart.filter(i => i.id !== id); renderCart(); }
 
@@ -431,7 +433,9 @@ function openProductDetail(product){
   `;
   document.getElementById('detailAddBtn').addEventListener('click', () => {
     addToCart({id:product['MODEL NO.'],name,brand:product.BRAND||'',price:'AED '+Number(product.PRICE||0),priceValue:Number(product.PRICE||0),img:imgs[0]});
-    closeProductDetail();
+    const btn = document.getElementById('detailAddBtn');
+    btn.classList.add('pulse');
+    setTimeout(closeProductDetail, 350);
   });
   function showImg(i){ curImg=(i+imgs.length)%imgs.length; window.__detailCurImg=curImg; document.getElementById('detailImg').src=imgs[curImg]; detailContent.querySelectorAll('[data-dot]').forEach(d=>d.style.background=Number(d.dataset.dot)===curImg?'#0a0a0a':'rgba(10,10,10,.3)'); }
   window.__detailShowImg = showImg;
