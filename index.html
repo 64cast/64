@@ -71,7 +71,7 @@ button{font-family:var(--font);cursor:pointer}
     </nav>
 
     <div id="stickyBar" style="display:flex;align-items:center;gap:10px;padding:14px 40px;background:#fff;border-bottom:1px solid rgba(0,0,0,.08);">
-      <button class="chip glossO" data-jump="newArrivals">New Arrivals</button>
+      <button class="chip glossO" onclick="location.href='https://64cast.com/new-arrivals/'">New Arrivals</button>
       <button class="chip glossW" data-jump="brands">Shop With Brands</button>
       <button class="chip glossW" onclick="location.href='https://64cast.com/current-stock/'">Current Stock</button>
       <button class="chip glossW" onclick="location.href='https://64cast.com/current-stock/?status=preorder'">Pre-Order</button>
@@ -182,7 +182,7 @@ button{font-family:var(--font);cursor:pointer}
         <div style="font-size:.55rem;letter-spacing:2.5px;text-transform:uppercase;color:#888;margin-bottom:14px;">Explore</div>
         <a href="#" style="display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.5px;color:#333;margin-bottom:12px;">Home</a>
         <a href="https://64cast.com/current-stock/" style="display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.5px;color:#333;margin-bottom:12px;">Current Stocks</a>
-        <a href="#newArrivals" style="display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.5px;color:#333;margin-bottom:12px;">New Arrivals</a>
+        <a href="https://64cast.com/new-arrivals/" style="display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.5px;color:#333;margin-bottom:12px;">New Arrivals</a>
         <a href="https://64cast.com/current-stock/?status=preorder" style="display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.5px;color:#333;margin-bottom:12px;">Pre-Order</a>
         <a href="#faq" style="display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.5px;color:#333;">FAQ</a>
       </div>
@@ -250,6 +250,18 @@ button{font-family:var(--font);cursor:pointer}
 <script>
 const WA_NUMBER = '971552112588';
 const API_URL = 'https://64cast-products-api.trailsec5.workers.dev';
+const EMBEDDED_DEMO_PRODUCTS = [
+  {"MODEL NO.":"MGT00456","PRODUCT NAME":"Nissan Skyline GT-R R34 V-Spec II Nur","BRAND":"Mini GT","CARBRAND":"Nissan","PRICE":95,"STATUS":"currentstock","SORTORDER":1,"NEW":true,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/minigt.jpg"},
+  {"MODEL NO.":"INN64-021","PRODUCT NAME":"Honda Civic EG6 SiR-II","BRAND":"Inno64","CARBRAND":"Honda","PRICE":88,"STATUS":"currentstock","SORTORDER":2,"NEW":true,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/inno64.jpg"},
+  {"MODEL NO.":"BBR-F1-16","PRODUCT NAME":"1/43 F1 Ferrari SF-24 #16 Charles Leclerc","BRAND":"Bburago","CARBRAND":"Ferrari","PRICE":50,"STATUS":"currentstock","SORTORDER":3,"NEW":false,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/bburago.jpg"},
+  {"MODEL NO.":"KH-SUP-01","PRODUCT NAME":"Toyota Supra MK4 Kaido Racer","BRAND":"Kaido House","CARBRAND":"Toyota","PRICE":75,"STATUS":"currentstock","SORTORDER":4,"NEW":false,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/kaidohouse.jpg"},
+  {"MODEL NO.":"CM-LFA-01","PRODUCT NAME":"Lexus LFA Nurburgring Edition","BRAND":"CM Model","CARBRAND":"Lexus","PRICE":110,"STATUS":"currentstock","SORTORDER":5,"NEW":false,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/cmmodel.jpg"},
+  {"MODEL NO.":"MH-RX7-01","PRODUCT NAME":"Mazda RX-7 FD3S Veilside","BRAND":"Motorhelix","CARBRAND":"Mazda","PRICE":98,"STATUS":"currentstock","SORTORDER":6,"NEW":false,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/motorhelix.jpg"},
+  {"MODEL NO.":"HJ-R32-01","PRODUCT NAME":"Nissan Skyline GT-R R32 Group A","BRAND":"Hobby Japan","CARBRAND":"Nissan","PRICE":102,"STATUS":"currentstock","SORTORDER":7,"NEW":false,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/hobbyjapan.jpg"},
+  {"MODEL NO.":"LEGO-CIV-01","PRODUCT NAME":"Speed Champions Civic Type R","BRAND":"Lego","CARBRAND":"Honda","PRICE":45,"STATUS":"currentstock","SORTORDER":8,"NEW":false,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/lego.jpg"},
+  {"MODEL NO.":"TW-GR-01","PRODUCT NAME":"Toyota GR Supra Global64 Racing","BRAND":"Tarmac Works","CARBRAND":"Toyota","PRICE":120,"STATUS":"preorder","SORTORDER":9,"NEW":false,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/tarmacworks.jpg"},
+  {"MODEL NO.":"PR-GTR-35","PRODUCT NAME":"Nissan GT-R R35 Liberty Walk","BRAND":"PopRace","CARBRAND":"Nissan","PRICE":105,"STATUS":"preorder","SORTORDER":10,"NEW":false,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/poprace.jpg"}
+];
 const fallbackImg = "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22400%22%20height%3D%22400%22%20viewBox%3D%220%200%20400%20400%22%3E%3Crect%20width%3D%22400%22%20height%3D%22400%22%20fill%3D%22%23f2f2f2%22%2F%3E%3Cdefs%3E%3Cpattern%20id%3D%22s%22%20width%3D%2214%22%20height%3D%2214%22%20patternTransform%3D%22rotate(45)%22%20patternUnits%3D%22userSpaceOnUse%22%3E%3Crect%20width%3D%227%22%20height%3D%2214%22%20fill%3D%22%23e9e9e9%22%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D%22400%22%20height%3D%22400%22%20fill%3D%22url(%23s)%22%2F%3E%3Ctext%20x%3D%22200%22%20y%3D%22200%22%20font-family%3D%22monospace%22%20font-size%3D%2213%22%20fill%3D%22%238a8a8a%22%20text-anchor%3D%22middle%22%3Eproduct%20photo%3C%2Ftext%3E%3C%2Fsvg%3E";
 
 function statusOf(p){
@@ -340,7 +352,7 @@ function renderStock() {
   const q = document.getElementById('searchInput').value.trim().toLowerCase();
   const filtered = allProducts
     .filter(p => activeFilter === 'All' || p.brand === activeFilter)
-    .filter(p => !q || p.name.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q));
+    .filter(p => !q || p.name.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q) || (p.id||'').toLowerCase().includes(q));
   const grid = document.getElementById('stockGrid');
   grid.innerHTML = filtered.length ? filtered.map(cardHtml).join('') : '<div style="width:100%;text-align:center;padding:40px 0;color:#999;font-size:.85rem;">No pieces match that search/filter.</div>';
   bindAdd(grid);
@@ -363,7 +375,16 @@ fetch(API_URL, { method: 'GET', cache: 'no-store' })
     renderStock();
     renderPreorder();
   })
-  .catch(() => { renderNewArrivals(); renderStock(); renderPreorder(); });
+  .catch(() => {
+    const products = EMBEDDED_DEMO_PRODUCTS.map(toCard);
+    allProducts = products.filter(p => p.status === 'currentstock').sort(bySortOrder).slice(0, 6);
+    preOrderProducts = products.filter(p => p.status === 'preorder').sort(bySortOrder).slice(0, 6);
+    newArrivalsProducts = products.filter(p => p.isNew && p.status !== 'sold').sort(bySortOrder).slice(0, 6);
+    if (!newArrivalsProducts.length) newArrivalsProducts = products.filter(p => p.status !== 'sold').sort(bySortOrder).slice(0, 6);
+    renderNewArrivals();
+    renderStock();
+    renderPreorder();
+  });
 
 function addToCart(product) {
   const existing = cart.find(i => i.id === product.id);
@@ -496,13 +517,18 @@ document.getElementById('searchInput').addEventListener('keydown', e => {
 });
 document.getElementById('joinBtn').addEventListener('click', () => {
   const num = document.getElementById('newsletterInput').value.trim();
-  const msg = num ? `Hi! Please add ${num} to the alerts list.` : "Hi! I'd like to get new arrival alerts.";
-  window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+  if (!num) { alert('Please enter your WhatsApp number.'); return; }
+  fetch(API_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'join-community', phone: num }) })
+    .then(r => r.json()).then(() => { document.getElementById('newsletterInput').value=''; alert('Joined! You\'ll get alerts on WhatsApp.'); })
+    .catch(() => window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent('Hi! Please add ' + num + ' to the alerts list.')}`, '_blank'));
 });
 document.getElementById('checkoutBtn').addEventListener('click', () => {
-  const lines = cart.map(i => `${i.qty}x ${i.name} (${i.price})`).join('\n');
+  if (!cart.length) return;
+  const lines = cart.map((i,idx) => `${idx+1}. ${i.brand ? i.brand+' — '+i.name : i.name} (${i.id})\nhttps://64cast.com/product/${i.id}\nQty ${i.qty} × ${i.price} = AED ${i.priceValue*i.qty}`).join('\n\n');
   const subtotal = cart.reduce((s,i) => s + i.priceValue * i.qty, 0);
-  const msg = `Hi! I'd like to order:\n${lines}\n\nSubtotal: AED ${subtotal}`;
+  const orderId = '64C-' + Math.random().toString(36).slice(2,10).toUpperCase();
+  const msg = `${lines}\n\nPending Order ID: ${orderId}`;
+  fetch(API_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'create-pending-order', items: cart, total: subtotal, orderId, source: 'website-cart-homepage' }) }).catch(()=>{});
   window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
 });
 
