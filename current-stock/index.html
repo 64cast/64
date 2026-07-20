@@ -11,7 +11,7 @@
 <style>
 :root{--font:"Jost",sans-serif}
 *{box-sizing:border-box}
-body{margin:0;font-family:var(--font);font-weight:300;color:#0a0a0a;-webkit-font-smoothing:antialiased}
+body{margin:0;font-family:var(--font);font-weight:300;color:#0a0a0a;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
 img{display:block;max-width:100%}
 a{color:#0a0a0a;text-decoration:none}
 a:hover{color:#f0701e}
@@ -54,7 +54,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 </head>
 <body>
 
-<div style="min-height:100vh;background:#fff;position:relative;overflow-x:hidden;">
+<div style="min-height:100vh;background:#fff;position:relative;">
 
   <div id="stickyHeader" style="position:sticky;top:0;z-index:100;">
     <div class="ann" style="text-align:center;padding:8px 16px;font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#fff;background:#0a0a0a;border-bottom:1px solid rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);">
@@ -339,7 +339,6 @@ function renderGrid(){
     <div class="product-card" data-product='${JSON.stringify(p).replace(/'/g,"&apos;")}' style="border-radius:18px;overflow:hidden;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.7);box-shadow:0 12px 30px rgba(0,0,0,.06);">
       <div style="position:relative;aspect-ratio:1/1;background:#fff;overflow:hidden;cursor:pointer;">
         <img src="${imgs[0]}" data-imgs='${JSON.stringify(imgs)}' data-cur="0" alt="${name}" style="width:100%;height:100%;object-fit:cover;touch-action:pan-y;" onerror="this.src='${fallbackImg}'"${imgs.length>1 ? ` onmouseenter="this.dataset.hoverCur=this.dataset.cur; this.dataset.cur=1; this.src=JSON.parse(this.dataset.imgs)[1];" onmouseleave="this.dataset.cur=this.dataset.hoverCur||0; this.src=JSON.parse(this.dataset.imgs)[Number(this.dataset.cur)];" ontouchstart="this.dataset.sx=event.touches[0].clientX" ontouchend="var im=JSON.parse(this.dataset.imgs);var dx=event.changedTouches[0].clientX-this.dataset.sx;if(Math.abs(dx)>30){var c=(Number(this.dataset.cur)+(dx<0?1:-1)+im.length)%im.length;this.dataset.cur=c;this.src=im[c];}"` : ''}>
-        ${imgs.length>1 ? `<div style="position:absolute;bottom:6px;left:50%;transform:translateX(-50%);display:flex;gap:4px;">${imgs.map((_,i)=>`<span style="width:5px;height:5px;border-radius:50%;background:${i===0?'#0a0a0a':'rgba(10,10,10,.3)'};"></span>`).join('')}</div>` : ''}
         ${disabled ? `<div style="position:absolute;top:8px;left:8px;padding:3px 9px;border-radius:999px;font-size:.44rem;letter-spacing:1px;text-transform:uppercase;font-weight:700;background:rgba(10,10,10,.75);color:#fff;">Sold</div>` : ''}
       </div>
       <div style="padding:12px 14px 14px;">
@@ -359,6 +358,19 @@ function renderGrid(){
     card.addEventListener('click', (e) => {
       if(e.target.closest('[data-add]')) return;
       openProductDetail(JSON.parse(card.dataset.product));
+    });
+  });
+  validateCardImages(grid);
+}
+function validateCardImages(grid){
+  const checkImg = src => new Promise(resolve => { const im = new Image(); im.onload = () => resolve(src); im.onerror = () => resolve(null); im.src = src; });
+  grid.querySelectorAll('img[data-imgs]').forEach(img => {
+    let list; try { list = JSON.parse(img.dataset.imgs); } catch(e) { return; }
+    if (list.length <= 1) return;
+    Promise.all(list.map(checkImg)).then(results => {
+      const valid = results.filter(Boolean);
+      img.dataset.imgs = JSON.stringify(valid.length ? valid : [list[0]]);
+      img.dataset.cur = 0;
     });
   });
 }
@@ -412,7 +424,17 @@ function openProductDetail(product){
   const name = product['PRODUCT NAME'] || '';
   const resolveAny = raw => !raw ? '' : (/^https?:|^data:/.test(raw) ? raw : IMAGE_BASE_URL + raw);
   const rawImgs = [...new Set([resolveAny(product['REF IMG']), resolveAny(product.IMG1), resolveAny(product.IMG2), resolveAny(product.IMG3), resolveAny(product.IMG4)].filter(Boolean))];
-  const imgs = rawImgs.length ? rawImgs : [fallbackImg];
+  detailContent.innerHTML = '<div style="text-align:center;padding:60px 0;color:#999;font-size:.8rem;">Loading...</div>';
+  detailOverlay.classList.add('open');
+  const checkImg = src => new Promise(resolve => { const im = new Image(); im.onload = () => resolve(src); im.onerror = () => resolve(null); im.src = src; });
+  Promise.all(rawImgs.map(checkImg)).then(results => {
+    const imgs = results.filter(Boolean);
+    renderDetailBody(product, name, imgs.length ? imgs : [fallbackImg]);
+  });
+}
+function renderDetailBody(product, name, imgs){
+  const detailOverlay = document.getElementById('productDetailOverlay');
+  const detailContent = document.getElementById('detailContent');
   let curImg = 0;
   detailContent.innerHTML = `
     <div>
@@ -469,7 +491,6 @@ function openProductDetail(product){
   wrap.addEventListener('touchstart', e => { sx = e.touches[0].clientX; });
   wrap.addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 30) showImg(curImg + (dx < 0 ? 1 : -1)); });
   detailImgCount = imgs.length;
-  detailOverlay.classList.add('open');
 }
 let detailImgCount = 0;
 function closeProductDetail(){ document.getElementById('productDetailOverlay').classList.remove('open'); }
