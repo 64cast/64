@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>FAQ — 64CAST</title>
-<meta name="theme-color" content="#cfd1d4">
+<meta name="theme-color" content="#ffffff">
 <link rel="icon" href="https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/64_LOGO_Falcon.png" type="image/png">
 <link href="https://fonts.googleapis.com" rel="preconnect">
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--font:"Jost",sans-serif}
 *{box-sizing:border-box}
-body{margin:0;font-family:var(--font);font-weight:300;color:#0a0a0a;-webkit-font-smoothing:antialiased}
+body{margin:0;font-family:var(--font);font-weight:300;color:#0a0a0a;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
 img{display:block;max-width:100%}
 a{color:#0a0a0a;text-decoration:none}
 a:hover{color:#f0701e}
@@ -39,23 +39,26 @@ button{font-family:var(--font);cursor:pointer}
 </head>
 <body>
 
-<div style="min-height:100vh;background:linear-gradient(135deg,#e2e3e5 0%,#cfd1d4 45%,#b9bcc0 100%);position:relative;overflow-x:hidden;">
+<div style="min-height:100vh;background:#fff;position:relative;">
 
-  <div style="position:sticky;top:0;z-index:101;text-align:center;padding:8px 16px;font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#fff;background:#0a0a0a;backdrop-filter:none;-webkit-backdrop-filter:none;border-bottom:1px solid rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);">
-    <a href="https://chat.whatsapp.com/DFLnEWrKlQGKwrd01w2pOa" target="_blank" rel="noopener" style="color:inherit;">Join our <span style="text-decoration:underline;text-underline-offset:3px;font-weight:500;">WhatsApp Community</span> for the latest drops</a>
-  </div>
-
-  <nav style="position:sticky;top:33px;z-index:100;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:76px;padding:0 40px;background:rgba(255,255,255,.5);backdrop-filter:none;-webkit-backdrop-filter:none;border-bottom:1px solid rgba(255,255,255,.55);box-shadow:0 8px 32px rgba(0,0,0,.06),inset 0 1px 0 rgba(255,255,255,.85);">
-    <button id="navToggle" aria-label="Open menu" class="glossW" style="justify-self:start;display:flex;align-items:center;gap:8px;width:40px;height:40px;border-radius:999px;justify-content:center;">
-      <svg viewBox="0 0 24 24" style="width:17px;height:17px;stroke:#0a0a0a;fill:none;stroke-width:1.6;stroke-linecap:round"><line x1="3" x2="21" y1="6" y2="6"></line><line x1="3" x2="15" y1="12" y2="12"></line><line x1="3" x2="21" y1="18" y2="18"></line></svg>
-    </button>
-    <a href="/" style="justify-self:center;line-height:0;">
-      <img src="https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/64CAST_LOGO_B.png" alt="64CAST" style="height:24px;width:auto;object-fit:contain;">
-    </a>
-    <div style="justify-self:end;display:flex;align-items:center;gap:10px;">
-      <a href="/current-stock" class="glossW" style="height:40px;padding:0 18px;border-radius:999px;display:flex;align-items:center;font-size:.68rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;color:#0a0a0a;">Cart</a>
+  <div id="stickyHeader" style="position:sticky;top:0;z-index:100;">
+    <div class="ann" style="text-align:center;padding:8px 16px;font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#fff;background:#0a0a0a;border-bottom:1px solid rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);">
+      <a href="https://chat.whatsapp.com/DFLnEWrKlQGKwrd01w2pOa" target="_blank" rel="noopener" style="color:inherit;">Join our <span style="text-decoration:underline;text-underline-offset:3px;font-weight:500;">WhatsApp Community</span> for the latest drops</a>
     </div>
-  </nav>
+
+    <nav style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:56px;padding:0 40px;background:#fff;border-bottom:1px solid rgba(0,0,0,.08);">
+      <button id="navToggle" aria-label="Open menu" style="justify-self:start;display:flex;align-items:center;gap:8px;background:none;border:none;padding:0;">
+        <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:#0a0a0a;fill:none;stroke-width:1.6;stroke-linecap:round"><line x1="3" x2="21" y1="6" y2="6"></line><line x1="3" x2="15" y1="12" y2="12"></line><line x1="3" x2="21" y1="18" y2="18"></line></svg>
+        <span style="font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:#0a0a0a;">Menu</span>
+      </button>
+      <a href="/" style="justify-self:center;line-height:0;">
+        <img src="https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/64CAST_LOGO_B.png" alt="64CAST" style="height:22px;width:auto;object-fit:contain;">
+      </a>
+      <button id="cartToggle" aria-label="Open cart" onclick="location.href='/current-stock'" style="justify-self:end;background:none;border:none;padding:0;font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:#0a0a0a;">
+        Cart
+      </button>
+    </nav>
+  </div>
 
   <main style="max-width:760px;margin:0 auto;padding:56px 24px 90px;position:relative;z-index:1;">
     <div style="text-align:center;margin-bottom:44px;">
@@ -175,12 +178,12 @@ button{font-family:var(--font);cursor:pointer}
   <footer style="margin:20px 20px 20px;border-radius:34px;overflow:hidden;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.7);box-shadow:0 20px 60px rgba(0,0,0,.08),inset 0 1px 0 rgba(255,255,255,.9);backdrop-filter:none;-webkit-backdrop-filter:none;position:relative;z-index:1;">
     <div style="padding:22px 48px;display:flex;justify-content:center;border-bottom:1px solid rgba(255,255,255,.5);">
       <div style="display:flex;gap:26px;flex-wrap:wrap;justify-content:center;">
-        <span style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#aaa;">Facebook</span>
-        <span style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#aaa;">Instagram</span>
-        <a href="https://wa.me/971552112588" target="_blank" rel="noopener" style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#f0701e;font-weight:600;">WhatsApp</a>
-        <span style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#aaa;">TikTok</span>
-        <span style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#aaa;">Snapchat</span>
-        <span style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#aaa;">YouTube</span>
+        <span style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#0a0a0a;font-weight:700;opacity:.5;">Facebook</span>
+        <span style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#0a0a0a;font-weight:700;opacity:.5;">Instagram</span>
+        <a href="https://wa.me/971552112588" target="_blank" rel="noopener" style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#0a0a0a;font-weight:700;opacity:.5;">WhatsApp</a>
+        <span style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#0a0a0a;font-weight:700;opacity:.5;">TikTok</span>
+        <span style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#0a0a0a;font-weight:700;opacity:.5;">Snapchat</span>
+        <span style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#0a0a0a;font-weight:700;opacity:.5;">YouTube</span>
       </div>
     </div>
     <div style="padding:40px 48px;display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:36px;">
@@ -214,8 +217,8 @@ button{font-family:var(--font);cursor:pointer}
     <div style="padding:18px 48px;text-align:center;border-top:1px solid rgba(255,255,255,.5);color:#999;font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;">© 2026 64CAST</div>
   </footer>
 
-  <div id="navOverlay" class="drawer-overlay">
-    <div style="position:absolute;top:0;left:0;bottom:0;width:290px;border-radius:0;overflow:hidden;background:rgba(255,255,255,.65);backdrop-filter:none;-webkit-backdrop-filter:none;border-right:1px solid rgba(255,255,255,.55);box-shadow:12px 0 60px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.9);padding:28px 26px;display:flex;flex-direction:column;gap:6px;">
+  <div id="navOverlay" class="drawer-overlay" style="z-index:200;">
+    <div style="position:absolute;top:0;left:0;bottom:0;width:290px;border-radius:0;overflow:hidden;background:rgba(255,255,255,.97);backdrop-filter:none;-webkit-backdrop-filter:none;border-right:1px solid rgba(255,255,255,.9);box-shadow:16px 0 70px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.9);padding:28px 26px;display:flex;flex-direction:column;gap:6px;">
       <div style="position:absolute;top:0;left:0;right:0;height:45%;background:linear-gradient(180deg,rgba(255,255,255,.4),transparent);pointer-events:none;"></div>
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;position:relative;">
         <div style="font-size:.62rem;letter-spacing:3px;text-transform:uppercase;color:#888;font-weight:600;">Menu</div>
