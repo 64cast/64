@@ -31,13 +31,14 @@ button{font-family:var(--font);cursor:pointer}
 .drawer-overlay.open .drawer-panel-right{transform:translateX(0);}
 .drawer-panel-left{transform:translateX(-100%);transition:transform .35s cubic-bezier(.22,1,.36,1);}
 .drawer-overlay.open .drawer-panel-left{transform:translateX(0);}
-@media (max-width:760px){ .drawer-panel-right,.drawer-panel-left{width:100vw!important;} }
+@media (max-width:760px){ .drawer-panel-right,.drawer-panel-left{width:100vw!important;} #filterOverlay .drawer-panel-left{top:auto!important;bottom:0!important;left:0!important;right:0!important;max-height:80vh!important;border-radius:20px 20px 0 0!important;border-right:none!important;border-top:1px solid rgba(255,255,255,.9);box-shadow:0 -16px 70px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.9)!important;transform:translateY(100%)!important;} #filterOverlay.open .drawer-panel-left{transform:translateY(0)!important;} }
 .navlink{padding:12px 8px;font-size:.9rem;text-transform:uppercase;letter-spacing:1px;text-decoration:none;color:#0a0a0a;display:block;}
 input[type=range]{-webkit-appearance:none;width:100%;height:4px;border-radius:999px;background:rgba(255,255,255,.6);}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#fff;border:2px solid #dd5912;cursor:pointer;margin-top:-5px;}
 @keyframes addPulse{0%{transform:scale(1);}50%{transform:scale(1.4);}100%{transform:scale(1);}}
 .addbtn.pulse{animation:addPulse .38s cubic-bezier(.34,1.56,.64,1);background:#dd5912!important;border-color:#dd5912!important;}
 .addbtn.pulse svg{stroke:#fff!important;}
+@media (max-width:760px){ .sheetHandle{display:block!important;} }
 @media (max-width:860px){
   nav img[alt="64CAST"]{height:16px!important;}
   #stockGrid{grid-template-columns:repeat(2,1fr)!important;gap:10px!important;padding:8px 16px 24px!important;}
@@ -162,6 +163,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 
   <div id="filterOverlay" class="drawer-overlay" style="z-index:210;">
     <div class="drawer-panel-left" style="position:absolute;top:0;left:0;bottom:0;width:320px;overflow-y:auto;background:rgba(255,255,255,.97);border-right:1px solid rgba(255,255,255,.9);box-shadow:16px 0 70px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.9);padding:26px;">
+      <div class="sheetHandle" style="display:none;width:36px;height:4px;border-radius:999px;background:rgba(0,0,0,.15);margin:0 auto 16px;"></div>
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
         <div style="font-size:.85rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;">Filters</div>
         <button id="filterClose" class="glossW" style="width:30px;height:30px;border-radius:999px;display:flex;align-items:center;justify-content:center;">
@@ -416,6 +418,11 @@ function renderCart(){
   }));
 }
 
+window.addEventListener('message', e => { if (e.data === '__openFilters') openFilters(); });
+
+function syncBodyScroll(){ document.body.style.overflow = document.querySelectorAll('.drawer-overlay.open').length ? 'hidden' : ''; }
+new MutationObserver(syncBodyScroll).observe(document.body, {attributes:true, attributeFilter:['class'], subtree:true});
+
 function closeAllDrawers(){ ['navOverlay','cartOverlay','filterOverlay','productDetailOverlay'].forEach(id => document.getElementById(id).classList.remove('open')); }
 function openNav(){ closeAllDrawers(); document.getElementById('navOverlay').classList.add('open'); }
 function closeNav(){ document.getElementById('navOverlay').classList.remove('open'); }
@@ -444,7 +451,7 @@ function renderDetailBody(product, name, imgs){
   let curImg = 0;
   detailContent.innerHTML = `
     <div>
-      <div id="detailImgWrap" style="aspect-ratio:1/1;background:#fff;border-radius:12px;overflow:hidden;margin-bottom:20px;position:relative;touch-action:pan-y;">
+      <div id="detailImgWrap" style="aspect-ratio:1/1;background:#fff;border-radius:12px;overflow:hidden;margin-bottom:20px;position:relative;touch-action:none;">
         <img id="detailImg" src="${imgs[0]}" alt="${name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.onerror=null;this.src='${fallbackImg}'">
         ${imgs.length > 1 ? `
         <button id="detailPrevBtn" aria-label="Previous image" style="position:absolute;top:50%;left:10px;transform:translateY(-50%);width:30px;height:30px;border-radius:999px;border:none;background:rgba(255,255,255,.8);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15);"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#0a0a0a;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M15 18l-6-6 6-6"></path></svg></button>
@@ -472,7 +479,9 @@ function renderDetailBody(product, name, imgs){
     addToCart({id:product['MODEL NO.'],name,brand:product.BRAND||'',price:'AED '+Number(product.PRICE||0),priceValue:Number(product.PRICE||0),img:imgs[0]});
     const btn = document.getElementById('detailAddBtn');
     btn.classList.add('pulse');
-    setTimeout(closeProductDetail, 350);
+    const originalLabel = btn.textContent;
+    btn.textContent = 'Added ✓';
+    setTimeout(() => { btn.classList.remove('pulse'); btn.textContent = originalLabel; }, 1200);
   });
   const brandLink = document.getElementById('detailBrandLink');
   if (brandLink && product.BRAND) brandLink.addEventListener('click', () => {
@@ -493,9 +502,10 @@ function renderDetailBody(product, name, imgs){
   if (prevBtn) prevBtn.addEventListener('click', () => showImg(curImg - 1));
   if (nextBtn) nextBtn.addEventListener('click', () => showImg(curImg + 1));
   const wrap = document.getElementById('detailImgWrap');
-  let sx = 0;
-  wrap.addEventListener('touchstart', e => { sx = e.touches[0].clientX; });
-  wrap.addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 30) showImg(curImg + (dx < 0 ? 1 : -1)); });
+  let sx = 0, sy = 0;
+  wrap.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; });
+  wrap.addEventListener('touchmove', e => { e.preventDefault(); }, {passive:false});
+  wrap.addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - sx; const dy = e.changedTouches[0].clientY - sy; if (Math.abs(dx) > 30 && Math.abs(dx) > Math.abs(dy)) showImg(curImg + (dx < 0 ? 1 : -1)); });
   detailImgCount = imgs.length;
 }
 let detailImgCount = 0;
@@ -528,7 +538,7 @@ document.addEventListener('keydown', e => {
 [['navOverlay',closeNav],['cartOverlay',closeCart],['filterOverlay',closeFilters],['productDetailOverlay',closeProductDetail]].forEach(([id,close]) => {
   const ov = document.getElementById(id);
   let sx = 0;
-  ov.addEventListener('touchstart', e => { if (e.target.id === id) sx = e.touches[0].clientX; else sx = null; });
+  ov.addEventListener('touchstart', e => { if (e.target.closest('#detailImgWrap, button, a, input, select')) { sx = null; return; } sx = e.touches[0].clientX; });
   ov.addEventListener('touchend', e => { if (sx === null) return; const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 50) close(); });
 });
 document.getElementById('searchInput').addEventListener('input', () => { updateFiltersCount(); resetPaging(); });
