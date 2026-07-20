@@ -227,16 +227,16 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 <script>
 const API_URL = 'https://64cast-products-api.trailsec5.workers.dev';
 const EMBEDDED_DEMO_PRODUCTS = [
-  {"MODEL NO.":"MGT00456","PRODUCT NAME":"Nissan Skyline GT-R R34 V-Spec II Nur","BRAND":"Mini GT","CARBRAND":"Nissan","PRICE":95,"STATUS":"currentstock","SORTORDER":1,"NEW":true,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/minigt.jpg","IMG2":""},
-  {"MODEL NO.":"INN64-021","PRODUCT NAME":"Honda Civic EG6 SiR-II","BRAND":"Inno64","CARBRAND":"Honda","PRICE":88,"STATUS":"currentstock","SORTORDER":2,"NEW":true,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/inno64.jpg","IMG2":""},
-  {"MODEL NO.":"BBR-F1-16","PRODUCT NAME":"1/43 F1 Ferrari SF-24 #16 Charles Leclerc","BRAND":"Bburago","CARBRAND":"Ferrari","PRICE":50,"STATUS":"currentstock","SORTORDER":3,"NEW":false,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/bburago.jpg","IMG2":""},
-  {"MODEL NO.":"KH-SUP-01","PRODUCT NAME":"Toyota Supra MK4 Kaido Racer","BRAND":"Kaido House","CARBRAND":"Toyota","PRICE":75,"STATUS":"currentstock","SORTORDER":4,"NEW":false,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/kaidohouse.jpg","IMG2":""},
-  {"MODEL NO.":"CM-LFA-01","PRODUCT NAME":"Lexus LFA Nurburgring Edition","BRAND":"CM Model","CARBRAND":"Lexus","PRICE":110,"STATUS":"currentstock","SORTORDER":5,"NEW":false,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/cmmodel.jpg","IMG2":""},
-  {"MODEL NO.":"MH-RX7-01","PRODUCT NAME":"Mazda RX-7 FD3S Veilside","BRAND":"Motorhelix","CARBRAND":"Mazda","PRICE":98,"STATUS":"currentstock","SORTORDER":6,"NEW":false,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/motorhelix.jpg","IMG2":""},
-  {"MODEL NO.":"HJ-R32-01","PRODUCT NAME":"Nissan Skyline GT-R R32 Group A","BRAND":"Hobby Japan","CARBRAND":"Nissan","PRICE":102,"STATUS":"currentstock","SORTORDER":7,"NEW":false,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/hobbyjapan.jpg","IMG2":""},
-  {"MODEL NO.":"LEGO-CIV-01","PRODUCT NAME":"Speed Champions Civic Type R","BRAND":"Lego","CARBRAND":"Honda","PRICE":45,"STATUS":"currentstock","SORTORDER":8,"NEW":false,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/lego.jpg","IMG2":""},
-  {"MODEL NO.":"TW-GR-01","PRODUCT NAME":"Toyota GR Supra Global64 Racing","BRAND":"Tarmac Works","CARBRAND":"Toyota","PRICE":120,"STATUS":"preorder","SORTORDER":9,"NEW":false,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/tarmacworks.jpg","IMG2":""},
-  {"MODEL NO.":"PR-GTR-35","PRODUCT NAME":"Nissan GT-R R35 Liberty Walk","BRAND":"PopRace","CARBRAND":"Nissan","PRICE":105,"STATUS":"preorder","SORTORDER":10,"NEW":false,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/poprace.jpg","IMG2":""}
+  {"MODEL NO.":"MGT00456","PRODUCT NAME":"Nissan Skyline GT-R R34 V-Spec II Nur","BRAND":"Mini GT","CARBRAND":"Nissan","PRICE":95,"STATUS":"currentstock","SORTORDER":1,"NEW":true,"QTY":5,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/minigt.jpg","IMG2":""},
+  {"MODEL NO.":"INN64-021","PRODUCT NAME":"Honda Civic EG6 SiR-II","BRAND":"Inno64","CARBRAND":"Honda","PRICE":88,"STATUS":"currentstock","SORTORDER":2,"NEW":true,"QTY":5,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/inno64.jpg","IMG2":""},
+  {"MODEL NO.":"BBR-F1-16","PRODUCT NAME":"1/43 F1 Ferrari SF-24 #16 Charles Leclerc","BRAND":"Bburago","CARBRAND":"Ferrari","PRICE":50,"STATUS":"currentstock","SORTORDER":3,"NEW":false,"QTY":5,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/bburago.jpg","IMG2":""},
+  {"MODEL NO.":"KH-SUP-01","PRODUCT NAME":"Toyota Supra MK4 Kaido Racer","BRAND":"Kaido House","CARBRAND":"Toyota","PRICE":75,"STATUS":"currentstock","SORTORDER":4,"NEW":false,"QTY":5,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/kaidohouse.jpg","IMG2":""},
+  {"MODEL NO.":"CM-LFA-01","PRODUCT NAME":"Lexus LFA Nurburgring Edition","BRAND":"CM Model","CARBRAND":"Lexus","PRICE":110,"STATUS":"currentstock","SORTORDER":5,"NEW":false,"QTY":5,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/cmmodel.jpg","IMG2":""},
+  {"MODEL NO.":"MH-RX7-01","PRODUCT NAME":"Mazda RX-7 FD3S Veilside","BRAND":"Motorhelix","CARBRAND":"Mazda","PRICE":98,"STATUS":"currentstock","SORTORDER":6,"NEW":false,"QTY":5,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/motorhelix.jpg","IMG2":""},
+  {"MODEL NO.":"HJ-R32-01","PRODUCT NAME":"Nissan Skyline GT-R R32 Group A","BRAND":"Hobby Japan","CARBRAND":"Nissan","PRICE":102,"STATUS":"currentstock","SORTORDER":7,"NEW":false,"QTY":5,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/hobbyjapan.jpg","IMG2":""},
+  {"MODEL NO.":"LEGO-CIV-01","PRODUCT NAME":"Speed Champions Civic Type R","BRAND":"Lego","CARBRAND":"Honda","PRICE":45,"STATUS":"currentstock","SORTORDER":8,"NEW":false,"QTY":5,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/lego.jpg","IMG2":""},
+  {"MODEL NO.":"TW-GR-01","PRODUCT NAME":"Toyota GR Supra Global64 Racing","BRAND":"Tarmac Works","CARBRAND":"Toyota","PRICE":120,"STATUS":"preorder","SORTORDER":9,"NEW":false,"QTY":5,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/tarmacworks.jpg","IMG2":""},
+  {"MODEL NO.":"PR-GTR-35","PRODUCT NAME":"Nissan GT-R R35 Liberty Walk","BRAND":"PopRace","CARBRAND":"Nissan","PRICE":105,"STATUS":"preorder","SORTORDER":10,"NEW":false,"QTY":5,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/poprace.jpg","IMG2":""}
 ];
 const IMAGE_BASE_URL = 'https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/';
 const WA_NUMBER = '971552112588';
@@ -259,7 +259,7 @@ const QS_BRAND = (new URLSearchParams(window.location.search).get('brand') || ''
 const QS_SEARCH = (new URLSearchParams(window.location.search).get('q') || '').trim();
 let activeBrand = QS_BRAND || 'All';
 let activeVehicleBrand = 'All';
-if (QS_SEARCH) { document.getElementById('searchInput').value = QS_SEARCH; document.getElementById('mobileSearchInput').value = QS_SEARCH; }
+if (QS_SEARCH) { document.getElementById('searchInput').value = QS_SEARCH; }
 let cart = [];
 let visibleCount = 20;
 const PAGE_SIZE = 20;
@@ -321,7 +321,7 @@ function renderGrid(){
     .filter(p => activeBrand === 'All' || p.BRAND === activeBrand)
     .filter(p => activeVehicleBrand === 'All' || p.CARBRAND === activeVehicleBrand)
     .filter(p => { const price = Number(p.PRICE||0); return price >= priceMin && price <= priceMax; })
-    .filter(p => !q || (p['PRODUCT NAME']||'').toLowerCase().includes(q) || (p.BRAND||'').toLowerCase().includes(q) || (p.CARBRAND||'').toLowerCase().includes(q));
+    .filter(p => !q || (p['PRODUCT NAME']||'').toLowerCase().includes(q) || (p.BRAND||'').toLowerCase().includes(q) || (p.CARBRAND||'').toLowerCase().includes(q) || (p['MODEL NO.']||'').toLowerCase().includes(q));
   document.getElementById('resultCount').textContent = '(' + filtered.length + ')';
   const visible = filtered.slice(0, visibleCount);
   const loadMoreWrap = document.getElementById('loadMoreWrap');
