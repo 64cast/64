@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>64CAST — Limited Pieces. Endless Passion.</title>
-<meta name="theme-color" content="#cfd1d4">
+<meta name="theme-color" content="#ffffff">
 <link rel="icon" href="https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/64_LOGO_Falcon.png" type="image/png">
 <link href="https://fonts.googleapis.com" rel="preconnect">
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--font:"Jost",sans-serif}
 *{box-sizing:border-box}
-body{margin:0;font-family:var(--font);font-weight:300;color:#0a0a0a;-webkit-font-smoothing:antialiased}
+body{margin:0;font-family:var(--font);font-weight:300;color:#0a0a0a;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
 img{display:block;max-width:100%}
 a{color:#0a0a0a;text-decoration:none}
 a:hover{color:#f0701e}
@@ -50,7 +50,7 @@ button{font-family:var(--font);cursor:pointer}
 </head>
 <body>
 
-<div style="min-height:100vh;background:linear-gradient(135deg,#e2e3e5 0%,#cfd1d4 45%,#b9bcc0 100%);position:relative;overflow-x:hidden;">
+<div style="min-height:100vh;background:#fff;position:relative;">
 
   <div id="stickyHeader" style="position:sticky;top:0;z-index:100;">
     <div style="text-align:center;padding:8px 16px;font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#fff;background:#0a0a0a;border-bottom:1px solid rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);">
@@ -296,25 +296,36 @@ function bindAdd(container){
   container.querySelectorAll('.product-card[data-product]').forEach(card => {
     card.addEventListener('click', () => openProductDetail(JSON.parse(card.dataset.product)));
   });
+  validateCardImages(container);
+}
+function validateCardImages(container){
+  const checkImg = src => new Promise(resolve => { const im = new Image(); im.onload = () => resolve(src); im.onerror = () => resolve(null); im.src = src; });
+  container.querySelectorAll('img[data-imgs]').forEach(img => {
+    let list; try { list = JSON.parse(img.dataset.imgs); } catch(e) { return; }
+    if (list.length <= 1) return;
+    Promise.all(list.map(checkImg)).then(results => {
+      const valid = results.filter(Boolean);
+      img.dataset.imgs = JSON.stringify(valid.length ? valid : [list[0]]);
+      img.dataset.cur = 0;
+    });
+  });
 }
 
 function cardHtml(p){
   const imgs = p.imgs && p.imgs.length ? p.imgs : [p.img];
   return `
-    <div class="product-card" data-product='${JSON.stringify(p).replace(/'/g,"&apos;")}' style="flex:0 0 220px;">
-      <div style="position:relative;aspect-ratio:1/1;background:#fff;overflow:hidden;">
+    <div class="product-card" data-product='${JSON.stringify(p).replace(/'/g,"&apos;")}' style="flex:0 0 220px;border-radius:18px;overflow:hidden;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.7);box-shadow:0 12px 30px rgba(0,0,0,.06);">
+      <div style="position:relative;aspect-ratio:1/1;background:#fff;overflow:hidden;cursor:pointer;">
         <img src="${imgs[0]}" data-imgs='${JSON.stringify(imgs)}' data-cur="0" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;touch-action:pan-y;" onerror="this.src='${fallbackImg}'"${imgs.length>1 ? ` onmouseenter="this.dataset.hoverCur=this.dataset.cur; this.dataset.cur=1; this.src=JSON.parse(this.dataset.imgs)[1];" onmouseleave="this.dataset.cur=this.dataset.hoverCur||0; this.src=JSON.parse(this.dataset.imgs)[Number(this.dataset.cur)];" ontouchstart="event.stopPropagation();this.dataset.sx=event.touches[0].clientX" ontouchend="event.stopPropagation();var im=JSON.parse(this.dataset.imgs);var dx=event.changedTouches[0].clientX-this.dataset.sx;if(Math.abs(dx)>30){var c=(Number(this.dataset.cur)+(dx<0?1:-1)+im.length)%im.length;this.dataset.cur=c;this.src=im[c];}"` : ''}>
-        ${imgs.length>1 ? `<div style="position:absolute;bottom:6px;left:50%;transform:translateX(-50%);display:flex;gap:4px;">${imgs.map((_,i)=>`<span style="width:5px;height:5px;border-radius:50%;background:${i===0?'#0a0a0a':'rgba(10,10,10,.3)'};"></span>`).join('')}</div>` : ''}
-        <div style="position:absolute;top:10px;left:10px;padding:5px 12px;border-radius:999px;font-size:.5rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;background:rgba(255,255,255,.7);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.8);color:${p.badgeColor};">${p.badge}</div>
+        <div style="position:absolute;top:8px;left:8px;padding:3px 9px;border-radius:999px;font-size:.44rem;letter-spacing:1px;text-transform:uppercase;font-weight:700;background:rgba(255,255,255,.8);color:${p.badgeColor};">${p.badge}</div>
       </div>
-      <div style="padding:14px 16px 18px;position:relative;">
-        <div style="position:absolute;left:16px;right:16px;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.9),transparent);"></div>
-        <div style="font-size:.6rem;letter-spacing:1.8px;text-transform:uppercase;color:#8a8a8a;margin-bottom:6px;">${p.brand}</div>
-        <div style="font-size:.92rem;font-weight:400;text-transform:uppercase;line-height:1.35;min-height:2.5em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${p.name}</div>
-        <div style="display:flex;align-items:baseline;justify-content:space-between;margin-top:10px;">
-          <div style="font-size:1.02rem;font-weight:500;">${p.price}</div>
-          <button class="addbtn glossW" data-add='${JSON.stringify({id:p.id,name:p.name,brand:p.brand,price:p.price,priceValue:p.priceValue,img:p.img})}'>
-            <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:#0a0a0a;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+      <div style="padding:12px 14px 14px;">
+        <div style="font-size:.55rem;letter-spacing:1px;text-transform:uppercase;color:#aaa;">${p.brand}</div>
+        <div style="font-size:.76rem;font-weight:500;margin:3px 0 10px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.name}</div>
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px;">
+          <div style="font-size:.8rem;font-weight:500;white-space:nowrap;">${p.price}</div>
+          <button class="addbtn" style="background:rgba(255,255,255,.9);border:1px solid #eee;" data-add='${JSON.stringify({id:p.id,name:p.name,brand:p.brand,price:p.price,priceValue:p.priceValue,img:p.img})}'>
+            <svg viewBox="0 0 24 24" style="width:11px;height:11px;stroke:#0a0a0a;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
           </button>
         </div>
       </div>
@@ -396,7 +407,17 @@ function openProductDetail(card){
   const overlay = document.getElementById('productDetailOverlay');
   const detailContent = document.getElementById('detailContent');
   const name = card.name || product['PRODUCT NAME'] || '';
-  const imgs = (card.imgs && card.imgs.length ? card.imgs : [card.img || fallbackImg]);
+  const candidateImgs = (card.imgs && card.imgs.length ? card.imgs : [card.img || fallbackImg]);
+  detailContent.innerHTML = '<div style="text-align:center;padding:60px 0;color:#999;font-size:.8rem;">Loading...</div>';
+  overlay.classList.add('open');
+  const checkImg = src => new Promise(resolve => { const im = new Image(); im.onload = () => resolve(src); im.onerror = () => resolve(null); im.src = src; });
+  Promise.all(candidateImgs.map(checkImg)).then(results => {
+    const imgs = results.filter(Boolean);
+    renderDetailBody(card, name, imgs.length ? imgs : [fallbackImg]);
+  });
+}
+function renderDetailBody(card, name, imgs){
+  const detailContent = document.getElementById('detailContent');
   let curImg = 0;
   detailContent.innerHTML = `
     <div id="detailImgWrap" style="aspect-ratio:1/1;background:#fff;border-radius:12px;overflow:hidden;margin-bottom:20px;position:relative;touch-action:pan-y;">
@@ -407,7 +428,7 @@ function openProductDetail(card){
       <div style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px;">${imgs.map((img,i) => `<button data-dot="${i}" style="width:8px;height:8px;border-radius:50%;background:${i===0?'#0a0a0a':'rgba(10,10,10,.3)'};border:none;cursor:pointer;"></button>`).join('')}</div>` : ''}
     </div>
     <div style="border-bottom:1px solid rgba(10,10,10,.1);padding-bottom:16px;margin-bottom:16px;">
-      <div style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:6px;">${card.brand||''}</div>
+      <div style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:6px;cursor:${card.brand?'pointer':'default'};text-decoration:${card.brand?'underline':'none'};text-underline-offset:3px;" id="detailBrandLink">${card.brand||''}</div>
       <div style="font-size:1rem;font-weight:400;text-transform:uppercase;line-height:1.4;margin-bottom:10px;">${name}</div>
       <div style="font-size:1rem;font-weight:500;margin-bottom:10px;">${card.price||''}</div>
       <div style="display:inline-block;padding:5px 10px;border-radius:6px;font-size:.6rem;letter-spacing:1px;text-transform:uppercase;font-weight:600;background:rgba(240,112,14,.15);color:#dd5912;">${card.badge||''}</div>
@@ -437,7 +458,10 @@ function openProductDetail(card){
   let sx = 0;
   wrap.addEventListener('touchstart', e => { sx = e.touches[0].clientX; });
   wrap.addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 30) showImg(curImg + (dx < 0 ? 1 : -1)); });
-  overlay.classList.add('open');
+  const brandLink = document.getElementById('detailBrandLink');
+  if (brandLink && card.brand) brandLink.addEventListener('click', () => {
+    window.location.href = '/current-stock/?brand=' + encodeURIComponent(card.brand);
+  });
 }
 function closeProductDetail(){ document.getElementById('productDetailOverlay').classList.remove('open'); }
 
