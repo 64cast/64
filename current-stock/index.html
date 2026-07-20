@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title id="pageTitle">Current Stock — 64CAST</title>
-<meta name="theme-color" content="#cfd1d4">
+<meta name="theme-color" content="#ffffff">
 <link rel="icon" href="https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/64_LOGO_Falcon.png" type="image/png">
 <link href="https://fonts.googleapis.com" rel="preconnect">
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
@@ -54,7 +54,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 </head>
 <body>
 
-<div style="min-height:100vh;background:linear-gradient(135deg,#e2e3e5 0%,#cfd1d4 45%,#b9bcc0 100%);position:relative;overflow-x:hidden;">
+<div style="min-height:100vh;background:#fff;position:relative;overflow-x:hidden;">
 
   <div id="stickyHeader" style="position:sticky;top:0;z-index:100;">
     <div class="ann" style="text-align:center;padding:8px 16px;font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#fff;background:#0a0a0a;border-bottom:1px solid rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);">
@@ -138,7 +138,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
   </footer>
 
   <div id="navOverlay" class="drawer-overlay" style="z-index:200;">
-    <div style="position:absolute;top:0;left:0;bottom:0;width:290px;border-radius:0;overflow:hidden;background:rgba(255,255,255,.65);backdrop-filter:none;-webkit-backdrop-filter:none;border-right:1px solid rgba(255,255,255,.55);box-shadow:12px 0 60px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.9);padding:28px 26px;display:flex;flex-direction:column;gap:6px;">
+    <div style="position:absolute;top:0;left:0;bottom:0;width:290px;border-radius:0;overflow:hidden;background:rgba(255,255,255,.97);backdrop-filter:none;-webkit-backdrop-filter:none;border-right:1px solid rgba(255,255,255,.9);box-shadow:16px 0 70px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.9);padding:28px 26px;display:flex;flex-direction:column;gap:6px;">
       <div style="position:absolute;top:0;left:0;right:0;height:45%;background:linear-gradient(180deg,rgba(255,255,255,.4),transparent);pointer-events:none;"></div>
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;position:relative;">
         <div style="font-size:.62rem;letter-spacing:3px;text-transform:uppercase;color:#888;font-weight:600;">Menu</div>
@@ -330,14 +330,17 @@ function renderGrid(){
   grid.innerHTML = visible.length ? visible.map(p => {
     const img = resolveImg(p);
     const img2 = resolveImg2(p);
+    const resolveAny = raw => !raw ? '' : (/^https?:|^data:/.test(raw) ? raw : IMAGE_BASE_URL + raw);
+    const imgs = [...new Set([img, img2, resolveAny(p.IMG3), resolveAny(p.IMG4)].filter(Boolean))];
     const name = p['PRODUCT NAME'] || '';
     const qty = Number(p.QTY||0);
     const disabled = qty <= 0;
     return `
     <div class="product-card" data-product='${JSON.stringify(p).replace(/'/g,"&apos;")}' style="border-radius:18px;overflow:hidden;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.7);box-shadow:0 12px 30px rgba(0,0,0,.06);">
       <div style="position:relative;aspect-ratio:1/1;background:#fff;overflow:hidden;cursor:pointer;">
-        <img src="${img}" data-img1="${img}" data-img2="${img2}" alt="${name}" style="width:100%;height:100%;object-fit:cover;touch-action:pan-y;" onerror="this.src='${fallbackImg}'"${img2 ? ` onmouseenter="this.src='${img2}'" onmouseleave="this.src='${img}'" ontouchstart="this.dataset.sx=event.touches[0].clientX" ontouchend="var dx=event.changedTouches[0].clientX-this.dataset.sx; if(Math.abs(dx)>30){this.src=(this.src===this.dataset.img2)?this.dataset.img1:this.dataset.img2;}"` : ''}>
-        <div style="position:absolute;top:8px;left:8px;padding:3px 9px;border-radius:999px;font-size:.44rem;letter-spacing:1px;text-transform:uppercase;font-weight:700;background:${disabled ? 'rgba(10,10,10,.75)' : 'rgba(255,255,255,.8)'};color:${disabled ? '#fff' : '#0a0a0a'};">${disabled ? 'Sold' : (p.BRAND||'')}</div>
+        <img src="${imgs[0]}" data-imgs='${JSON.stringify(imgs)}' data-cur="0" alt="${name}" style="width:100%;height:100%;object-fit:cover;touch-action:pan-y;" onerror="this.src='${fallbackImg}'"${imgs.length>1 ? ` onmouseenter="this.dataset.hoverCur=this.dataset.cur; this.dataset.cur=1; this.src=JSON.parse(this.dataset.imgs)[1];" onmouseleave="this.dataset.cur=this.dataset.hoverCur||0; this.src=JSON.parse(this.dataset.imgs)[Number(this.dataset.cur)];" ontouchstart="this.dataset.sx=event.touches[0].clientX" ontouchend="var im=JSON.parse(this.dataset.imgs);var dx=event.changedTouches[0].clientX-this.dataset.sx;if(Math.abs(dx)>30){var c=(Number(this.dataset.cur)+(dx<0?1:-1)+im.length)%im.length;this.dataset.cur=c;this.src=im[c];}"` : ''}>
+        ${imgs.length>1 ? `<div style="position:absolute;bottom:6px;left:50%;transform:translateX(-50%);display:flex;gap:4px;">${imgs.map((_,i)=>`<span style="width:5px;height:5px;border-radius:50%;background:${i===0?'#0a0a0a':'rgba(10,10,10,.3)'};"></span>`).join('')}</div>` : ''}
+        ${disabled ? `<div style="position:absolute;top:8px;left:8px;padding:3px 9px;border-radius:999px;font-size:.44rem;letter-spacing:1px;text-transform:uppercase;font-weight:700;background:rgba(10,10,10,.75);color:#fff;">Sold</div>` : ''}
       </div>
       <div style="padding:12px 14px 14px;">
         <div style="font-size:.55rem;letter-spacing:1px;text-transform:uppercase;color:#aaa;">${p.BRAND||''}</div>
@@ -380,14 +383,19 @@ function renderCart(){
   document.getElementById('cartSubtotal').textContent = 'AED ' + subtotal;
   list.innerHTML = cart.length ? cart.map(i => `
     <div style="display:flex;gap:12px;align-items:center;border-bottom:1px solid rgba(10,10,10,.08);padding-bottom:12px;">
-      <img src="${i.img}" alt="${i.name}" style="width:52px;height:52px;border-radius:12px;object-fit:cover;flex-shrink:0;">
+      <img src="${i.img}" alt="${i.name}" data-cart-img="${i.id}" style="width:52px;height:52px;border-radius:12px;object-fit:cover;flex-shrink:0;cursor:pointer;">
       <div style="flex:1;min-width:0;">
+        <div style="font-size:.55rem;letter-spacing:1px;text-transform:uppercase;color:#aaa;">${i.brand||''}${i.brand && i.id ? ' · ' : ''}${i.id||''}</div>
         <div style="font-size:.72rem;text-transform:uppercase;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${i.name}</div>
         <div style="font-size:.72rem;color:#666;margin-top:2px;">${i.price} × ${i.qty}</div>
       </div>
       <button data-remove="${i.id}" style="font-size:.6rem;letter-spacing:1px;text-transform:uppercase;color:#999;background:none;border:none;cursor:pointer;">Remove</button>
     </div>`).join('') : '<div style="text-align:center;color:#999;font-size:.8rem;padding:40px 0;">Your cart is empty.</div>';
   list.querySelectorAll('[data-remove]').forEach(btn => btn.addEventListener('click', () => removeFromCart(btn.dataset.remove)));
+  list.querySelectorAll('[data-cart-img]').forEach(img => img.addEventListener('click', () => {
+    const product = allProducts.find(p => p['MODEL NO.'] === img.dataset.cartImg);
+    if (product) openProductDetail(product);
+  }));
 }
 
 function closeAllDrawers(){ ['navOverlay','cartOverlay','filterOverlay','productDetailOverlay'].forEach(id => document.getElementById(id).classList.remove('open')); }
@@ -403,7 +411,8 @@ function openProductDetail(product){
   const detailContent = document.getElementById('detailContent');
   const name = product['PRODUCT NAME'] || '';
   const resolveAny = raw => !raw ? '' : (/^https?:|^data:/.test(raw) ? raw : IMAGE_BASE_URL + raw);
-  const imgs = [...new Set([resolveImg(product), resolveImg2(product), resolveAny(product.IMG3), resolveAny(product.IMG4)].filter(Boolean))];
+  const rawImgs = [...new Set([resolveAny(product['REF IMG']), resolveAny(product.IMG1), resolveAny(product.IMG2), resolveAny(product.IMG3), resolveAny(product.IMG4)].filter(Boolean))];
+  const imgs = rawImgs.length ? rawImgs : [fallbackImg];
   let curImg = 0;
   detailContent.innerHTML = `
     <div>
@@ -415,7 +424,7 @@ function openProductDetail(product){
         <div style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px;">${imgs.map((img,i) => `<button data-dot="${i}" style="width:8px;height:8px;border-radius:50%;background:${i===0?'#0a0a0a':'rgba(10,10,10,.3)'};border:none;cursor:pointer;"></button>`).join('')}</div>` : ''}
       </div>
       <div style="border-bottom:1px solid rgba(10,10,10,.1);padding-bottom:16px;margin-bottom:16px;">
-        <div style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:6px;">${product.BRAND||''}</div>
+        <div id="detailBrandLink" style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:6px;cursor:pointer;text-decoration:underline;text-underline-offset:3px;">${product.BRAND||''}</div>
         <div style="font-size:1rem;font-weight:400;text-transform:uppercase;line-height:1.4;margin-bottom:10px;">${name}</div>
         <div style="font-size:1rem;font-weight:500;margin-bottom:10px;">AED ${Number(product.PRICE||0)}</div>
         <div style="display:inline-block;padding:5px 10px;border-radius:6px;font-size:.6rem;letter-spacing:1px;text-transform:uppercase;font-weight:600;background:rgba(240,112,14,.15);color:#dd5912;">${statusLabel(product.STATUS)}</div>
@@ -437,6 +446,16 @@ function openProductDetail(product){
     btn.classList.add('pulse');
     setTimeout(closeProductDetail, 350);
   });
+  const brandLink = document.getElementById('detailBrandLink');
+  if (brandLink && product.BRAND) brandLink.addEventListener('click', () => {
+    closeProductDetail();
+    activeBrand = product.BRAND;
+    document.getElementById('brandSelect').value = product.BRAND;
+    activeVehicleBrand = 'All';
+    renderVehicleBrandRail();
+    updateFiltersCount();
+    resetPaging();
+  });
   function showImg(i){ curImg=(i+imgs.length)%imgs.length; window.__detailCurImg=curImg; document.getElementById('detailImg').src=imgs[curImg]; detailContent.querySelectorAll('[data-dot]').forEach(d=>d.style.background=Number(d.dataset.dot)===curImg?'#0a0a0a':'rgba(10,10,10,.3)'); }
   window.__detailShowImg = showImg;
   window.__detailCurImg = 0;
@@ -457,6 +476,7 @@ function closeProductDetail(){ document.getElementById('productDetailOverlay').c
 
 document.getElementById('filtersBarBtn').addEventListener('click', openFilters);
 document.getElementById('filterClose').addEventListener('click', closeFilters);
+document.getElementById('filterOverlay').addEventListener('click', e => { if (e.target.id === 'filterOverlay') closeFilters(); });
 document.getElementById('detailClose').addEventListener('click', closeProductDetail);
 document.getElementById('navToggle').addEventListener('click', openNav);
 document.getElementById('navClose').addEventListener('click', closeNav);
