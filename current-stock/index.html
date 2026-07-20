@@ -41,6 +41,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 @media (max-width:860px){
   nav img[alt="64CAST"]{height:16px!important;}
   #stockGrid{grid-template-columns:repeat(2,1fr)!important;gap:10px!important;padding:8px 16px 24px!important;}
+  #stockContainer{border-radius:0!important;background:none!important;box-shadow:none!important;}
   nav{padding:0 16px!important;}
   #filtersBar{padding:0 16px!important;}
   .ann{padding:6px 12px!important;font-size:.56rem!important;}
@@ -48,6 +49,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 }
 @media (max-width:520px){
   #stockGrid{grid-template-columns:1fr 1fr!important;}
+  #stockContainer{margin:0 -5vw;}
+  div[style*="padding:24px 5vw 24px"]{padding-left:0!important;padding-right:0!important;}
   div[style*="grid-template-columns:1.3fr 1fr 1fr 1fr"]{grid-template-columns:1fr!important;}
 }
 </style>
@@ -83,7 +86,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
   </div>
 
   <div style="padding:24px 5vw 24px;position:relative;z-index:1;">
-    <div style="border-radius:28px;overflow:hidden;background:rgba(255,255,255,.28);box-shadow:0 20px 60px rgba(0,0,0,.1);">
+    <div id="stockContainer" style="border-radius:0;overflow:visible;background:none;box-shadow:none;">
       <div style="padding:24px 24px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;">
         <div id="pageHeading" style="font-size:1.3rem;letter-spacing:1px;text-transform:uppercase;font-weight:400;flex:1;">Current Stock</div>
         <span id="resultCount" style="font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:#888;flex-shrink:0;"></span>
@@ -559,8 +562,8 @@ fetch(API_URL, { method: 'GET', cache: 'no-store' })
   .then(rows => {
     allProducts = Array.isArray(rows) ? rows : [];
     if (QS_BRAND) {
-      const match = allProducts.find(p => (p.BRAND||'').trim().toLowerCase() === QS_BRAND.toLowerCase());
-      activeBrand = match ? match.BRAND : 'All';
+      const match = allProducts.find(p => (p.BRAND||'').trim().toLowerCase() === QS_BRAND.trim().toLowerCase());
+      activeBrand = match ? match.BRAND : QS_BRAND;
     }
     const prices = allProducts.filter(passesStatus).map(p => Number(p.PRICE||0));
     const maxPrice = prices.length ? Math.ceil(Math.max(...prices) / 10) * 10 : 500;
@@ -574,8 +577,8 @@ fetch(API_URL, { method: 'GET', cache: 'no-store' })
   .catch(() => {
     allProducts = EMBEDDED_DEMO_PRODUCTS.slice();
     if (QS_BRAND) {
-      const match = allProducts.find(p => (p.BRAND||'').trim().toLowerCase() === QS_BRAND.toLowerCase());
-      activeBrand = match ? match.BRAND : 'All';
+      const match = allProducts.find(p => (p.BRAND||'').trim().toLowerCase() === QS_BRAND.trim().toLowerCase());
+      activeBrand = match ? match.BRAND : QS_BRAND;
     }
     const prices = allProducts.filter(passesStatus).map(p => Number(p.PRICE||0));
     const maxPrice = prices.length ? Math.ceil(Math.max(...prices) / 10) * 10 : 500;
