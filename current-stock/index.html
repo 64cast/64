@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title id="pageTitle">Current Stock — 64CAST</title>
+<title id="pageTitle">New Arrivals — 64CAST</title>
 <meta name="theme-color" content="#ffffff">
 <link rel="icon" href="https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/64_LOGO_Falcon.png" type="image/png">
 <link href="https://fonts.googleapis.com" rel="preconnect">
@@ -31,14 +31,13 @@ button{font-family:var(--font);cursor:pointer}
 .drawer-overlay.open .drawer-panel-right{transform:translateX(0);}
 .drawer-panel-left{transform:translateX(-100%);transition:transform .35s cubic-bezier(.22,1,.36,1);}
 .drawer-overlay.open .drawer-panel-left{transform:translateX(0);}
-@media (max-width:760px){ .drawer-panel-right,.drawer-panel-left{width:100vw!important;} #filterOverlay .drawer-panel-left{top:auto!important;bottom:0!important;left:0!important;right:0!important;max-height:80vh!important;border-radius:20px 20px 0 0!important;border-right:none!important;border-top:1px solid rgba(255,255,255,.9);box-shadow:0 -16px 70px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.9)!important;transform:translateY(100%)!important;} #filterOverlay.open .drawer-panel-left{transform:translateY(0)!important;} }
+@media (max-width:760px){ .drawer-panel-right,.drawer-panel-left{width:100vw!important;} #filterOverlay .drawer-panel-left{top:auto!important;bottom:0!important;left:0!important;right:0!important;max-height:80vh!important;border-radius:20px 20px 0 0!important;border-right:none!important;border-top:1px solid rgba(255,255,255,.9);box-shadow:0 -16px 70px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.9)!important;transform:translateY(100%)!important;} #filterOverlay.open .drawer-panel-left{transform:translateY(0)!important;} .sheetHandle{display:block!important;} }
 .navlink{padding:12px 8px;font-size:.9rem;text-transform:uppercase;letter-spacing:1px;text-decoration:none;color:#0a0a0a;display:block;}
 input[type=range]{-webkit-appearance:none;width:100%;height:4px;border-radius:999px;background:rgba(255,255,255,.6);}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#fff;border:2px solid #dd5912;cursor:pointer;margin-top:-5px;}
 @keyframes addPulse{0%{transform:scale(1);}50%{transform:scale(1.4);}100%{transform:scale(1);}}
 .addbtn.pulse{animation:addPulse .38s cubic-bezier(.34,1.56,.64,1);background:#dd5912!important;border-color:#dd5912!important;}
 .addbtn.pulse svg{stroke:#fff!important;}
-@media (max-width:760px){ .sheetHandle{display:block!important;} }
 @media (max-width:860px){
   nav img[alt="64CAST"]{height:16px!important;}
   #stockGrid{grid-template-columns:repeat(2,1fr)!important;gap:10px!important;padding:8px 16px 24px!important;}
@@ -92,7 +91,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
   <div style="padding:24px 5vw 24px;position:relative;z-index:1;">
     <div id="stockContainer" style="border-radius:0;overflow:visible;background:none;box-shadow:none;">
       <div style="padding:24px 24px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;">
-        <div id="pageHeading" style="font-size:1.3rem;letter-spacing:1px;text-transform:uppercase;font-weight:400;flex:1;">Current Stock</div>
+        <div id="pageHeading" style="font-size:1.3rem;letter-spacing:1px;text-transform:uppercase;font-weight:400;flex:1;">New Arrivals</div>
         <span id="resultCount" style="font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:#888;flex-shrink:0;"></span>
       </div>
       <div id="stockScrollArea">
@@ -234,6 +233,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 
 <script>
 const API_URL = 'https://64cast-products-api.trailsec5.workers.dev';
+function isNewFlag(p){
+  if (p.NEW === true) return true;
+  const v = String(p.NEW||p.NEWARRIVAL||p['NEW ARRIVAL']||'').toLowerCase();
+  return v==='yes'||v==='true'||v==='1'||v==='new';
+}
 const EMBEDDED_DEMO_PRODUCTS = [
   {"MODEL NO.":"MGT00456","PRODUCT NAME":"Nissan Skyline GT-R R34 V-Spec II Nur","BRAND":"Mini GT","CARBRAND":"Nissan","PRICE":95,"STATUS":"currentstock","SORTORDER":1,"NEW":true,"QTY":5,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/minigt.jpg","IMG2":""},
   {"MODEL NO.":"INN64-021","PRODUCT NAME":"Honda Civic EG6 SiR-II","BRAND":"Inno64","CARBRAND":"Honda","PRICE":88,"STATUS":"currentstock","SORTORDER":2,"NEW":true,"QTY":5,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/inno64.jpg","IMG2":""},
@@ -248,16 +252,11 @@ const EMBEDDED_DEMO_PRODUCTS = [
 ];
 const IMAGE_BASE_URL = 'https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/';
 const WA_NUMBER = '971552112588';
-const IS_PREORDER = new URLSearchParams(window.location.search).get('status') === 'preorder';
-const SHOW_STATUS_TOGGLE = true;
-document.getElementById('statusInStock').checked = !IS_PREORDER;
-document.getElementById('statusPreorder').checked = IS_PREORDER;
+document.getElementById('statusInStock').checked = true;
+document.getElementById('statusPreorder').checked = true;
 function updateHeading(){
-  const stockOn = document.getElementById('statusInStock').checked;
-  const preorderOn = document.getElementById('statusPreorder').checked;
-  const label = stockOn && preorderOn ? 'All Products' : preorderOn ? 'Pre-Order' : 'Current Stock';
-  document.getElementById('pageTitle').textContent = label + ' — 64CAST';
-  document.getElementById('pageHeading').textContent = label;
+  document.getElementById('pageTitle').textContent = 'New Arrivals — 64CAST';
+  document.getElementById('pageHeading').textContent = 'New Arrivals';
 }
 updateHeading();
 const fallbackImg = "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22400%22%20height%3D%22400%22%20viewBox%3D%220%200%20400%20400%22%3E%3Crect%20width%3D%22400%22%20height%3D%22400%22%20fill%3D%22%23f2f2f2%22%2F%3E%3Cdefs%3E%3Cpattern%20id%3D%22s%22%20width%3D%2214%22%20height%3D%2214%22%20patternTransform%3D%22rotate(45)%22%20patternUnits%3D%22userSpaceOnUse%22%3E%3Crect%20width%3D%227%22%20height%3D%2214%22%20fill%3D%22%23e9e9e9%22%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D%22400%22%20height%3D%22400%22%20fill%3D%22url(%23s)%22%2F%3E%3Ctext%20x%3D%22200%22%20y%3D%22200%22%20font-family%3D%22monospace%22%20font-size%3D%2213%22%20fill%3D%22%238a8a8a%22%20text-anchor%3D%22middle%22%3Eno%20image%3C%2Ftext%3E%3C%2Fsvg%3E";
@@ -286,6 +285,7 @@ function statusLabel(s){
   return { currentstock:'Current Stock', readytocollect:'Ready to Collect', instock:'Current Stock', preorder:'Pre-Order', sold:'Sold' }[s] || s;
 }
 function passesStatus(p){
+  if (!isNewFlag(p)) return false;
   const s = (p.STATUS||'').toLowerCase();
   const stockOn = document.getElementById('statusInStock')?.checked;
   const preorderOn = document.getElementById('statusPreorder')?.checked;
@@ -418,7 +418,6 @@ function renderCart(){
   }));
 }
 
-window.addEventListener('message', e => { if (e.data === '__openFilters') openFilters(); });
 
 function syncBodyScroll(){ document.body.style.overflow = document.querySelectorAll('.drawer-overlay.open').length ? 'hidden' : ''; }
 new MutationObserver(syncBodyScroll).observe(document.body, {attributes:true, attributeFilter:['class'], subtree:true});
@@ -576,8 +575,8 @@ fetch(API_URL, { method: 'GET', cache: 'no-store' })
   .then(rows => {
     allProducts = Array.isArray(rows) ? rows : [];
     if (QS_BRAND) {
-      const match = allProducts.find(p => (p.BRAND||'').trim().toLowerCase() === QS_BRAND.trim().toLowerCase());
-      activeBrand = match ? match.BRAND : QS_BRAND;
+      const match = allProducts.find(p => (p.BRAND||'').trim().toLowerCase() === QS_BRAND.toLowerCase());
+      activeBrand = match ? match.BRAND : 'All';
     }
     const prices = allProducts.filter(passesStatus).map(p => Number(p.PRICE||0));
     const maxPrice = prices.length ? Math.ceil(Math.max(...prices) / 10) * 10 : 500;
@@ -591,8 +590,8 @@ fetch(API_URL, { method: 'GET', cache: 'no-store' })
   .catch(() => {
     allProducts = EMBEDDED_DEMO_PRODUCTS.slice();
     if (QS_BRAND) {
-      const match = allProducts.find(p => (p.BRAND||'').trim().toLowerCase() === QS_BRAND.trim().toLowerCase());
-      activeBrand = match ? match.BRAND : QS_BRAND;
+      const match = allProducts.find(p => (p.BRAND||'').trim().toLowerCase() === QS_BRAND.toLowerCase());
+      activeBrand = match ? match.BRAND : 'All';
     }
     const prices = allProducts.filter(passesStatus).map(p => Number(p.PRICE||0));
     const maxPrice = prices.length ? Math.ceil(Math.max(...prices) / 10) * 10 : 500;
