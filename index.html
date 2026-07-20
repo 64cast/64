@@ -26,6 +26,7 @@ button{font-family:var(--font);cursor:pointer}
   #stickyBar{padding:8px 16px!important;overflow-x:auto!important;gap:6px!important;}
   .chip{height:32px!important;padding:0 12px!important;font-size:.56rem!important;}
   #stickyBar input{display:none!important;}
+  #navSearchWrap{display:flex!important;}
   #brandRow{padding:8px 16px 32px!important;display:grid!important;grid-template-columns:repeat(4,1fr)!important;gap:10px!important;}
   #brandRow button{width:100%!important;height:auto!important;aspect-ratio:1/1!important;}
   #newArrivalsRow,#stockGrid,#preorderGrid{padding-left:16px!important;padding-right:16px!important;}
@@ -203,6 +204,10 @@ button{font-family:var(--font);cursor:pointer}
         <button id="navClose" class="glossW" style="width:30px;height:30px;border-radius:999px;display:flex;align-items:center;justify-content:center;">
           <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:#0a0a0a;fill:none;stroke-width:1.6;stroke-linecap:round"><path d="M18 6 6 18M6 6l12 12"></path></svg>
         </button>
+      </div>
+      <div style="display:none;align-items:center;gap:8px;height:40px;border-radius:999px;padding:0 14px;background:rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.08);margin-bottom:14px;" id="navSearchWrap">
+        <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#555;fill:none;stroke-width:1.6;flex-shrink:0"><circle cx="11" cy="11" r="8"></circle><line x1="21" x2="16.65" y1="21" y2="16.65"></line></svg>
+        <input id="navSearchInput" placeholder="Search model, brand..." style="border:none;outline:none;background:none;font-family:var(--font);font-size:.75rem;color:#0a0a0a;width:100%;">
       </div>
       <a href="#" class="navlink" data-jump="top">Home</a>
       <a href="https://64cast.com/new-arrivals/" class="navlink">New Arrivals</a>
@@ -420,6 +425,10 @@ function openNav(){ closeAllDrawers(); document.getElementById('navOverlay').cla
 function closeNav(){ document.getElementById('navOverlay').classList.remove('open'); }
 function openCart(){ closeAllDrawers(); document.getElementById('cartOverlay').classList.add('open'); }
 function closeCart(){ document.getElementById('cartOverlay').classList.remove('open'); }
+
+function syncBodyScroll(){ document.body.style.overflow = document.querySelectorAll('.drawer-overlay.open').length ? 'hidden' : ''; }
+new MutationObserver(syncBodyScroll).observe(document.body, {attributes:true, attributeFilter:['class'], subtree:true});
+
 function closeAllDrawers(){ ['navOverlay','cartOverlay','productDetailOverlay'].forEach(id => document.getElementById(id).classList.remove('open')); }
 
 function openProductDetail(card){
@@ -441,7 +450,7 @@ function renderDetailBody(card, name, imgs){
   const detailContent = document.getElementById('detailContent');
   let curImg = 0;
   detailContent.innerHTML = `
-    <div id="detailImgWrap" style="aspect-ratio:1/1;background:#fff;border-radius:12px;overflow:hidden;margin-bottom:20px;position:relative;touch-action:pan-y;">
+    <div id="detailImgWrap" style="aspect-ratio:1/1;background:#fff;border-radius:12px;overflow:hidden;margin-bottom:20px;position:relative;touch-action:none;">
       <img id="detailImg" src="${imgs[0]}" alt="${name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.onerror=null;this.src='${fallbackImg}'">
       ${imgs.length > 1 ? `
       <button id="detailPrevBtn" aria-label="Previous image" style="position:absolute;top:50%;left:10px;transform:translateY(-50%);width:30px;height:30px;border-radius:999px;border:none;background:rgba(255,255,255,.8);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15);"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#0a0a0a;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M15 18l-6-6 6-6"></path></svg></button>
@@ -467,7 +476,9 @@ function renderDetailBody(card, name, imgs){
     addToCart({id:card.id,name,brand:card.brand,price:card.price,priceValue:card.priceValue,img:imgs[0]});
     const btn = document.getElementById('detailAddBtn');
     btn.classList.add('pulse');
-    setTimeout(closeProductDetail, 350);
+    const originalLabel = btn.textContent;
+    btn.textContent = 'Added ✓';
+    setTimeout(() => { btn.classList.remove('pulse'); btn.textContent = originalLabel; }, 1200);
   });
   function showImg(i){ curImg=(i+imgs.length)%imgs.length; document.getElementById('detailImg').src=imgs[curImg]; detailContent.querySelectorAll('[data-dot]').forEach(d=>d.style.background=Number(d.dataset.dot)===curImg?'#0a0a0a':'rgba(10,10,10,.3)'); }
   detailContent.querySelectorAll('[data-dot]').forEach(d => d.addEventListener('click', () => showImg(Number(d.dataset.dot))));
@@ -476,9 +487,10 @@ function renderDetailBody(card, name, imgs){
   if (prevBtn) prevBtn.addEventListener('click', () => showImg(curImg - 1));
   if (nextBtn) nextBtn.addEventListener('click', () => showImg(curImg + 1));
   const wrap = document.getElementById('detailImgWrap');
-  let sx = 0;
-  wrap.addEventListener('touchstart', e => { sx = e.touches[0].clientX; });
-  wrap.addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 30) showImg(curImg + (dx < 0 ? 1 : -1)); });
+  let sx = 0, sy = 0;
+  wrap.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; });
+  wrap.addEventListener('touchmove', e => { e.preventDefault(); }, {passive:false});
+  wrap.addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - sx; const dy = e.changedTouches[0].clientY - sy; if (Math.abs(dx) > 30 && Math.abs(dx) > Math.abs(dy)) showImg(curImg + (dx < 0 ? 1 : -1)); });
   const brandLink = document.getElementById('detailBrandLink');
   if (brandLink && card.brand) brandLink.addEventListener('click', () => {
     window.location.href = '/current-stock/?brand=' + encodeURIComponent(card.brand);
@@ -498,6 +510,11 @@ document.querySelectorAll('[data-jump]').forEach(btn => btn.addEventListener('cl
   if(target) target.scrollIntoView({behavior:'smooth'});
 }));
 document.getElementById('navToggle').addEventListener('click', openNav);
+document.getElementById('navSearchInput').addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  const q = e.target.value.trim();
+  if (q) window.location.href = '/current-stock/?q=' + encodeURIComponent(q);
+});
 document.getElementById('navClose').addEventListener('click', closeNav);
 document.getElementById('navOverlay').addEventListener('click', e => { if (e.target.id === 'navOverlay') closeNav(); });
 document.getElementById('cartToggle').addEventListener('click', openCart);
@@ -509,6 +526,12 @@ document.querySelectorAll('[data-jump]').forEach(el => el.addEventListener('clic
 document.querySelectorAll('[data-filter-brand]').forEach(btn => btn.addEventListener('click', () => {
   window.location.href = '/current-stock/?brand=' + encodeURIComponent(btn.dataset.filterBrand);
 }));
+[['navOverlay',closeNav],['cartOverlay',closeCart],['productDetailOverlay',closeProductDetail]].forEach(([id,close]) => {
+  const ov = document.getElementById(id);
+  let sx = 0;
+  ov.addEventListener('touchstart', e => { if (e.target.closest('#detailImgWrap, button, a, input, select')) { sx = null; return; } sx = e.touches[0].clientX; });
+  ov.addEventListener('touchend', e => { if (sx === null) return; const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 50) close(); });
+});
 document.getElementById('searchInput').addEventListener('input', renderStock);
 document.getElementById('searchInput').addEventListener('keydown', e => {
   if (e.key !== 'Enter') return;
