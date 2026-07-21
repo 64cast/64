@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title id="pageTitle">Current Stock — 64CAST</title>
 <meta name="theme-color" content="#ffffff">
+<meta property="og:title" content="Current Stock — 64CAST">
+<meta property="og:description" content="Rare 1:64 diecast, checkout instantly on WhatsApp.">
+<meta property="og:image" content="https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/64CAST_LOGO_B.png">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/64_LOGO_Falcon.png" type="image/png">
 <link href="https://fonts.googleapis.com" rel="preconnect">
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
@@ -491,9 +495,18 @@ function renderDetailBody(product, name, imgs){
     setTimeout(() => { btn.classList.remove('pulse'); btn.textContent = originalLabel; }, 1200);
   });
   const shareBtn = document.getElementById('detailShareBtn');
-  if (shareBtn) shareBtn.addEventListener('click', () => {
+  if (shareBtn) shareBtn.addEventListener('click', async () => {
     const url = `${location.origin}${location.pathname}?product=${encodeURIComponent(product['MODEL NO.']||'')}`;
-    if (navigator.share) {
+    const imgUrl = imgs[0];
+    let file = null;
+    try {
+      const res = await fetch(imgUrl);
+      const blob = await res.blob();
+      file = new File([blob], 'product.jpg', { type: blob.type || 'image/jpeg' });
+    } catch (e) {}
+    if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+      navigator.share({ title: name, text: name, url, files: [file] }).catch(() => {});
+    } else if (navigator.share) {
       navigator.share({ title: name, text: name, url }).catch(() => {});
     } else {
       navigator.clipboard.writeText(url).then(() => {
