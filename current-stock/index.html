@@ -496,7 +496,7 @@ function renderDetailBody(product, name, imgs){
   });
   const shareBtn = document.getElementById('detailShareBtn');
   if (shareBtn) shareBtn.addEventListener('click', async () => {
-    const url = `${location.origin}${location.pathname}?product=${encodeURIComponent(product['MODEL NO.']||'')}`;
+    const url = `${location.origin}/product/${encodeURIComponent(product['MODEL NO.']||'')}`;
     const imgUrl = imgs[0];
     let file = null;
     try {
