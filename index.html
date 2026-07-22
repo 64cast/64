@@ -211,7 +211,7 @@ button{font-family:var(--font);cursor:pointer}
   </footer>
 
   <div id="navOverlay" class="drawer-overlay">
-    <div id="navPanel" style="position:absolute;top:0;left:0;bottom:0;width:290px;border-radius:0;overflow:hidden;background:rgba(255,255,255,.97);backdrop-filter:none;-webkit-backdrop-filter:none;border-right:1px solid rgba(255,255,255,.9);box-shadow:16px 0 70px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.9);padding:28px 26px;display:flex;flex-direction:column;gap:6px;">
+    <div id="navPanel" style="position:absolute;top:0;left:0;bottom:0;width:290px;border-radius:0;overflow:hidden;overscroll-behavior:contain;background:rgba(255,255,255,.97);backdrop-filter:none;-webkit-backdrop-filter:none;border-right:1px solid rgba(255,255,255,.9);box-shadow:16px 0 70px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.9);padding:28px 26px;display:flex;flex-direction:column;gap:6px;">
       <div style="position:absolute;top:0;left:0;right:0;height:45%;background:linear-gradient(180deg,rgba(255,255,255,.4),transparent);pointer-events:none;"></div>
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;position:relative;">
         <div style="font-size:.62rem;letter-spacing:3px;text-transform:uppercase;color:#888;font-weight:600;">Menu</div>
@@ -233,7 +233,7 @@ button{font-family:var(--font);cursor:pointer}
   </div>
 
   <div id="cartOverlay" class="drawer-overlay">
-    <div style="position:absolute;top:0;right:0;bottom:0;width:340px;border-radius:30px 0 0 30px;overflow:hidden;background:rgba(255,255,255,.65);backdrop-filter:blur(36px) saturate(1.9);-webkit-backdrop-filter:blur(36px) saturate(1.9);border-left:1px solid rgba(255,255,255,.55);box-shadow:-12px 0 60px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.9),inset 1px 0 0 rgba(255,255,255,.4);padding:26px;display:flex;flex-direction:column;">
+    <div id="cartPanel" style="position:absolute;top:0;right:0;bottom:0;width:340px;border-radius:30px 0 0 30px;overflow:hidden;overscroll-behavior:contain;background:rgba(255,255,255,.65);backdrop-filter:blur(36px) saturate(1.9);-webkit-backdrop-filter:blur(36px) saturate(1.9);border-left:1px solid rgba(255,255,255,.55);box-shadow:-12px 0 60px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.9),inset 1px 0 0 rgba(255,255,255,.4);padding:26px;display:flex;flex-direction:column;">
       <div style="position:absolute;top:0;left:0;right:0;height:35%;background:linear-gradient(180deg,rgba(255,255,255,.4),transparent);pointer-events:none;"></div>
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;position:relative;">
         <div style="font-size:.85rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;">Your Cart</div>
@@ -241,7 +241,7 @@ button{font-family:var(--font);cursor:pointer}
           <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:#0a0a0a;fill:none;stroke-width:1.6;stroke-linecap:round"><path d="M18 6 6 18M6 6l12 12"></path></svg>
         </button>
       </div>
-      <div id="cartList" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px;position:relative;"></div>
+      <div id="cartList" style="flex:1;overflow-y:auto;overscroll-behavior:contain;display:flex;flex-direction:column;gap:14px;position:relative;"></div>
       <div style="border-top:1px solid rgba(255,255,255,.5);padding-top:16px;margin-top:12px;position:relative;">
         <div style="display:flex;justify-content:space-between;font-size:.85rem;margin-bottom:14px;">
           <span style="text-transform:uppercase;letter-spacing:1px;color:#666;">Subtotal</span>
@@ -253,7 +253,7 @@ button{font-family:var(--font);cursor:pointer}
   </div>
 
   <div id="productDetailOverlay" class="drawer-overlay">
-    <div id="detailPanel" style="position:absolute;top:0;right:0;bottom:0;width:420px;max-width:92vw;overflow-y:auto;background:rgba(255,255,255,.97);backdrop-filter:none;-webkit-backdrop-filter:none;border-left:1px solid rgba(255,255,255,.9);box-shadow:-16px 0 70px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.9);padding:26px;display:flex;flex-direction:column;">
+    <div id="detailPanel" style="position:absolute;top:0;right:0;bottom:0;width:420px;max-width:92vw;overflow-y:auto;overscroll-behavior:contain;background:rgba(255,255,255,.97);backdrop-filter:none;-webkit-backdrop-filter:none;border-left:1px solid rgba(255,255,255,.9);box-shadow:-16px 0 70px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.9);padding:26px;display:flex;flex-direction:column;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-shrink:0;">
         <div style="font-size:.85rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;">Product Details</div>
         <button id="detailClose" class="glossW" style="width:30px;height:30px;border-radius:999px;display:flex;align-items:center;justify-content:center;">
@@ -440,7 +440,30 @@ function closeNav(){ document.getElementById('navOverlay').classList.remove('ope
 function openCart(){ closeAllDrawers(); document.getElementById('cartOverlay').classList.add('open'); }
 function closeCart(){ document.getElementById('cartOverlay').classList.remove('open'); }
 
-function syncBodyScroll(){ document.body.style.overflow = document.querySelectorAll('.drawer-overlay.open').length ? 'hidden' : ''; }
+let __scrollLockY = 0;
+function syncBodyScroll(){
+  const anyOpen = document.querySelectorAll('.drawer-overlay.open').length;
+  if (anyOpen && document.body.style.position !== 'fixed') {
+    __scrollLockY = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top = -__scrollLockY + 'px';
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+  } else if (!anyOpen && document.body.style.position === 'fixed') {
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.width = '';
+    window.scrollTo(0, __scrollLockY);
+  }
+}
+document.addEventListener('touchmove', e => {
+  if (!document.querySelectorAll('.drawer-overlay.open').length) return;
+  if (e.target.closest('#navPanel, #cartPanel, #detailPanel')) return;
+  e.preventDefault();
+}, { passive: false });
 new MutationObserver(syncBodyScroll).observe(document.body, {attributes:true, attributeFilter:['class'], subtree:true});
 
 function closeAllDrawers(){ ['navOverlay','cartOverlay','productDetailOverlay'].forEach(id => document.getElementById(id).classList.remove('open')); }
