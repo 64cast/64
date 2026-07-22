@@ -4,7 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>64CAST — Limited Pieces. Endless Passion.</title>
+<meta name="description" content="Discover rare 1:64 diecast and checkout instantly on WhatsApp — join the UAE's growing collector community.">
 <meta name="theme-color" content="#ffffff">
+<meta property="og:type" content="website">
+<meta property="og:title" content="64CAST — Limited Pieces. Endless Passion.">
+<meta property="og:description" content="Discover rare 1:64 diecast and checkout instantly on WhatsApp — join the UAE's growing collector community.">
+<meta property="og:image" content="https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/64CAST_LOGO_B.png">
+<meta property="og:url" content="https://64cast.com">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="64CAST — Limited Pieces. Endless Passion.">
+<meta name="twitter:description" content="Discover rare 1:64 diecast and checkout instantly on WhatsApp — join the UAE's growing collector community.">
 <link rel="icon" href="https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/64_LOGO_Falcon.png" type="image/png">
 <link href="https://fonts.googleapis.com" rel="preconnect">
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
@@ -338,11 +347,11 @@ function cardHtml(p){
   return `
     <div class="product-card" data-product='${JSON.stringify(p).replace(/'/g,"&apos;")}' style="flex:0 0 220px;border-radius:18px;overflow:hidden;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.7);box-shadow:0 12px 30px rgba(0,0,0,.06);">
       <div style="position:relative;aspect-ratio:1/1;background:#fff;overflow:hidden;cursor:pointer;">
-        <img src="${imgs[0]}" data-imgs='${JSON.stringify(imgs)}' data-cur="0" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;touch-action:pan-y;" onerror="this.src='${fallbackImg}'"${imgs.length>1 ? ` onmouseenter="this.dataset.hoverCur=this.dataset.cur; this.dataset.cur=1; this.src=JSON.parse(this.dataset.imgs)[1];" onmouseleave="this.dataset.cur=this.dataset.hoverCur||0; this.src=JSON.parse(this.dataset.imgs)[Number(this.dataset.cur)];" ontouchstart="event.stopPropagation();this.dataset.sx=event.touches[0].clientX" ontouchend="event.stopPropagation();var im=JSON.parse(this.dataset.imgs);var dx=event.changedTouches[0].clientX-this.dataset.sx;if(Math.abs(dx)>30){var c=(Number(this.dataset.cur)+(dx<0?1:-1)+im.length)%im.length;this.dataset.cur=c;this.src=im[c];}"` : ''}>
+        <img src="${imgs[0]}" data-imgs='${JSON.stringify(imgs)}' data-cur="0" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;touch-action:pan-y;" onerror="this.src='${fallbackImg}'"${imgs.length>1 ? ` onmouseenter="this.dataset.hoverCur=this.dataset.cur; this.dataset.cur=1; this.src=JSON.parse(this.dataset.imgs)[1];" onmouseleave="this.dataset.cur=this.dataset.hoverCur||0; this.src=JSON.parse(this.dataset.imgs)[Number(this.dataset.cur)];"` : ''}>
         <div style="position:absolute;top:8px;left:8px;padding:3px 9px;border-radius:999px;font-size:.44rem;letter-spacing:1px;text-transform:uppercase;font-weight:700;background:rgba(255,255,255,.8);color:${p.badgeColor};">${p.badge}</div>
       </div>
       <div style="padding:12px 14px 14px;">
-        <div style="font-size:.55rem;letter-spacing:1px;text-transform:uppercase;color:#aaa;">${p.brand}</div>
+        <div style="font-size:.55rem;letter-spacing:1px;text-transform:uppercase;color:#555;">${p.brand}</div>
         <div style="font-size:.76rem;font-weight:500;margin:3px 0 10px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.name}</div>
         <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px;">
           <div style="font-size:.8rem;font-weight:500;white-space:nowrap;">${p.price}</div>
@@ -475,9 +484,9 @@ function renderDetailBody(card, name, imgs){
         <div><span style="color:#888;">Vehicle Brand</span><br>${card.carbrand||'—'}</div>
       </div>
     </div>
-    <button id="detailAddBtn" class="glossO" style="width:100%;height:48px;border-radius:999px;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;">Add to Cart</button>
+    <button id="detailAddBtn" class="glossO" ${card.status==='sold' ? 'disabled' : ''} style="width:100%;height:48px;border-radius:999px;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;${card.status==='sold' ? 'opacity:.5;cursor:not-allowed;' : ''}">${card.status==='sold' ? 'Sold Out' : 'Add to Cart'}</button>
   `;
-  document.getElementById('detailAddBtn').addEventListener('click', () => {
+  if (card.status!=='sold') document.getElementById('detailAddBtn').addEventListener('click', () => {
     addToCart({id:card.id,name,brand:card.brand,price:card.price,priceValue:card.priceValue,img:imgs[0]});
     const btn = document.getElementById('detailAddBtn');
     btn.classList.add('pulse');
