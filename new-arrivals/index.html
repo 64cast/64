@@ -27,9 +27,9 @@ button{font-family:var(--font);cursor:pointer}
 .addbtn{width:30px;height:30px;border-radius:999px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .drawer-overlay{position:fixed;inset:0;z-index:200;background:rgba(6,9,16,.82);backdrop-filter:none;display:none;}
 .drawer-overlay.open{display:block;}
-.drawer-panel-right{transform:translateX(100%);transition:transform .35s cubic-bezier(.22,1,.36,1);}
+.drawer-panel-right{transform:translateX(100%);transition:transform .35s cubic-bezier(.22,1,.36,1);overscroll-behavior:contain;}
 .drawer-overlay.open .drawer-panel-right{transform:translateX(0);}
-.drawer-panel-left{transform:translateX(-100%);transition:transform .35s cubic-bezier(.22,1,.36,1);}
+.drawer-panel-left{transform:translateX(-100%);transition:transform .35s cubic-bezier(.22,1,.36,1);overscroll-behavior:contain;}
 .drawer-overlay.open .drawer-panel-left{transform:translateX(0);}
 @media (max-width:760px){ .drawer-panel-right,.drawer-panel-left{width:100vw!important;} #filterOverlay .drawer-panel-left{top:auto!important;bottom:0!important;left:0!important;right:0!important;max-height:80vh!important;border-radius:20px 20px 0 0!important;border-right:none!important;border-top:1px solid rgba(255,255,255,.9);box-shadow:0 -16px 70px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.9)!important;transform:translateY(100%)!important;} #filterOverlay.open .drawer-panel-left{transform:translateY(0)!important;} .sheetHandle{display:block!important;} }
 .navlink{padding:12px 8px;font-size:.9rem;text-transform:uppercase;letter-spacing:1px;text-decoration:none;color:#0a0a0a;display:block;}
@@ -205,7 +205,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
           <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:#0a0a0a;fill:none;stroke-width:1.6;stroke-linecap:round"><path d="M18 6 6 18M6 6l12 12"></path></svg>
         </button>
       </div>
-      <div id="cartList" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px;position:relative;"></div>
+      <div id="cartList" style="flex:1;overflow-y:auto;overscroll-behavior:contain;display:flex;flex-direction:column;gap:14px;position:relative;"></div>
       <div style="border-top:1px solid rgba(255,255,255,.5);padding-top:16px;margin-top:12px;position:relative;">
         <div style="display:flex;justify-content:space-between;font-size:.85rem;margin-bottom:14px;">
           <span style="text-transform:uppercase;letter-spacing:1px;color:#666;">Subtotal</span>
@@ -289,6 +289,7 @@ function passesStatus(p){
   const s = (p.STATUS||'').toLowerCase();
   const stockOn = document.getElementById('statusInStock')?.checked;
   const preorderOn = document.getElementById('statusPreorder')?.checked;
+  if (Number(p.QTY||0) <= 0 || s === 'sold') return true;
   if (['currentstock','instock','readytocollect'].includes(s)) return !!stockOn;
   if (s === 'preorder') return !!preorderOn;
   return false;
@@ -329,7 +330,8 @@ function renderGrid(){
     .filter(p => activeBrand === 'All' || p.BRAND === activeBrand)
     .filter(p => activeVehicleBrand === 'All' || p.CARBRAND === activeVehicleBrand)
     .filter(p => { const price = Number(p.PRICE||0); return price >= priceMin && price <= priceMax; })
-    .filter(p => !q || (p['PRODUCT NAME']||'').toLowerCase().includes(q) || (p.BRAND||'').toLowerCase().includes(q) || (p.CARBRAND||'').toLowerCase().includes(q) || (p['MODEL NO.']||'').toLowerCase().includes(q));
+    .filter(p => !q || (p['PRODUCT NAME']||'').toLowerCase().includes(q) || (p.BRAND||'').toLowerCase().includes(q) || (p.CARBRAND||'').toLowerCase().includes(q) || (p['MODEL NO.']||'').toLowerCase().includes(q))
+    .sort((a,b) => (Number(a.QTY||0)<=0) - (Number(b.QTY||0)<=0));
   document.getElementById('resultCount').textContent = '(' + filtered.length + ')';
   const visible = filtered.slice(0, visibleCount);
   const loadMoreWrap = document.getElementById('loadMoreWrap');
@@ -346,7 +348,7 @@ function renderGrid(){
     return `
     <div class="product-card" data-product='${JSON.stringify(p).replace(/'/g,"&apos;")}' style="border-radius:18px;overflow:hidden;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.7);box-shadow:0 12px 30px rgba(0,0,0,.06);">
       <div style="position:relative;aspect-ratio:1/1;background:#fff;overflow:hidden;cursor:pointer;">
-        <img src="${imgs[0]}" data-imgs='${JSON.stringify(imgs)}' data-cur="0" alt="${name}" style="width:100%;height:100%;object-fit:cover;touch-action:pan-y;" onerror="this.src='${fallbackImg}'"${imgs.length>1 ? ` onmouseenter="this.dataset.hoverCur=this.dataset.cur; this.dataset.cur=1; this.src=JSON.parse(this.dataset.imgs)[1];" onmouseleave="this.dataset.cur=this.dataset.hoverCur||0; this.src=JSON.parse(this.dataset.imgs)[Number(this.dataset.cur)];" ontouchstart="this.dataset.sx=event.touches[0].clientX" ontouchend="var im=JSON.parse(this.dataset.imgs);var dx=event.changedTouches[0].clientX-this.dataset.sx;if(Math.abs(dx)>30){var c=(Number(this.dataset.cur)+(dx<0?1:-1)+im.length)%im.length;this.dataset.cur=c;this.src=im[c];}"` : ''}>
+        <img src="${imgs[0]}" data-imgs='${JSON.stringify(imgs)}' data-cur="0" alt="${name}" style="width:100%;height:100%;object-fit:cover;touch-action:pan-y;filter:${disabled?'grayscale(1)':'none'};" onerror="this.src='${fallbackImg}'"${imgs.length>1 ? ` onmouseenter="this.dataset.hoverCur=this.dataset.cur; this.dataset.cur=1; this.src=JSON.parse(this.dataset.imgs)[1];" onmouseleave="this.dataset.cur=this.dataset.hoverCur||0; this.src=JSON.parse(this.dataset.imgs)[Number(this.dataset.cur)];" ontouchstart="this.dataset.sx=event.touches[0].clientX" ontouchend="var im=JSON.parse(this.dataset.imgs);var dx=event.changedTouches[0].clientX-this.dataset.sx;if(Math.abs(dx)>30){var c=(Number(this.dataset.cur)+(dx<0?1:-1)+im.length)%im.length;this.dataset.cur=c;this.src=im[c];}"` : ''}>
         ${disabled ? `<div style="position:absolute;top:8px;left:8px;padding:3px 9px;border-radius:999px;font-size:.44rem;letter-spacing:1px;text-transform:uppercase;font-weight:700;background:rgba(10,10,10,.75);color:#fff;">Sold</div>` : ''}
       </div>
       <div style="padding:12px 14px 14px;">
@@ -419,7 +421,30 @@ function renderCart(){
 }
 
 
-function syncBodyScroll(){ document.body.style.overflow = document.querySelectorAll('.drawer-overlay.open').length ? 'hidden' : ''; }
+let __scrollLockY = 0;
+function syncBodyScroll(){
+  const anyOpen = document.querySelectorAll('.drawer-overlay.open').length;
+  if (anyOpen && document.body.style.position !== 'fixed') {
+    __scrollLockY = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top = -__scrollLockY + 'px';
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+  } else if (!anyOpen && document.body.style.position === 'fixed') {
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.width = '';
+    window.scrollTo(0, __scrollLockY);
+  }
+}
+document.addEventListener('touchmove', e => {
+  if (!document.querySelectorAll('.drawer-overlay.open').length) return;
+  if (e.target.closest('.drawer-panel-right, .drawer-panel-left')) return;
+  e.preventDefault();
+}, { passive: false });
 new MutationObserver(syncBodyScroll).observe(document.body, {attributes:true, attributeFilter:['class'], subtree:true});
 
 function closeAllDrawers(){ ['navOverlay','cartOverlay','filterOverlay','productDetailOverlay'].forEach(id => document.getElementById(id).classList.remove('open')); }
