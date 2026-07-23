@@ -486,7 +486,12 @@ function renderDetailBody(product, name, imgs){
         <div id="detailBrandLink" style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:6px;cursor:pointer;text-decoration:underline;text-underline-offset:3px;">${product.BRAND||''}</div>
         <div style="font-size:1rem;font-weight:400;text-transform:uppercase;line-height:1.4;margin-bottom:10px;">${name}</div>
         <div style="font-size:1rem;font-weight:500;margin-bottom:10px;">AED ${Number(product.PRICE||0)}</div>
-        <div style="display:inline-block;padding:5px 10px;border-radius:6px;font-size:.6rem;letter-spacing:1px;text-transform:uppercase;font-weight:600;background:rgba(240,112,14,.15);color:#dd5912;">${statusLabel(product.STATUS)}</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+          <div style="display:inline-block;padding:5px 10px;border-radius:6px;font-size:.6rem;letter-spacing:1px;text-transform:uppercase;font-weight:600;background:rgba(240,112,14,.15);color:#dd5912;">${statusLabel(product.STATUS)}</div>
+          <button id="detailShareBtn" aria-label="Share product" style="width:32px;height:32px;border-radius:999px;border:1px solid rgba(10,10,10,.12);background:rgba(255,255,255,.6);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#0a0a0a;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"></line><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"></line></svg>
+          </button>
+        </div>
       </div>
       <div style="margin-bottom:20px;">
         <div style="font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:#888;margin-bottom:10px;">Details</div>
@@ -506,6 +511,27 @@ function renderDetailBody(product, name, imgs){
     const originalLabel = btn.textContent;
     btn.textContent = 'Added ✓';
     setTimeout(() => { btn.classList.remove('pulse'); btn.textContent = originalLabel; }, 1200);
+  });
+  const shareBtn = document.getElementById('detailShareBtn');
+  if (shareBtn) shareBtn.addEventListener('click', async () => {
+    const url = `${location.origin}/product/${encodeURIComponent(product['MODEL NO.']||'')}`;
+    const imgUrl = imgs[0];
+    let file = null;
+    try {
+      const res = await fetch(imgUrl);
+      const blob = await res.blob();
+      file = new File([blob], 'product.jpg', { type: blob.type || 'image/jpeg' });
+    } catch (e) {}
+    if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+      navigator.share({ title: name, text: name, url, files: [file] }).catch(() => {});
+    } else if (navigator.share) {
+      navigator.share({ title: name, text: name, url }).catch(() => {});
+    } else {
+      navigator.clipboard.writeText(url).then(() => {
+        shareBtn.classList.add('pulse');
+        setTimeout(() => shareBtn.classList.remove('pulse'), 380);
+      }).catch(() => window.prompt('Copy this link:', url));
+    }
   });
   const brandLink = document.getElementById('detailBrandLink');
   if (brandLink && product.BRAND) brandLink.addEventListener('click', () => {
