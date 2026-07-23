@@ -394,6 +394,7 @@ fetch(API_URL, { method: 'GET', cache: 'no-store' })
     renderStock();
     renderPreorder();
   })
+  .then(openRoutedProductIfAny)
   .catch(() => {
     const products = EMBEDDED_DEMO_PRODUCTS.map(toCard);
     allProducts = products.filter(p => p.status === 'currentstock').sort(bySortOrder).slice(0, 6);
@@ -534,6 +535,13 @@ function renderDetailBody(card, name, imgs){
   });
 }
 function closeProductDetail(){ document.getElementById('productDetailOverlay').classList.remove('open'); }
+function openRoutedProductIfAny(){
+  const model = window.__PRODUCT_ROUTE_MODEL__;
+  if (!model) return;
+  const all = [...allProducts, ...preOrderProducts, ...newArrivalsProducts];
+  const card = all.find(p => String(p.id || '').trim() === model);
+  if (card) openProductDetail(card);
+}
 
 function jumpTo(id) {
   closeNav();
