@@ -499,7 +499,12 @@ function renderDetailBody(card, name, imgs){
       <div style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:6px;cursor:${card.brand?'pointer':'default'};text-decoration:${card.brand?'underline':'none'};text-underline-offset:3px;" id="detailBrandLink">${card.brand||''}</div>
       <div style="font-size:1rem;font-weight:400;text-transform:uppercase;line-height:1.4;margin-bottom:10px;">${name}</div>
       <div style="font-size:1rem;font-weight:500;margin-bottom:10px;">${card.price||''}</div>
-      <div style="display:inline-block;padding:5px 10px;border-radius:6px;font-size:.6rem;letter-spacing:1px;text-transform:uppercase;font-weight:600;background:rgba(240,112,14,.15);color:#dd5912;">${card.badge||''}</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+        <div style="display:inline-block;padding:5px 10px;border-radius:6px;font-size:.6rem;letter-spacing:1px;text-transform:uppercase;font-weight:600;background:rgba(240,112,14,.15);color:#dd5912;">${card.badge||''}</div>
+        <button id="detailShareBtn" aria-label="Share product" style="width:32px;height:32px;border-radius:999px;border:1px solid rgba(10,10,10,.12);background:rgba(255,255,255,.6);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#0a0a0a;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"></line><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"></line></svg>
+        </button>
+      </div>
     </div>
     <div style="margin-bottom:20px;">
       <div style="font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:#888;margin-bottom:10px;">Details</div>
@@ -517,6 +522,27 @@ function renderDetailBody(card, name, imgs){
     const originalLabel = btn.textContent;
     btn.textContent = 'Added ✓';
     setTimeout(() => { btn.classList.remove('pulse'); btn.textContent = originalLabel; }, 1200);
+  });
+  const shareBtn = document.getElementById('detailShareBtn');
+  if (shareBtn) shareBtn.addEventListener('click', async () => {
+    const url = `${location.origin}/product/${encodeURIComponent(card.id||'')}`;
+    const imgUrl = imgs[0];
+    let file = null;
+    try {
+      const res = await fetch(imgUrl);
+      const blob = await res.blob();
+      file = new File([blob], 'product.jpg', { type: blob.type || 'image/jpeg' });
+    } catch (e) {}
+    if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+      navigator.share({ title: name, text: name, url, files: [file] }).catch(() => {});
+    } else if (navigator.share) {
+      navigator.share({ title: name, text: name, url }).catch(() => {});
+    } else {
+      navigator.clipboard.writeText(url).then(() => {
+        shareBtn.classList.add('pulse');
+        setTimeout(() => shareBtn.classList.remove('pulse'), 380);
+      }).catch(() => window.prompt('Copy this link:', url));
+    }
   });
   function showImg(i){ curImg=(i+imgs.length)%imgs.length; document.getElementById('detailImg').src=imgs[curImg]; detailContent.querySelectorAll('[data-dot]').forEach(d=>d.style.background=Number(d.dataset.dot)===curImg?'#0a0a0a':'rgba(10,10,10,.3)'); }
   detailContent.querySelectorAll('[data-dot]').forEach(d => d.addEventListener('click', () => showImg(Number(d.dataset.dot))));
