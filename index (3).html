@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title id="pageTitle">New Arrivals — 64CAST</title>
+<title id="pageTitle">Current Stock — 64CAST</title>
 <meta name="theme-color" content="#ffffff">
-<meta property="og:title" content="New Arrivals — 64CAST">
+<meta property="og:title" content="Current Stock — 64CAST">
 <meta property="og:description" content="Rare 1:64 diecast, checkout instantly on WhatsApp.">
 <meta property="og:image" content="https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/64_LOGO_Falcon.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -123,6 +123,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
             <input id="searchInput" placeholder="Search..." style="border:none;outline:none;background:none;font-family:var(--font);font-size:.8rem;color:#0a0a0a;width:100%;">
           </div>
         </div>
+        <div id="statusSection">
+          <div class="lbl" id="statusTitle" style="font-size:.66rem;letter-spacing:1.5px;text-transform:uppercase;color:#888;margin-bottom:10px;">Status</div>
+          <div id="statusList" style="display:flex;flex-direction:column;gap:8px;"></div>
+        </div>
         <div id="brandFilterSection">
           <div class="lbl" style="font-size:.66rem;letter-spacing:1.5px;text-transform:uppercase;color:#888;margin-bottom:10px;">Brand</div>
           <div id="brandRail" style="display:flex;flex-direction:column;gap:2px;"></div>
@@ -152,7 +156,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
           </div>
         </div>
         <div id="pageHeadingRow" style="display:none;padding:24px 24px 12px;align-items:center;justify-content:space-between;gap:10px;">
-          <div id="pageHeading" style="font-size:1.3rem;letter-spacing:1px;text-transform:uppercase;font-weight:400;flex:1;">New Arrivals</div>
+          <div id="pageHeading" style="font-size:1.3rem;letter-spacing:1px;text-transform:uppercase;font-weight:400;flex:1;">Current Stock</div>
           <span id="resultCount" style="font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:#888;flex-shrink:0;"></span>
         </div>
         <div id="activeFiltersRow" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:24px 24px 14px;">
@@ -299,11 +303,41 @@ const EMBEDDED_DEMO_PRODUCTS = [
 ];
 const IMAGE_BASE_URL = 'https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/';
 const WA_NUMBER = '971552112588';
+const IS_PREORDER = new URLSearchParams(window.location.search).get('status') === 'preorder';
+let activeStatuses = new Set([IS_PREORDER ? 'preorder' : 'currentstock']);
+function renderStatusList(){
+  const counts = {inhand:0, currentstock:0, preorder:0, sold:0};
+  allProducts.forEach(p => {
+    const s = (p.STATUS||'').toLowerCase();
+    const qty = Number(p.QTY||0);
+    if (qty <= 0 || s === 'sold') counts.sold++;
+    else if (s === 'preorder') counts.preorder++;
+    else if (['inhand'].includes(s)) counts.inhand++;
+    else counts.currentstock++;
+  });
+  const rows = [
+    {key:'inhand', label:'Inhand Items', count:counts.inhand},
+    {key:'currentstock', label:'Current Stock', count:counts.currentstock},
+    {key:'preorder', label:'Pre-Order', count:counts.preorder},
+    {key:'sold', label:'Sold Out', count:counts.sold}
+  ];
+  document.getElementById('statusList').innerHTML = rows.map(r => {
+    const on = activeStatuses.has(r.key);
+    return `<label data-status="${r.key}" style="display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:.82rem;color:${on?'#0a0a0a':'#888'};cursor:pointer;"><span>${r.label} (${r.count})</span><span style="position:relative;width:30px;height:17px;border-radius:999px;background:${on?'#f0701e':'#ddd'};flex-shrink:0;transition:background .15s;"><span style="position:absolute;top:2px;left:${on?'15px':'2px'};width:13px;height:13px;border-radius:50%;background:#fff;transition:left .15s;box-shadow:0 1px 2px rgba(0,0,0,.25);"></span></span></label>`;
+  }).join('');
+  document.querySelectorAll('#statusList [data-status]').forEach(el => el.addEventListener('click', () => {
+    const key = el.dataset.status;
+    if (activeStatuses.has(key)) { if (activeStatuses.size > 1) activeStatuses.delete(key); }
+    else activeStatuses.add(key);
+    updateHeading(); renderStatusList(); renderBrandRail(); renderVehicleBrandRail(); resetPaging();
+  }));
+}
 function updateHeading(){
-  const label = 'New Arrivals';
+  const labels = { inhand:'Inhand Items', currentstock:'Current Stock', preorder:'Pre-Order', sold:'Sold Out' };
+  const label = activeStatuses.size === 1 ? labels[[...activeStatuses][0]] : 'Current Stock';
   const title = window.__BRAND_ROUTE__ ? `${window.__BRAND_ROUTE__} — 64CAST` : label + ' — 64CAST';
   document.getElementById('pageTitle').textContent = title;
-  document.getElementById('pageHeading').textContent = window.__BRAND_ROUTE__ ? window.__BRAND_ROUTE__ : label;
+  document.getElementById('pageHeading').textContent = window.__BRAND_ROUTE__ ? label : label;
 }
 function renderBrandHero(){
   if (!window.__BRAND_ROUTE__) return;
@@ -351,8 +385,9 @@ function statusLabel(s){
 }
 function passesStatus(p){
   const s = (p.STATUS||'').toLowerCase();
-  if (Number(p.QTY||0) <= 0 || s === 'sold') return false;
-  return !!p.NEW;
+  const qty = Number(p.QTY||0);
+  const bucket = (qty <= 0 || s === 'sold') ? 'sold' : s === 'preorder' ? 'preorder' : s === 'inhand' ? 'inhand' : 'currentstock';
+  return activeStatuses.has(bucket);
 }
 
 function renderBrandRail(){
@@ -470,7 +505,7 @@ function renderGrid(){
     <div class="product-card" data-product='${JSON.stringify(p).replace(/'/g,"&apos;")}' style="border-radius:18px;overflow:hidden;background:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.8);box-shadow:0 12px 30px rgba(0,0,0,.06);">
       <div style="position:relative;aspect-ratio:1/1;background:#fff;overflow:hidden;cursor:pointer;">
         <img src="${imgs[0]}" data-imgs='${JSON.stringify(imgs)}' data-cur="0" alt="${name}" style="width:100%;height:100%;object-fit:cover;touch-action:pan-y;filter:${disabled?'grayscale(1)':'none'};" onerror="this.src='${fallbackImg}'"${imgs.length>1 ? ` onmouseenter="this.dataset.hoverCur=this.dataset.cur; this.dataset.cur=1; this.src=JSON.parse(this.dataset.imgs)[1];" onmouseleave="this.dataset.cur=this.dataset.hoverCur||0; this.src=JSON.parse(this.dataset.imgs)[Number(this.dataset.cur)];" ontouchstart="this.dataset.sx=event.touches[0].clientX" ontouchend="var im=JSON.parse(this.dataset.imgs);var dx=event.changedTouches[0].clientX-this.dataset.sx;if(Math.abs(dx)>30){var c=(Number(this.dataset.cur)+(dx<0?1:-1)+im.length)%im.length;this.dataset.cur=c;this.src=im[c];}"` : ''}>
-        <div style="position:absolute;top:8px;left:8px;padding:3px 9px;border-radius:999px;font-size:.44rem;letter-spacing:1px;text-transform:uppercase;font-weight:700;background:${disabled?'rgba(10,10,10,.75)':'#fbead9'};color:${disabled?'#fff':'#c1601a'};">${disabled ? 'Sold' : 'New'}</div>
+        ${disabled ? `<div style="position:absolute;top:8px;left:8px;padding:3px 9px;border-radius:999px;font-size:.44rem;letter-spacing:1px;text-transform:uppercase;font-weight:700;background:rgba(10,10,10,.75);color:#fff;">Sold</div>` : ''}
       </div>
       <div style="padding:12px 14px 14px;">
         <div style="font-size:.64rem;letter-spacing:1px;text-transform:uppercase;color:#555;">${p.BRAND||''}</div>
@@ -604,7 +639,6 @@ function renderDetailBody(product, name, imgs){
   const detailContent = document.getElementById('detailContent');
   let curImg = 0;
   const soldOut = Number(product.QTY||0) <= 0 || (product.STATUS||'').toLowerCase() === 'sold';
-  const isPreorder = !soldOut && (product.STATUS||'').toLowerCase() === 'preorder';
   detailContent.innerHTML = `
     <div>
       <div id="detailImgWrap" style="aspect-ratio:1/1;background:#fff;border-radius:12px;overflow:hidden;margin-bottom:20px;position:relative;touch-action:none;">
@@ -633,39 +667,16 @@ function renderDetailBody(product, name, imgs){
           <div><span style="color:#888;">Est. Arrival</span><br>${etaLabel(product) || '—'}</div>
         </div>
       </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-        <div style="font-size:.68rem;letter-spacing:1.5px;text-transform:uppercase;color:#888;">Quantity</div>
-        <div style="display:flex;align-items:center;gap:14px;border:1px solid rgba(0,0,0,.12);border-radius:999px;padding:4px 6px;">
-          <button id="detailQtyMinus" style="width:22px;height:22px;border-radius:50%;background:#f1f1f1;border:none;display:flex;align-items:center;justify-content:center;font-size:.85rem;cursor:pointer;">−</button>
-          <div id="detailQty" style="font-size:.85rem;width:14px;text-align:center;">1</div>
-          <button id="detailQtyPlus" style="width:22px;height:22px;border-radius:50%;background:#f1f1f1;border:none;display:flex;align-items:center;justify-content:center;font-size:.85rem;cursor:pointer;">+</button>
-        </div>
-      </div>
-      <button id="detailAddBtn" class="glossO" ${soldOut ? 'disabled' : ''} style="width:100%;height:48px;border-radius:999px;font-size:.76rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;${soldOut ? 'opacity:.5;cursor:not-allowed;' : ''}">${soldOut ? 'Sold Out' : isPreorder ? 'Notify Me' : 'Add to Cart'}</button>
-      ${isPreorder ? `<div style="border-radius:14px;background:rgba(10,10,10,.03);border:1px solid rgba(0,0,0,.06);padding:14px;font-size:.78rem;color:#666;line-height:1.6;margin-top:16px;">Interested in a piece marked <span style="font-weight:500;color:#0a0a0a;">Pre-Order</span>? Tap <span style="font-weight:500;color:#dd5912;">Notify Me</span> instead of Add to Cart — we'll message you on WhatsApp the moment it lands.</div>` : ''}
+      <button id="detailAddBtn" class="glossO" ${soldOut ? 'disabled' : ''} style="width:100%;height:48px;border-radius:999px;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;${soldOut ? 'opacity:.5;cursor:not-allowed;' : ''}">${soldOut ? 'Sold Out' : 'Add to Cart'}</button>
     </div>
   `;
-  if (!soldOut && !isPreorder) document.getElementById('detailAddBtn').addEventListener('click', () => {
-    const qty = Number(document.getElementById('detailQty')?.textContent || 1);
-    for (let i = 0; i < qty; i++) addToCart({id:product['MODEL NO.'],name,brand:product.BRAND||'',price:'AED '+Number(product.PRICE||0),priceValue:Number(product.PRICE||0),img:imgs[0]});
+  if (!soldOut) document.getElementById('detailAddBtn').addEventListener('click', () => {
+    addToCart({id:product['MODEL NO.'],name,brand:product.BRAND||'',price:'AED '+Number(product.PRICE||0),priceValue:Number(product.PRICE||0),img:imgs[0]});
     const btn = document.getElementById('detailAddBtn');
     btn.classList.add('pulse');
     const originalLabel = btn.textContent;
     btn.textContent = 'Added ✓';
     setTimeout(() => { btn.classList.remove('pulse'); btn.textContent = originalLabel; }, 1200);
-  });
-  else if (!soldOut && isPreorder) document.getElementById('detailAddBtn').addEventListener('click', () => {
-    window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent('Hi! Please notify me when this arrives: ' + name + ' (' + (product['MODEL NO.']||'') + ')')}`, '_blank');
-  });
-  const qtyMinus = document.getElementById('detailQtyMinus');
-  const qtyPlus = document.getElementById('detailQtyPlus');
-  if (qtyMinus) qtyMinus.addEventListener('click', () => {
-    const el = document.getElementById('detailQty');
-    el.textContent = Math.max(1, Number(el.textContent) - 1);
-  });
-  if (qtyPlus) qtyPlus.addEventListener('click', () => {
-    const el = document.getElementById('detailQty');
-    el.textContent = Number(el.textContent) + 1;
   });
   const shareBtn = document.getElementById('detailShareBtn');
   if (shareBtn) shareBtn.addEventListener('click', async () => {
@@ -805,7 +816,7 @@ fetch(API_URL, { method: 'GET', cache: 'no-store' })
     document.getElementById('priceMax').max = maxPrice;
     document.getElementById('priceMax').value = maxPrice;
     updatePriceLabel();
-    renderBrandRail(); renderVehicleBrandRail(); renderGrid(); updateFiltersCount(); renderBrandHero();
+    renderBrandRail(); renderVehicleBrandRail(); renderStatusList(); renderGrid(); updateFiltersCount(); renderBrandHero();
     document.getElementById('loadMoreBtn').addEventListener('click', () => { visibleCount += PAGE_SIZE; renderGrid(); });
   })
   .catch(() => {
@@ -820,7 +831,7 @@ fetch(API_URL, { method: 'GET', cache: 'no-store' })
     document.getElementById('priceMax').max = maxPrice;
     document.getElementById('priceMax').value = maxPrice;
     updatePriceLabel();
-    renderBrandRail(); renderVehicleBrandRail(); renderGrid(); updateFiltersCount(); renderBrandHero();
+    renderBrandRail(); renderVehicleBrandRail(); renderStatusList(); renderGrid(); updateFiltersCount(); renderBrandHero();
     document.getElementById('loadMoreBtn').addEventListener('click', () => { visibleCount += PAGE_SIZE; renderGrid(); });
   });
 renderCart();
