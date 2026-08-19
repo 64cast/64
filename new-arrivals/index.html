@@ -50,11 +50,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
   #stockContainer{display:block!important;}
   #filterRail{position:fixed;top:0;left:0;bottom:0;width:300px;z-index:210;background:#fff;padding:26px 22px;transform:translateX(-100%);transition:transform .35s cubic-bezier(.22,1,.36,1);box-shadow:16px 0 70px rgba(0,0,0,.35);overflow-y:auto;border-right:1px solid rgba(255,255,255,.9);}
   #filterRail.open{transform:translateX(0);}
-  #filtersBar{display:flex!important;}
   #filterClose{display:flex!important;}
   #filterTitleRow{display:flex!important;}
 }
-@media (min-width:901px){ #filtersBar{display:none!important;} }
+#filtersBar{display:none!important;}
+@media (max-width:900px){ #sortWrap{display:none!important;} }
 @media (max-width:760px){
   #filterRail{top:auto;bottom:0;left:0;right:0;width:100%;max-height:82vh;border-radius:20px 20px 0 0;border-right:none;border-top:1px solid rgba(0,0,0,.08);box-shadow:0 -16px 70px rgba(0,0,0,.2);transform:translateY(100%);}
   #filterRail.open{transform:translateY(0);}
@@ -63,7 +63,9 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
   nav img[alt="64CAST"]{height:16px!important;}
   #stockGrid{grid-template-columns:repeat(2,1fr)!important;gap:1px!important;padding:0!important;background:rgba(0,0,0,.06)!important;}
   #stockGrid .product-card{border-radius:0!important;background:#fff!important;border:none!important;box-shadow:none!important;}
+  .cardTitle{font-size:.66rem!important;}
   #stockContainer{border-radius:16px!important;}
+  div:has(>#stockContainer){padding:0!important;}
   nav{padding:0 16px!important;}
   .ann{padding:6px 12px!important;font-size:.56rem!important;}
   footer .footer-premium-inner,div[style*="grid-template-columns:1.3fr 1fr 1fr 1fr"]{grid-template-columns:1fr 1fr!important;}
@@ -161,7 +163,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
         </div>
         <div id="activeFiltersRow" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:24px 24px 14px;">
           <div id="activePills" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
-          <div style="display:flex;align-items:center;gap:8px;font-size:.8rem;color:#666;letter-spacing:.3px;flex-shrink:0;">
+          <div id="sortWrap" style="display:flex;align-items:center;gap:8px;font-size:.8rem;color:#666;letter-spacing:.3px;flex-shrink:0;">
             Sort by
             <select id="sortSelect" style="border:none;background:none;height:24px;padding:0 14px 0 0;font-family:var(--font);font-size:.8rem;font-weight:500;letter-spacing:.3px;color:#0a0a0a;cursor:pointer;">
               <option value="newest">Newest ↓</option>
@@ -482,7 +484,7 @@ function renderGrid(){
       </div>
       <div style="padding:12px 14px 14px;">
         <div style="font-size:.64rem;letter-spacing:1px;text-transform:uppercase;color:#555;">${p.BRAND||''}</div>
-        <div style="font-size:.88rem;font-weight:500;margin:3px 0 10px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${name}</div>
+        <div class="cardTitle" style="font-size:.88rem;font-weight:500;margin:3px 0 10px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${name}</div>
         <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px;">
           <div style="font-size:.92rem;font-weight:500;white-space:nowrap;">AED ${Number(p.PRICE||0)}</div>
           <button class="addbtn" style="background:rgba(255,255,255,.9);border:1px solid ${disabled?'#ccc':'#eee'};opacity:${disabled?'.5':'1'};" ${disabled?'disabled':''} data-add='${JSON.stringify({id:p['MODEL NO.'],name,brand:p.BRAND||'',price:'AED '+Number(p.PRICE||0),priceValue:Number(p.PRICE||0),img}).replace(/'/g,"&apos;")}'>
