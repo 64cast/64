@@ -63,6 +63,7 @@ tr.prow.drop-target td{border-top:2px solid var(--orange)}
 .mono{font-family:ui-monospace,Menlo,monospace;font-size:.68rem}
 .status-pill{display:inline-flex;align-items:center;gap:6px;border:none;padding:5px 10px;border-radius:999px;text-transform:uppercase;font-size:.62rem;letter-spacing:1px;font-weight:500;cursor:pointer}
 .status-pill.currentstock{background:rgba(26,122,74,.15);color:var(--ok)}
+.status-pill.inhand{background:rgba(10,10,10,.1);color:#0a0a0a}
 .status-pill.preorder{background:rgba(221,89,18,.15);color:var(--orange)}
 .status-pill.sold{background:rgba(180,35,24,.12);color:var(--danger)}
 .price-input{width:74px;height:30px;border:1px solid transparent;border-radius:8px;padding:0 8px;background:transparent;font-family:var(--font);font-size:.78rem}
@@ -155,6 +156,7 @@ tr.prow.drop-target td{border-top:2px solid var(--orange)}
       <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
         <select id="bulkStatusSel" class="sel" style="height:32px">
           <option value="currentstock">Current Stock</option>
+          <option value="inhand">Inhand</option>
           <option value="preorder">Pre-Order</option>
           <option value="sold">Sold Out</option>
         </select>
@@ -165,6 +167,7 @@ tr.prow.drop-target td{border-top:2px solid var(--orange)}
         <button id="bulkCarbrandBtn" class="glossW btn" type="button">Apply Car Brand</button>
         <button id="bulkNewOnBtn" class="glossW btn" type="button">+ New Arrival</button>
         <button id="bulkNewOffBtn" class="glossW btn" type="button">- New Arrival</button>
+        <button id="bulkInhandBtn" class="glossW btn" type="button">Set Inhand</button>
         <button id="bulkDeleteBtn" class="btn danger" type="button">Delete Selected</button>
         <button id="bulkClearBtn" class="glossW btn" type="button">Clear</button>
       </div>
@@ -192,7 +195,7 @@ tr.prow.drop-target td{border-top:2px solid var(--orange)}
         <div class="field"><label>Car Brand</label><input id="fCarbrand" list="carList"></div>
       </div>
       <div class="grid3">
-        <div class="field"><label>Status</label><select id="fStatus"><option value="currentstock">Current Stock</option><option value="preorder">Pre-Order</option><option value="sold">Sold Out</option></select></div>
+        <div class="field"><label>Status</label><select id="fStatus"><option value="currentstock">Current Stock</option><option value="inhand">Inhand</option><option value="preorder">Pre-Order</option><option value="sold">Sold Out</option></select></div>
         <div class="field"><label>ETA Month</label><select id="fEta"><option value="">No ETA</option></select></div>
         <div class="field"><label>Sort Position</label><input id="fSort" type="number" min="1" step="1"><small>Or just drag the row on the table.</small></div>
         <div class="field"><label>Qty</label><input id="fQty" type="number" min="0" step="1"></div>
@@ -306,9 +309,9 @@ function renderPagination(total){
   if(next)next.onclick=function(){CURRENT_PAGE++;renderTable()};
   if(sizeSel)sizeSel.onchange=function(){PAGE_SIZE=num(this.value,25);CURRENT_PAGE=1;renderTable()};
 }
-var STATUS_CYCLE=['currentstock','preorder','sold'];
-function statusPill(st){return '<button type="button" class="status-pill '+esc(st)+'" data-status-cycle="__MODEL__" title="Click to change status">'+(st==='currentstock'?'Current Stock':st==='preorder'?'Pre-Order':'Sold Out')+'</button>'}
-function renderTable(){var all=filtered();renderPagination(all.length);var rows=all.slice((CURRENT_PAGE-1)*PAGE_SIZE,CURRENT_PAGE*PAGE_SIZE);$('tbody').innerHTML=rows.length?rows.map(function(p){var st=statusOf(p),m=modelOf(p),isNew=clean(p.NEW).toLowerCase()==='yes';return '<tr class="prow" draggable="true" data-model="'+esc(m)+'"><td><input type="checkbox" class="row-ck" data-ck="'+esc(m)+'" '+(SELECTED_MODELS.has(m)?'checked':'')+'></td><td><span class="drag-handle">\u22ee\u22ee</span></td><td><img class="thumb" src="'+esc(imageOf(p))+'" alt="'+esc(p['PRODUCT NAME']||m)+'" onerror="this.style.visibility=\'hidden\'"></td><td><div class="name">'+esc(p['PRODUCT NAME'])+'</div><div class="muted mono">'+esc(p.SCALE)+'</div></td><td>'+esc(p.BRAND)+'</td><td>'+esc(p.CARBRAND||'-')+'</td><td class="mono">'+esc(m)+'</td><td>'+statusPill(st).replace('__MODEL__',esc(m))+'</td><td>'+esc(p.ETA||'-')+'</td><td><input class="mini-input qty-input" data-qty="'+esc(m)+'" type="number" min="0" step="1" value="'+esc(p.QTY)+'" '+(st==='sold'?'readonly':'')+'></td><td><input class="price-input" data-price="'+esc(m)+'" type="number" min="0" step="0.01" value="'+esc(p.PRICE)+'"></td><td><div class="row-actions"><button class="link-btn'+(isNew?' new-active':'')+'" data-new="'+esc(m)+'" title="Toggle New Arrival">'+(isNew?'\u2605 New':'+ New')+'</button><button class="link-btn" data-edit="'+esc(m)+'">Edit</button><button class="link-btn danger" data-del="'+esc(m)+'">Delete</button></div></td></tr>'}).join(''):'<tr><td colspan="12" style="text-align:center;padding:40px;color:#999">No products found</td></tr>';attachDrag();}
+var STATUS_CYCLE=['currentstock','inhand','preorder','sold'];
+function statusPill(st){return '<button type="button" class="status-pill '+esc(st)+'" data-status-cycle="__MODEL__" title="Click to change status">'+(st==='currentstock'?'Current Stock':st==='inhand'?'Inhand':st==='preorder'?'Pre-Order':'Sold Out')+'</button>'}
+function renderTable(){var all=filtered();renderPagination(all.length);var rows=all.slice((CURRENT_PAGE-1)*PAGE_SIZE,CURRENT_PAGE*PAGE_SIZE);$('tbody').innerHTML=rows.length?rows.map(function(p){var st=statusOf(p),m=modelOf(p),isNew=clean(p.NEW).toLowerCase()==='yes';return '<tr class="prow" draggable="true" data-model="'+esc(m)+'"><td><input type="checkbox" class="row-ck" data-ck="'+esc(m)+'" '+(SELECTED_MODELS.has(m)?'checked':'')+'></td><td><span class="drag-handle">\u22ee\u22ee</span></td><td><img class="thumb" src="'+esc(imageOf(p))+'" alt="'+esc(p['PRODUCT NAME']||m)+'" onerror="this.style.visibility=\'hidden\'"></td><td><div class="name">'+esc(p['PRODUCT NAME'])+'</div><div class="muted mono">'+esc(p.SCALE)+'</div></td><td>'+esc(p.BRAND)+'</td><td>'+esc(p.CARBRAND||'-')+'</td><td class="mono">'+esc(m)+'</td><td>'+statusPill(st).replace('__MODEL__',esc(m))+'</td><td>'+esc(p.ETA||'-')+'</td><td><input class="mini-input qty-input" data-qty="'+esc(m)+'" type="number" min="0" step="1" value="'+esc(p.QTY)+'" '+(st==='sold'?'readonly':'')+'></td><td><input class="price-input" data-price="'+esc(m)+'" type="number" min="0" step="0.01" value="'+esc(p.PRICE)+'"></td><td><div class="row-actions"><button class="link-btn'+(isNew?' new-active':'')+'" data-new="'+esc(m)+'" title="Toggle New Arrival">'+(isNew?'\u2605 New':'+ New')+'</button><button class="link-btn'+(st==='inhand'?' new-active':'')+'" data-inhand="'+esc(m)+'" title="Toggle Inhand">'+(st==='inhand'?'\u2605 Inhand':'+ Inhand')+'</button><button class="link-btn" data-edit="'+esc(m)+'">Edit</button><button class="link-btn danger" data-del="'+esc(m)+'">Delete</button></div></td></tr>'}).join(''):'<tr><td colspan="12" style="text-align:center;padding:40px;color:#999">No products found</td></tr>';attachDrag();}
 function attachDrag(){
   var dragModel=null;
   document.querySelectorAll('tr.prow').forEach(function(row){
@@ -450,6 +453,14 @@ async function quickOrder(model,value){
   await persistProducts(PRODUCTS);
   toast('Order updated and saved to live site')
 }
+async function quickToggleInhand(model){
+  var p=PRODUCTS.find(function(x){return modelOf(x)===model});
+  if(!p)return;
+  var isInhand=statusOf(p)==='inhand';
+  p.STATUS=isInhand?'currentstock':'inhand';
+  await persistProducts(PRODUCTS);
+  toast(isInhand?'Moved back to Current Stock':'Marked Inhand');
+}
 async function quickToggleNew(model){
   var p=PRODUCTS.find(function(x){return modelOf(x)===model});
   if(!p)return;
@@ -544,11 +555,12 @@ $('loginForm').addEventListener('submit',async function(e){e.preventDefault();$(
 $('logoutBtn').onclick=function(){setToken('');location.href='/admin-8822'};$('refreshBtn').onclick=function(){load().catch(function(e){showNotice(e.message);alert(e.message)})};$('addBtn').onclick=function(){openEdit('')};$('importBtn').onclick=function(){$('importModal').classList.add('open')};$('exportBtn').onclick=exportJson;$('exportCsvBtn').onclick=exportCsv;$('healthBtn').onclick=healthCheck;$('communityBtn').onclick=function(){loadCommunitySignups().catch(function(e){alert(e.message||e)})};$('ordersBtn').onclick=function(){loadPendingOrders().catch(function(e){alert(e.message||e)})};$('confirmAllOrdersBtn').onclick=function(){confirmAllOrders().catch(function(e){alert(e.message||e)})};$('rejectAllOrdersBtn').onclick=function(){rejectAllOrders().catch(function(e){alert(e.message||e)})};$('repairBtn').onclick=function(){repairAndSave().catch(function(e){alert(e.message||e)})};
 ['searchInput','brandFilter','carFilter','statusFilter'].forEach(function(id){$(id).addEventListener('input',function(){CURRENT_PAGE=1;renderTable()});$(id).addEventListener('change',function(){CURRENT_PAGE=1;renderTable()})});
 ['fStatus','fQty'].forEach(function(id){$(id).addEventListener('input',function(){syncStatusQty($('fStatus'),$('fQty'))});$(id).addEventListener('change',function(){syncStatusQty($('fStatus'),$('fQty'))})});
-document.body.addEventListener('click',function(e){var close=e.target.getAttribute('data-close');if(close)$(close).classList.remove('open');var edit=e.target.getAttribute('data-edit');if(edit)openEdit(edit);var del=e.target.getAttribute('data-del');if(del)deleteProduct(del).catch(function(err){alert(err.message||err)});var isNewBtn=e.target.getAttribute('data-new');if(isNewBtn)quickToggleNew(isNewBtn).catch(function(err){alert(err.message||err)});var delSignup=e.target.getAttribute('data-del-signup');if(delSignup)removeCommunitySignup(delSignup).catch(function(err){alert(err.message||err)});var confirmOrderId=e.target.getAttribute('data-confirm-order');if(confirmOrderId)confirmOrder(confirmOrderId).catch(function(err){alert(err.message||err)});var rejectOrderId=e.target.getAttribute('data-reject-order');if(rejectOrderId)rejectOrder(rejectOrderId).catch(function(err){alert(err.message||err)});var statusCycle=e.target.getAttribute('data-status-cycle');if(statusCycle)quickStatusCycle(statusCycle).catch(function(err){alert(err.message||err)})});
+document.body.addEventListener('click',function(e){var close=e.target.getAttribute('data-close');if(close)$(close).classList.remove('open');var edit=e.target.getAttribute('data-edit');if(edit)openEdit(edit);var del=e.target.getAttribute('data-del');if(del)deleteProduct(del).catch(function(err){alert(err.message||err)});var isNewBtn=e.target.getAttribute('data-new');if(isNewBtn)quickToggleNew(isNewBtn).catch(function(err){alert(err.message||err)});var isInhandBtn=e.target.getAttribute('data-inhand');if(isInhandBtn)quickToggleInhand(isInhandBtn).catch(function(err){alert(err.message||err)});var delSignup=e.target.getAttribute('data-del-signup');if(delSignup)removeCommunitySignup(delSignup).catch(function(err){alert(err.message||err)});var confirmOrderId=e.target.getAttribute('data-confirm-order');if(confirmOrderId)confirmOrder(confirmOrderId).catch(function(err){alert(err.message||err)});var rejectOrderId=e.target.getAttribute('data-reject-order');if(rejectOrderId)rejectOrder(rejectOrderId).catch(function(err){alert(err.message||err)});var statusCycle=e.target.getAttribute('data-status-cycle');if(statusCycle)quickStatusCycle(statusCycle).catch(function(err){alert(err.message||err)})});
 document.body.addEventListener('change',function(e){var m=e.target.getAttribute('data-qty');if(m)quickQty(m,e.target.value).catch(function(err){alert(err.message||err)});var pr=e.target.getAttribute('data-price');if(pr)quickPrice(pr,e.target.value).catch(function(err){alert(err.message||err)});var ck=e.target.getAttribute('data-ck');if(ck){if(e.target.checked)SELECTED_MODELS.add(ck);else SELECTED_MODELS.delete(ck);updateBulkBar()}});
 $('selectAllCk').addEventListener('change',function(){var boxes=document.querySelectorAll('.row-ck');boxes.forEach(function(c){var m=c.getAttribute('data-ck');c.checked=$('selectAllCk').checked;if($('selectAllCk').checked)SELECTED_MODELS.add(m);else SELECTED_MODELS.delete(m)});updateBulkBar()});
 $('bulkStatusBtn').onclick=function(){bulkSetStatus($('bulkStatusSel').value).catch(function(e){alert(e.message||e)})};
 $('bulkNewOnBtn').onclick=function(){bulkSetFlag('NEW',true).catch(function(e){alert(e.message||e)})};
+$('bulkInhandBtn').onclick=function(){bulkSetStatus('inhand').catch(function(e){alert(e.message||e)})};
 $('bulkNewOffBtn').onclick=function(){bulkSetFlag('NEW',false).catch(function(e){alert(e.message||e)})};
 $('bulkBrandBtn').onclick=function(){bulkSetText('BRAND',$('bulkBrandInp').value).then(function(){$('bulkBrandInp').value=''}).catch(function(e){alert(e.message||e)})};
 $('bulkCarbrandBtn').onclick=function(){bulkSetText('CARBRAND',$('bulkCarbrandInp').value).then(function(){$('bulkCarbrandInp').value=''}).catch(function(e){alert(e.message||e)})};
