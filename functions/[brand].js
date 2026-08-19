@@ -1,34 +1,34 @@
 const BRANDS = [
-  { slug: "mini-gt", name: "Mini GT", logo: "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/minigt.jpg" },
-  { slug: "tarmac-works", name: "Tarmac Works", logo: "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/tarmacworks.jpg" },
+  { slug: "minigt", name: "Mini GT", logo: "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/minigt.jpg" },
+  { slug: "tarmacworks", name: "Tarmac Works", logo: "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/tarmacworks.jpg" },
   { slug: "inno64", name: "Inno64", logo: "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/inno64.jpg" },
   { slug: "poprace", name: "PopRace", logo: "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/poprace.jpg" },
   { slug: "bburago", name: "Bburago", logo: "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/bburago.jpg" },
-  { slug: "bbr-models", name: "BBR Models", logo: "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/bbrmodels.jpg" },
-  { slug: "cm-model", name: "CM Model", logo: "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/cmmodel.jpg" },
-  { slug: "hobby-japan", name: "Hobby Japan", logo: "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/hobbyjapan.jpg" },
-  { slug: "kaido-house", name: "Kaido House", logo: "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/kaidohouse.jpg" },
+  { slug: "bbrmodels", name: "BBR Models", logo: "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/bbrmodels.jpg" },
+  { slug: "cmmodel", name: "CM Model", logo: "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/cmmodel.jpg" },
+  { slug: "hobbyjapan", name: "Hobby Japan", logo: "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/hobbyjapan.jpg" },
+  { slug: "kaidohouse", name: "Kaido House", logo: "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/kaidohouse.jpg" },
   { slug: "lego", name: "Lego", logo: "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/lego.jpg" },
   { slug: "motorhelix", name: "Motorhelix", logo: "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/motorhelix.jpg" },
   { slug: "arbox", name: "ARbox", logo: "/assets/brands/arbox.png" },
-  { slug: "trends-hobby", name: "Trends Hobby", logo: "/assets/brands/trends-hobby.png" },
-  { slug: "american-diorama", name: "American Diorama", logo: "/assets/brands/american-diorama.png" },
+  { slug: "trendshobby", name: "Trends Hobby", logo: "/assets/brands/trends-hobby.png" },
+  { slug: "americandiorama", name: "American Diorama", logo: "/assets/brands/american-diorama.png" },
   { slug: "gcd", name: "GCD", logo: "/assets/brands/gcd.png" },
   { slug: "tiny", name: "Tiny", logo: "/assets/brands/tiny.png" },
   { slug: "sparky", name: "Sparky", logo: "/assets/brands/sparky.png" },
-  { slug: "unique-model", name: "Unique Model", logo: "/assets/brands/unique-model.png" },
+  { slug: "uniquemodel", name: "Unique Model", logo: "/assets/brands/unique-model.png" },
   { slug: "pgm", name: "PGM", logo: "/assets/brands/pgm.png" },
   { slug: "kyosho", name: "Kyosho", logo: "/assets/brands/kyosho.png" },
-  { slug: "bm-creations", name: "BM Creations", logo: "/assets/brands/bm-creations.png" }
+  { slug: "bmcreations", name: "BM Creations", logo: "/assets/brands/bm-creations.png" }
 ];
 
-// Matches /Mini-GT, /mini-gt, /Tarmac-Works, etc. at the root level.
+// Matches /minigt, /MiniGT, /poprace, etc. at the root level (no hyphens).
 // Falls through (context.next()) for anything that isn't a known brand slug,
 // so it never shadows /current-stock, /new-arrivals, /faq, /admin-8822, /product/*.
 export async function onRequest(context) {
   const { request, params, env } = context;
   const url = new URL(request.url);
-  const slug = decodeURIComponent(params.brand || "").trim().toLowerCase();
+  const slug = decodeURIComponent(params.brand || "").trim().toLowerCase().replace(/[-\s]+/g, "");
   const brand = BRANDS.find((b) => b.slug === slug);
   if (!brand) return context.next();
 
