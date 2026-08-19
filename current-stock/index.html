@@ -217,13 +217,26 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
           <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:#0a0a0a;fill:none;stroke-width:1.6;stroke-linecap:round"><path d="M18 6 6 18M6 6l12 12"></path></svg>
         </button>
       </div>
-      <div id="cartList" style="flex:1;overflow-y:auto;overscroll-behavior:contain;display:flex;flex-direction:column;gap:14px;position:relative;"></div>
-      <div style="border-top:1px solid rgba(255,255,255,.5);padding-top:16px;margin-top:12px;position:relative;">
-        <div style="display:flex;justify-content:space-between;font-size:.85rem;margin-bottom:14px;">
-          <span style="text-transform:uppercase;letter-spacing:1px;color:#666;">Subtotal</span>
-          <span id="cartSubtotal" style="font-weight:500;">AED 0</span>
+      <div id="cartMainView" style="flex:1;display:flex;flex-direction:column;min-height:0;">
+        <div id="cartList" style="flex:1;overflow-y:auto;overscroll-behavior:contain;display:flex;flex-direction:column;gap:14px;position:relative;"></div>
+        <div style="border-top:1px solid rgba(255,255,255,.5);padding-top:16px;margin-top:12px;position:relative;">
+          <div style="display:flex;justify-content:space-between;font-size:.85rem;margin-bottom:14px;">
+            <span style="text-transform:uppercase;letter-spacing:1px;color:#666;">Subtotal</span>
+            <span id="cartSubtotal" style="font-weight:500;">AED 0</span>
+          </div>
+          <button id="checkoutBtn" class="glossO" style="width:100%;height:48px;border-radius:999px;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;">Review Order →</button>
         </div>
-        <button id="checkoutBtn" class="glossO" style="width:100%;height:48px;border-radius:999px;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;">Checkout via WhatsApp</button>
+      </div>
+      <div id="cartReviewView" style="flex:1;display:none;flex-direction:column;min-height:0;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+          <button id="reviewBackBtn" class="glossW" style="width:30px;height:30px;border-radius:999px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:#0a0a0a;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M15 18l-6-6 6-6"></path></svg>
+          </button>
+          <div style="font-size:.85rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;">Review Order</div>
+        </div>
+        <div style="font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:#888;margin-bottom:8px;">Message preview to +971 55 211 2588</div>
+        <div id="reviewMessage" style="flex:1;overflow-y:auto;border-radius:16px;background:rgba(10,10,10,.03);border:1px solid rgba(0,0,0,.06);padding:16px;font-size:.75rem;line-height:1.8;color:#333;white-space:pre-wrap;"></div>
+        <button id="sendWhatsappBtn" class="glossO" style="width:100%;height:48px;border-radius:999px;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-top:16px;flex-shrink:0;">Send via WhatsApp</button>
       </div>
     </div>
   </div>
@@ -482,7 +495,7 @@ new MutationObserver(syncBodyScroll).observe(document.body, {attributes:true, at
 function closeAllDrawers(){ ['navOverlay','cartOverlay','filterOverlay','productDetailOverlay'].forEach(id => document.getElementById(id).classList.remove('open')); }
 function openNav(){ closeAllDrawers(); document.getElementById('navOverlay').classList.add('open'); }
 function closeNav(){ document.getElementById('navOverlay').classList.remove('open'); }
-function openCart(){ closeAllDrawers(); document.getElementById('cartOverlay').classList.add('open'); }
+function openCart(){ closeAllDrawers(); document.getElementById('cartMainView').style.display='flex'; document.getElementById('cartReviewView').style.display='none'; document.getElementById('cartOverlay').classList.add('open'); }
 function closeCart(){ document.getElementById('cartOverlay').classList.remove('open'); }
 function openFilters(){ closeAllDrawers(); document.getElementById('filterOverlay').classList.add('open'); }
 function closeFilters(){ document.getElementById('filterOverlay').classList.remove('open'); }
@@ -500,6 +513,13 @@ function openProductDetail(product){
     const imgs = results.filter(Boolean);
     renderDetailBody(product, name, imgs.length ? imgs : [fallbackImg]);
   });
+}
+function etaLabel(product){
+  const s = (product.STATUS||'').toLowerCase();
+  if (['inhand','readytocollect'].includes(s)) return 'Ready to Collect';
+  if (['currentstock','instock'].includes(s)) return '< 15 Days';
+  if (s === 'preorder') return product.ETA || 'TBD';
+  return '';
 }
 function renderDetailBody(product, name, imgs){
   const detailOverlay = document.getElementById('productDetailOverlay');
@@ -520,7 +540,7 @@ function renderDetailBody(product, name, imgs){
         <div style="font-size:1rem;font-weight:400;text-transform:uppercase;line-height:1.4;margin-bottom:10px;">${name}</div>
         <div style="font-size:1rem;font-weight:500;margin-bottom:10px;">AED ${Number(product.PRICE||0)}</div>
         <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
-          <div style="display:inline-block;padding:5px 10px;border-radius:6px;font-size:.6rem;letter-spacing:1px;text-transform:uppercase;font-weight:600;background:rgba(240,112,14,.15);color:#dd5912;">${statusLabel(product.STATUS)}${product.ETA && (product.STATUS||'').toLowerCase()==='preorder' ? ' · ETA ' + product.ETA : ''}</div>
+          <div style="display:inline-block;padding:5px 10px;border-radius:6px;font-size:.6rem;letter-spacing:1px;text-transform:uppercase;font-weight:600;background:rgba(240,112,14,.15);color:#dd5912;">${statusLabel(product.STATUS)}${etaLabel(product) ? ' · ' + etaLabel(product) : ''}</div>
           <button id="detailShareBtn" aria-label="Share product" style="width:32px;height:32px;border-radius:999px;border:1px solid rgba(10,10,10,.12);background:rgba(255,255,255,.6);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
             <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#0a0a0a;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"></line><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"></line></svg>
           </button>
@@ -528,10 +548,10 @@ function renderDetailBody(product, name, imgs){
       </div>
       <div style="margin-bottom:20px;">
         <div style="font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:#888;margin-bottom:10px;">Details</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:.75rem;line-height:1.6;">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;font-size:.75rem;line-height:1.6;">
           <div><span style="color:#888;">Model</span><br>${product['MODEL NO.']}</div>
           <div><span style="color:#888;">Condition</span><br>Brand New Sealed</div>
-          <div><span style="color:#888;">Availability</span><br>${product.STATUS}</div>
+          <div><span style="color:#888;">Est. Arrival</span><br>${etaLabel(product) || '—'}</div>
         </div>
       </div>
       <button id="detailAddBtn" class="glossO" ${soldOut ? 'disabled' : ''} style="width:100%;height:48px;border-radius:999px;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;${soldOut ? 'opacity:.5;cursor:not-allowed;' : ''}">${soldOut ? 'Sold Out' : 'Add to Cart'}</button>
@@ -644,14 +664,29 @@ document.getElementById('joinBtn').addEventListener('click', () => {
     .then(r => r.json()).then(() => { document.getElementById('newsletterInput').value=''; alert('Joined! You\'ll get alerts on WhatsApp.'); })
     .catch(() => window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent('Hi! Please add ' + num + ' to the alerts list.')}`, '_blank'));
 });
-document.getElementById('checkoutBtn').addEventListener('click', () => {
-  if (!cart.length) return;
+let pendingOrder = null;
+function buildOrderMessage(){
   const lines = cart.map((i,idx) => `${idx+1}. ${i.brand ? i.brand+' — '+i.name : i.name} (${i.id})\nhttps://64cast.com/product/${i.id}\nQty ${i.qty} × ${i.price} = AED ${i.priceValue*i.qty}`).join('\n\n');
   const subtotal = cart.reduce((s,i) => s + i.priceValue * i.qty, 0);
   const orderId = '64C-' + Math.random().toString(36).slice(2,10).toUpperCase();
   const msg = `${lines}\n\nPending Order ID: ${orderId}`;
-  fetch(API_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'create-pending-order', items: cart, total: subtotal, orderId, source: 'website-cart-glass-rail' }) }).catch(()=>{});
-  window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+  return { msg, subtotal, orderId };
+}
+document.getElementById('checkoutBtn').addEventListener('click', () => {
+  if (!cart.length) return;
+  pendingOrder = buildOrderMessage();
+  document.getElementById('reviewMessage').textContent = pendingOrder.msg;
+  document.getElementById('cartMainView').style.display = 'none';
+  document.getElementById('cartReviewView').style.display = 'flex';
+});
+document.getElementById('reviewBackBtn').addEventListener('click', () => {
+  document.getElementById('cartReviewView').style.display = 'none';
+  document.getElementById('cartMainView').style.display = 'flex';
+});
+document.getElementById('sendWhatsappBtn').addEventListener('click', () => {
+  if (!pendingOrder) return;
+  fetch(API_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'create-pending-order', items: cart, total: pendingOrder.subtotal, orderId: pendingOrder.orderId, source: 'website-cart-glass-rail' }) }).catch(()=>{});
+  window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(pendingOrder.msg)}`, '_blank');
   cart = [];
   saveCart();
   renderCart();

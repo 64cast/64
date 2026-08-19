@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title id="pageTitle">New Arrivals — 64CAST</title>
 <meta name="theme-color" content="#ffffff">
+<meta property="og:title" content="New Arrivals — 64CAST">
+<meta property="og:description" content="The newest 1:64 diecast drops, checkout instantly on WhatsApp.">
+<meta property="og:image" content="https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/64_LOGO_Falcon.png">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/64_LOGO_Falcon.png" type="image/png">
 <link href="https://fonts.googleapis.com" rel="preconnect">
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
@@ -31,17 +35,18 @@ button{font-family:var(--font);cursor:pointer}
 .drawer-overlay.open .drawer-panel-right{transform:translateX(0);}
 .drawer-panel-left{transform:translateX(-100%);transition:transform .35s cubic-bezier(.22,1,.36,1);overscroll-behavior:contain;}
 .drawer-overlay.open .drawer-panel-left{transform:translateX(0);}
-@media (max-width:760px){ .drawer-panel-right,.drawer-panel-left{width:100vw!important;} #filterOverlay .drawer-panel-left{top:auto!important;bottom:0!important;left:0!important;right:0!important;max-height:80vh!important;border-radius:20px 20px 0 0!important;border-right:none!important;border-top:1px solid rgba(255,255,255,.9);box-shadow:0 -16px 70px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.9)!important;transform:translateY(100%)!important;} #filterOverlay.open .drawer-panel-left{transform:translateY(0)!important;} .sheetHandle{display:block!important;} }
+@media (max-width:760px){ .drawer-panel-right,.drawer-panel-left{width:100vw!important;} #filterOverlay .drawer-panel-left{top:auto!important;bottom:0!important;left:0!important;right:0!important;max-height:80vh!important;border-radius:20px 20px 0 0!important;border-right:none!important;border-top:1px solid rgba(255,255,255,.9);box-shadow:0 -16px 70px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.9)!important;transform:translateY(100%)!important;} #filterOverlay.open .drawer-panel-left{transform:translateY(0)!important;} }
 .navlink{padding:12px 8px;font-size:.9rem;text-transform:uppercase;letter-spacing:1px;text-decoration:none;color:#0a0a0a;display:block;}
 input[type=range]{-webkit-appearance:none;width:100%;height:4px;border-radius:999px;background:rgba(255,255,255,.6);}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#fff;border:2px solid #dd5912;cursor:pointer;margin-top:-5px;}
 @keyframes addPulse{0%{transform:scale(1);}50%{transform:scale(1.4);}100%{transform:scale(1);}}
 .addbtn.pulse{animation:addPulse .38s cubic-bezier(.34,1.56,.64,1);background:#dd5912!important;border-color:#dd5912!important;}
 .addbtn.pulse svg{stroke:#fff!important;}
+@media (max-width:760px){ .sheetHandle{display:block!important;} }
 @media (max-width:860px){
   nav img[alt="64CAST"]{height:16px!important;}
   #stockGrid{grid-template-columns:repeat(2,1fr)!important;gap:10px!important;padding:8px 16px 24px!important;}
-  #stockContainer{border-radius:0!important;background:none!important;box-shadow:none!important;}
+  #stockContainer{border-radius:16px!important;}
   nav{padding:0 16px!important;}
   #filtersBar{padding:0 16px!important;}
   .ann{padding:6px 12px!important;font-size:.56rem!important;}
@@ -57,14 +62,14 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 </head>
 <body>
 
-<div style="min-height:100vh;background:#fff;position:relative;">
+<div style="min-height:100vh;background:linear-gradient(135deg,#e2e3e5 0%,#cfd1d4 45%,#b9bcc0 100%);position:relative;">
 
   <div id="stickyHeader" style="position:sticky;top:0;z-index:100;">
     <div class="ann" style="text-align:center;padding:8px 16px;font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#fff;background:#0a0a0a;border-bottom:1px solid rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);">
       <a href="https://chat.whatsapp.com/DFLnEWrKlQGKwrd01w2pOa" target="_blank" rel="noopener" style="color:inherit;">Join our <span style="text-decoration:underline;text-underline-offset:3px;font-weight:500;">WhatsApp Community</span> for the latest drops</a>
     </div>
 
-    <nav style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:56px;padding:0 40px;background:#fff;border-bottom:1px solid rgba(0,0,0,.08);">
+    <nav style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:56px;padding:0 40px;background:rgba(255,255,255,.55);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.7);">
       <button id="navToggle" aria-label="Open menu" style="justify-self:start;display:flex;align-items:center;gap:8px;background:none;border:none;padding:0;">
         <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:#0a0a0a;fill:none;stroke-width:1.6;stroke-linecap:round"><line x1="3" x2="21" y1="6" y2="6"></line><line x1="3" x2="15" y1="12" y2="12"></line><line x1="3" x2="21" y1="18" y2="18"></line></svg>
         <span style="font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:#0a0a0a;">Menu</span>
@@ -77,7 +82,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
       </button>
     </nav>
 
-    <div id="filtersBar" style="display:flex;align-items:center;justify-content:space-between;height:38px;padding:0 40px;background:#fff;border-bottom:1px solid rgba(0,0,0,.08);">
+    <div id="filtersBar" style="display:flex;align-items:center;justify-content:space-between;height:38px;padding:0 40px;background:rgba(255,255,255,.4);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.7);">
       <button id="filtersBarBtn" style="display:flex;align-items:center;gap:6px;background:none;border:none;padding:0;font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:#0a0a0a;">
         <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:#0a0a0a;fill:none;stroke-width:1.6"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"></path></svg>
         Filters (<span id="filtersCount">0</span>)
@@ -89,7 +94,14 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
   </div>
 
   <div style="padding:24px 5vw 24px;position:relative;z-index:1;">
-    <div id="stockContainer" style="border-radius:0;overflow:visible;background:none;box-shadow:none;">
+    <div id="stockContainer" style="border-radius:24px;overflow:visible;background:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.6);box-shadow:0 20px 60px rgba(0,0,0,.06);">
+      <div id="brandHero" style="display:none;padding:28px 24px 8px;align-items:center;gap:20px;">
+        <img id="brandHeroLogo" alt="" style="width:64px;height:64px;border-radius:16px;object-fit:contain;background:#fff;border:1px solid rgba(0,0,0,.08);padding:8px;flex-shrink:0;">
+        <div>
+          <div id="brandHeroName" style="font-size:1.3rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;"></div>
+          <div id="brandHeroCount" style="font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:#888;"></div>
+        </div>
+      </div>
       <div style="padding:24px 24px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;">
         <div id="pageHeading" style="font-size:1.3rem;letter-spacing:1px;text-transform:uppercase;font-weight:400;flex:1;">New Arrivals</div>
         <span id="resultCount" style="font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:#888;flex-shrink:0;"></span>
@@ -175,10 +187,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
         <input id="searchInput" placeholder="Search..." style="border:none;outline:none;background:none;font-family:var(--font);font-size:.7rem;color:#0a0a0a;width:100%;">
       </div>
 
-      <div id="statusSection" style="height:1px;background:rgba(255,255,255,.5);margin:0 0 14px;"></div>
-      <div id="statusTitle" style="font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:8px;">Status</div>
-      <label id="statusInStockLabel" style="display:flex;align-items:center;gap:6px;font-size:.68rem;color:#333;margin-bottom:6px;cursor:pointer;"><input type="checkbox" id="statusInStock"> Current Stock</label>
-      <label id="statusPreorderLabel" style="display:flex;align-items:center;gap:6px;font-size:.68rem;color:#333;margin-bottom:18px;cursor:pointer;"><input type="checkbox" id="statusPreorder"> Pre-Order</label>
+      <div id="statusSection" style="height:1px;background:rgba(255,255,255,.5);margin:0 0 14px;display:none;"></div>
+      <div id="statusTitle" style="font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:8px;display:none;">Status</div>
+      <label id="statusInStockLabel" style="display:none;"><input type="checkbox" id="statusInStock" checked> Current Stock</label>
+      <label id="statusPreorderLabel" style="display:none;"><input type="checkbox" id="statusPreorder" checked> Pre-Order</label>
 
       <div style="height:1px;background:rgba(255,255,255,.5);margin:14px 0;"></div>
       <div style="font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:8px;">Brand</div>
@@ -205,13 +217,26 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
           <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:#0a0a0a;fill:none;stroke-width:1.6;stroke-linecap:round"><path d="M18 6 6 18M6 6l12 12"></path></svg>
         </button>
       </div>
-      <div id="cartList" style="flex:1;overflow-y:auto;overscroll-behavior:contain;display:flex;flex-direction:column;gap:14px;position:relative;"></div>
-      <div style="border-top:1px solid rgba(255,255,255,.5);padding-top:16px;margin-top:12px;position:relative;">
-        <div style="display:flex;justify-content:space-between;font-size:.85rem;margin-bottom:14px;">
-          <span style="text-transform:uppercase;letter-spacing:1px;color:#666;">Subtotal</span>
-          <span id="cartSubtotal" style="font-weight:500;">AED 0</span>
+      <div id="cartMainView" style="flex:1;display:flex;flex-direction:column;min-height:0;">
+        <div id="cartList" style="flex:1;overflow-y:auto;overscroll-behavior:contain;display:flex;flex-direction:column;gap:14px;position:relative;"></div>
+        <div style="border-top:1px solid rgba(255,255,255,.5);padding-top:16px;margin-top:12px;position:relative;">
+          <div style="display:flex;justify-content:space-between;font-size:.85rem;margin-bottom:14px;">
+            <span style="text-transform:uppercase;letter-spacing:1px;color:#666;">Subtotal</span>
+            <span id="cartSubtotal" style="font-weight:500;">AED 0</span>
+          </div>
+          <button id="checkoutBtn" class="glossO" style="width:100%;height:48px;border-radius:999px;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;">Review Order →</button>
         </div>
-        <button id="checkoutBtn" class="glossO" style="width:100%;height:48px;border-radius:999px;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;">Checkout via WhatsApp</button>
+      </div>
+      <div id="cartReviewView" style="flex:1;display:none;flex-direction:column;min-height:0;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+          <button id="reviewBackBtn" class="glossW" style="width:30px;height:30px;border-radius:999px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:#0a0a0a;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M15 18l-6-6 6-6"></path></svg>
+          </button>
+          <div style="font-size:.85rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;">Review Order</div>
+        </div>
+        <div style="font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:#888;margin-bottom:8px;">Message preview to +971 55 211 2588</div>
+        <div id="reviewMessage" style="flex:1;overflow-y:auto;border-radius:16px;background:rgba(10,10,10,.03);border:1px solid rgba(0,0,0,.06);padding:16px;font-size:.75rem;line-height:1.8;color:#333;white-space:pre-wrap;"></div>
+        <button id="sendWhatsappBtn" class="glossO" style="width:100%;height:48px;border-radius:999px;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-top:16px;flex-shrink:0;">Send via WhatsApp</button>
       </div>
     </div>
   </div>
@@ -233,11 +258,6 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 
 <script>
 const API_URL = 'https://64cast-products-api.trailsec5.workers.dev';
-function isNewFlag(p){
-  if (p.NEW === true) return true;
-  const v = String(p.NEW||p.NEWARRIVAL||p['NEW ARRIVAL']||'').toLowerCase();
-  return v==='yes'||v==='true'||v==='1'||v==='new';
-}
 const EMBEDDED_DEMO_PRODUCTS = [
   {"MODEL NO.":"MGT00456","PRODUCT NAME":"Nissan Skyline GT-R R34 V-Spec II Nur","BRAND":"Mini GT","CARBRAND":"Nissan","PRICE":95,"STATUS":"currentstock","SORTORDER":1,"NEW":true,"QTY":5,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/minigt.jpg","IMG2":""},
   {"MODEL NO.":"INN64-021","PRODUCT NAME":"Honda Civic EG6 SiR-II","BRAND":"Inno64","CARBRAND":"Honda","PRICE":88,"STATUS":"currentstock","SORTORDER":2,"NEW":true,"QTY":5,"IMG1":"https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/inno64.jpg","IMG2":""},
@@ -252,22 +272,38 @@ const EMBEDDED_DEMO_PRODUCTS = [
 ];
 const IMAGE_BASE_URL = 'https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/';
 const WA_NUMBER = '971552112588';
-document.getElementById('statusInStock').checked = true;
-document.getElementById('statusPreorder').checked = true;
+const IS_PREORDER = false;
 function updateHeading(){
   document.getElementById('pageTitle').textContent = 'New Arrivals — 64CAST';
   document.getElementById('pageHeading').textContent = 'New Arrivals';
+}
+function renderBrandHero(){
+  if (!window.__BRAND_ROUTE__) return;
+  const hero = document.getElementById('brandHero');
+  const count = allProducts.filter(p => (p.BRAND||'').trim().toLowerCase() === window.__BRAND_ROUTE__.trim().toLowerCase() && (p.STATUS||'').toLowerCase() !== 'sold').length;
+  document.getElementById('brandHeroName').textContent = window.__BRAND_ROUTE__;
+  document.getElementById('brandHeroCount').textContent = count + (count === 1 ? ' Piece' : ' Pieces');
+  if (window.__BRAND_LOGO__) { document.getElementById('brandHeroLogo').src = window.__BRAND_LOGO__; document.getElementById('brandHeroLogo').style.display = 'block'; }
+  else { document.getElementById('brandHeroLogo').style.display = 'none'; }
+  hero.style.display = 'flex';
 }
 updateHeading();
 const fallbackImg = "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22400%22%20height%3D%22400%22%20viewBox%3D%220%200%20400%20400%22%3E%3Crect%20width%3D%22400%22%20height%3D%22400%22%20fill%3D%22%23f2f2f2%22%2F%3E%3Cdefs%3E%3Cpattern%20id%3D%22s%22%20width%3D%2214%22%20height%3D%2214%22%20patternTransform%3D%22rotate(45)%22%20patternUnits%3D%22userSpaceOnUse%22%3E%3Crect%20width%3D%227%22%20height%3D%2214%22%20fill%3D%22%23e9e9e9%22%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D%22400%22%20height%3D%22400%22%20fill%3D%22url(%23s)%22%2F%3E%3Ctext%20x%3D%22200%22%20y%3D%22200%22%20font-family%3D%22monospace%22%20font-size%3D%2213%22%20fill%3D%22%238a8a8a%22%20text-anchor%3D%22middle%22%3Eno%20image%3C%2Ftext%3E%3C%2Fsvg%3E";
 
 let allProducts = [];
-const QS_BRAND = (new URLSearchParams(window.location.search).get('brand') || '').trim();
+const ROUTE_BRAND = (window.__BRAND_ROUTE__ || '').trim();
+const QS_BRAND = (new URLSearchParams(window.location.search).get('brand') || ROUTE_BRAND || '').trim();
+const BRAND_LOCKED = !!ROUTE_BRAND;
 const QS_SEARCH = (new URLSearchParams(window.location.search).get('q') || '').trim();
 let activeBrand = QS_BRAND || 'All';
+if (BRAND_LOCKED) {
+  const brandFilterSection = document.getElementById('brandFilterSection');
+  if (brandFilterSection) brandFilterSection.style.display = 'none';
+}
 let activeVehicleBrand = 'All';
 if (QS_SEARCH) { document.getElementById('searchInput').value = QS_SEARCH; }
 let cart = [];
+try { cart = JSON.parse(localStorage.getItem('64cast_cart')||'[]'); } catch(e) { cart = []; }
 let visibleCount = 20;
 const PAGE_SIZE = 20;
 
@@ -285,14 +321,9 @@ function statusLabel(s){
   return { currentstock:'Current Stock', readytocollect:'Ready to Collect', instock:'Current Stock', preorder:'Pre-Order', sold:'Sold' }[s] || s;
 }
 function passesStatus(p){
-  if (!isNewFlag(p)) return false;
   const s = (p.STATUS||'').toLowerCase();
-  const stockOn = document.getElementById('statusInStock')?.checked;
-  const preorderOn = document.getElementById('statusPreorder')?.checked;
-  if (Number(p.QTY||0) <= 0 || s === 'sold') return true;
-  if (['currentstock','instock','readytocollect'].includes(s)) return !!stockOn;
-  if (s === 'preorder') return !!preorderOn;
-  return false;
+  if (Number(p.QTY||0) <= 0 || s === 'sold') return false;
+  return !!p.NEW;
 }
 
 function renderBrandRail(){
@@ -352,7 +383,7 @@ function renderGrid(){
         ${disabled ? `<div style="position:absolute;top:8px;left:8px;padding:3px 9px;border-radius:999px;font-size:.44rem;letter-spacing:1px;text-transform:uppercase;font-weight:700;background:rgba(10,10,10,.75);color:#fff;">Sold</div>` : ''}
       </div>
       <div style="padding:12px 14px 14px;">
-        <div style="font-size:.55rem;letter-spacing:1px;text-transform:uppercase;color:#aaa;">${p.BRAND||''}</div>
+        <div style="font-size:.55rem;letter-spacing:1px;text-transform:uppercase;color:#555;">${p.BRAND||''}</div>
         <div style="font-size:.76rem;font-weight:500;margin:3px 0 10px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${name}</div>
         <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px;">
           <div style="font-size:.8rem;font-weight:500;white-space:nowrap;">AED ${Number(p.PRICE||0)}</div>
@@ -389,13 +420,15 @@ function resetPaging(){ visibleCount = PAGE_SIZE; renderGrid(); }
 
 function resetPaging(){ visibleCount = PAGE_SIZE; renderGrid(); }
 
+function saveCart(){ try { localStorage.setItem('64cast_cart', JSON.stringify(cart)); } catch(e) {} }
 function addToCart(product){
   const existing = cart.find(i => i.id === product.id);
   if (existing) existing.qty++;
   else cart.push({ ...product, qty: 1 });
+  saveCart();
   renderCart();
 }
-function removeFromCart(id){ cart = cart.filter(i => i.id !== id); renderCart(); }
+function removeFromCart(id){ cart = cart.filter(i => i.id !== id); saveCart(); renderCart(); }
 
 function renderCart(){
   const list = document.getElementById('cartList');
@@ -420,6 +453,7 @@ function renderCart(){
   }));
 }
 
+window.addEventListener('message', e => { if (e.data === '__openFilters') openFilters(); });
 
 let __scrollLockY = 0;
 function syncBodyScroll(){
@@ -450,7 +484,7 @@ new MutationObserver(syncBodyScroll).observe(document.body, {attributes:true, at
 function closeAllDrawers(){ ['navOverlay','cartOverlay','filterOverlay','productDetailOverlay'].forEach(id => document.getElementById(id).classList.remove('open')); }
 function openNav(){ closeAllDrawers(); document.getElementById('navOverlay').classList.add('open'); }
 function closeNav(){ document.getElementById('navOverlay').classList.remove('open'); }
-function openCart(){ closeAllDrawers(); document.getElementById('cartOverlay').classList.add('open'); }
+function openCart(){ closeAllDrawers(); document.getElementById('cartMainView').style.display='flex'; document.getElementById('cartReviewView').style.display='none'; document.getElementById('cartOverlay').classList.add('open'); }
 function closeCart(){ document.getElementById('cartOverlay').classList.remove('open'); }
 function openFilters(){ closeAllDrawers(); document.getElementById('filterOverlay').classList.add('open'); }
 function closeFilters(){ document.getElementById('filterOverlay').classList.remove('open'); }
@@ -469,10 +503,18 @@ function openProductDetail(product){
     renderDetailBody(product, name, imgs.length ? imgs : [fallbackImg]);
   });
 }
+function etaLabel(product){
+  const s = (product.STATUS||'').toLowerCase();
+  if (['inhand','readytocollect'].includes(s)) return 'Ready to Collect';
+  if (['currentstock','instock'].includes(s)) return '< 15 Days';
+  if (s === 'preorder') return product.ETA || 'TBD';
+  return '';
+}
 function renderDetailBody(product, name, imgs){
   const detailOverlay = document.getElementById('productDetailOverlay');
   const detailContent = document.getElementById('detailContent');
   let curImg = 0;
+  const soldOut = Number(product.QTY||0) <= 0 || (product.STATUS||'').toLowerCase() === 'sold';
   detailContent.innerHTML = `
     <div>
       <div id="detailImgWrap" style="aspect-ratio:1/1;background:#fff;border-radius:12px;overflow:hidden;margin-bottom:20px;position:relative;touch-action:none;">
@@ -487,7 +529,7 @@ function renderDetailBody(product, name, imgs){
         <div style="font-size:1rem;font-weight:400;text-transform:uppercase;line-height:1.4;margin-bottom:10px;">${name}</div>
         <div style="font-size:1rem;font-weight:500;margin-bottom:10px;">AED ${Number(product.PRICE||0)}</div>
         <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
-          <div style="display:inline-block;padding:5px 10px;border-radius:6px;font-size:.6rem;letter-spacing:1px;text-transform:uppercase;font-weight:600;background:rgba(240,112,14,.15);color:#dd5912;">${statusLabel(product.STATUS)}</div>
+          <div style="display:inline-block;padding:5px 10px;border-radius:6px;font-size:.6rem;letter-spacing:1px;text-transform:uppercase;font-weight:600;background:rgba(240,112,14,.15);color:#dd5912;">${statusLabel(product.STATUS)}${etaLabel(product) ? ' · ' + etaLabel(product) : ''}</div>
           <button id="detailShareBtn" aria-label="Share product" style="width:32px;height:32px;border-radius:999px;border:1px solid rgba(10,10,10,.12);background:rgba(255,255,255,.6);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
             <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#0a0a0a;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"></line><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"></line></svg>
           </button>
@@ -495,16 +537,16 @@ function renderDetailBody(product, name, imgs){
       </div>
       <div style="margin-bottom:20px;">
         <div style="font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:#888;margin-bottom:10px;">Details</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:.75rem;line-height:1.6;">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;font-size:.75rem;line-height:1.6;">
           <div><span style="color:#888;">Model</span><br>${product['MODEL NO.']}</div>
           <div><span style="color:#888;">Condition</span><br>Brand New Sealed</div>
-          <div><span style="color:#888;">Availability</span><br>${product.STATUS}</div>
+          <div><span style="color:#888;">Est. Arrival</span><br>${etaLabel(product) || '—'}</div>
         </div>
       </div>
-      <button id="detailAddBtn" class="glossO" style="width:100%;height:48px;border-radius:999px;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;">Add to Cart</button>
+      <button id="detailAddBtn" class="glossO" ${soldOut ? 'disabled' : ''} style="width:100%;height:48px;border-radius:999px;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;${soldOut ? 'opacity:.5;cursor:not-allowed;' : ''}">${soldOut ? 'Sold Out' : 'Add to Cart'}</button>
     </div>
   `;
-  document.getElementById('detailAddBtn').addEventListener('click', () => {
+  if (!soldOut) document.getElementById('detailAddBtn').addEventListener('click', () => {
     addToCart({id:product['MODEL NO.'],name,brand:product.BRAND||'',price:'AED '+Number(product.PRICE||0),priceValue:Number(product.PRICE||0),img:imgs[0]});
     const btn = document.getElementById('detailAddBtn');
     btn.classList.add('pulse');
@@ -611,14 +653,32 @@ document.getElementById('joinBtn').addEventListener('click', () => {
     .then(r => r.json()).then(() => { document.getElementById('newsletterInput').value=''; alert('Joined! You\'ll get alerts on WhatsApp.'); })
     .catch(() => window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent('Hi! Please add ' + num + ' to the alerts list.')}`, '_blank'));
 });
-document.getElementById('checkoutBtn').addEventListener('click', () => {
-  if (!cart.length) return;
+let pendingOrder = null;
+function buildOrderMessage(){
   const lines = cart.map((i,idx) => `${idx+1}. ${i.brand ? i.brand+' — '+i.name : i.name} (${i.id})\nhttps://64cast.com/product/${i.id}\nQty ${i.qty} × ${i.price} = AED ${i.priceValue*i.qty}`).join('\n\n');
   const subtotal = cart.reduce((s,i) => s + i.priceValue * i.qty, 0);
   const orderId = '64C-' + Math.random().toString(36).slice(2,10).toUpperCase();
   const msg = `${lines}\n\nPending Order ID: ${orderId}`;
-  fetch(API_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'create-pending-order', items: cart, total: subtotal, orderId, source: 'website-cart-glass-rail' }) }).catch(()=>{});
-  window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+  return { msg, subtotal, orderId };
+}
+document.getElementById('checkoutBtn').addEventListener('click', () => {
+  if (!cart.length) return;
+  pendingOrder = buildOrderMessage();
+  document.getElementById('reviewMessage').textContent = pendingOrder.msg;
+  document.getElementById('cartMainView').style.display = 'none';
+  document.getElementById('cartReviewView').style.display = 'flex';
+});
+document.getElementById('reviewBackBtn').addEventListener('click', () => {
+  document.getElementById('cartReviewView').style.display = 'none';
+  document.getElementById('cartMainView').style.display = 'flex';
+});
+document.getElementById('sendWhatsappBtn').addEventListener('click', () => {
+  if (!pendingOrder) return;
+  fetch(API_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'create-pending-order', items: cart, total: pendingOrder.subtotal, orderId: pendingOrder.orderId, source: 'website-cart-glass-rail' }) }).catch(()=>{});
+  window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(pendingOrder.msg)}`, '_blank');
+  cart = [];
+  saveCart();
+  renderCart();
 });
 
 fetch(API_URL, { method: 'GET', cache: 'no-store' })
@@ -626,8 +686,8 @@ fetch(API_URL, { method: 'GET', cache: 'no-store' })
   .then(rows => {
     allProducts = Array.isArray(rows) ? rows : [];
     if (QS_BRAND) {
-      const match = allProducts.find(p => (p.BRAND||'').trim().toLowerCase() === QS_BRAND.toLowerCase());
-      activeBrand = match ? match.BRAND : 'All';
+      const match = allProducts.find(p => (p.BRAND||'').trim().toLowerCase() === QS_BRAND.trim().toLowerCase());
+      activeBrand = match ? match.BRAND : QS_BRAND;
     }
     const prices = allProducts.filter(passesStatus).map(p => Number(p.PRICE||0));
     const maxPrice = prices.length ? Math.ceil(Math.max(...prices) / 10) * 10 : 500;
@@ -635,14 +695,14 @@ fetch(API_URL, { method: 'GET', cache: 'no-store' })
     document.getElementById('priceMax').max = maxPrice;
     document.getElementById('priceMax').value = maxPrice;
     updatePriceLabel();
-    renderBrandRail(); renderVehicleBrandRail(); renderGrid(); updateFiltersCount();
+    renderBrandRail(); renderVehicleBrandRail(); renderGrid(); updateFiltersCount(); renderBrandHero();
     document.getElementById('loadMoreBtn').addEventListener('click', () => { visibleCount += PAGE_SIZE; renderGrid(); });
   })
   .catch(() => {
     allProducts = EMBEDDED_DEMO_PRODUCTS.slice();
     if (QS_BRAND) {
-      const match = allProducts.find(p => (p.BRAND||'').trim().toLowerCase() === QS_BRAND.toLowerCase());
-      activeBrand = match ? match.BRAND : 'All';
+      const match = allProducts.find(p => (p.BRAND||'').trim().toLowerCase() === QS_BRAND.trim().toLowerCase());
+      activeBrand = match ? match.BRAND : QS_BRAND;
     }
     const prices = allProducts.filter(passesStatus).map(p => Number(p.PRICE||0));
     const maxPrice = prices.length ? Math.ceil(Math.max(...prices) / 10) * 10 : 500;
@@ -650,7 +710,7 @@ fetch(API_URL, { method: 'GET', cache: 'no-store' })
     document.getElementById('priceMax').max = maxPrice;
     document.getElementById('priceMax').value = maxPrice;
     updatePriceLabel();
-    renderBrandRail(); renderVehicleBrandRail(); renderGrid(); updateFiltersCount();
+    renderBrandRail(); renderVehicleBrandRail(); renderGrid(); updateFiltersCount(); renderBrandHero();
     document.getElementById('loadMoreBtn').addEventListener('click', () => { visibleCount += PAGE_SIZE; renderGrid(); });
   });
 renderCart();
