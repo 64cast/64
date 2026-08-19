@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="Discover rare 1:64 diecast and checkout instantly on WhatsApp — join the UAE's growing collector community.">
 <link rel="icon" href="https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/64_LOGO_Falcon.png" type="image/png">
 <link href="https://fonts.googleapis.com" rel="preconnect">
-<link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root{--font:"Jost",sans-serif}
 *{box-sizing:border-box}
@@ -65,6 +65,8 @@ button{font-family:var(--font);cursor:pointer}
 .addbtn.pulse{animation:addPulse .38s cubic-bezier(.34,1.56,.64,1);}
 .drawer-overlay{position:fixed;inset:0;z-index:200;background:rgba(10,10,10,.28);backdrop-filter:blur(4px);display:none;}
 .drawer-overlay.open{display:block;}
+summary::-webkit-details-marker{display:none}
+summary::marker{content:''}
 .navlink{padding:12px 8px;font-size:.9rem;text-transform:uppercase;letter-spacing:1px;text-decoration:none;color:#0a0a0a;display:block;}
 @keyframes shimmer{0%{background-position:-220px 0}100%{background-position:220px 0}}
 .skel-card{flex:0 0 220px;aspect-ratio:.72/1;border-radius:18px;background:#eee linear-gradient(90deg,#eee 0%,#f6f6f6 20%,#eee 40%);background-size:220px 100%;animation:shimmer 1.3s ease-in-out infinite;}
@@ -281,8 +283,12 @@ button{font-family:var(--font);cursor:pointer}
       </div>
       <a href="#" class="navlink" data-jump="top">Home</a>
       <a href="https://64cast.com/new-arrivals/" class="navlink">New Arrivals</a>
-      <a href="#brands" class="navlink" data-jump="brands">Shop By Brand</a>
+      <details style="border:none;">
+        <summary class="navlink" style="cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;">Shop By Brand<svg viewBox="0 0 24 24" style="width:11px;height:11px;stroke:#888;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M6 9l6 6 6-6"></path></svg></summary>
+        <div style="display:flex;flex-direction:column;max-height:260px;overflow-y:auto;"><a href="https://64cast.com/minigt" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Mini GT</a><a href="https://64cast.com/tarmacworks" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Tarmac Works</a><a href="https://64cast.com/inno64" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Inno64</a><a href="https://64cast.com/poprace" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">PopRace</a><a href="https://64cast.com/bburago" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Bburago</a><a href="https://64cast.com/bbrmodels" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">BBR Models</a><a href="https://64cast.com/cmmodel" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">CM Model</a><a href="https://64cast.com/hobbyjapan" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Hobby Japan</a><a href="https://64cast.com/kaidohouse" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Kaido House</a><a href="https://64cast.com/lego" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Lego</a><a href="https://64cast.com/motorhelix" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Motorhelix</a><a href="https://64cast.com/arbox" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">ARbox</a><a href="https://64cast.com/trendshobby" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Trends Hobby</a><a href="https://64cast.com/americandiorama" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">American Diorama</a><a href="https://64cast.com/gcd" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">GCD</a><a href="https://64cast.com/tiny" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Tiny</a><a href="https://64cast.com/sparky" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Sparky</a><a href="https://64cast.com/uniquemodel" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Unique Model</a><a href="https://64cast.com/pgm" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">PGM</a><a href="https://64cast.com/kyosho" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Kyosho</a><a href="https://64cast.com/bmcreations" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">BM Creations</a></div>
+      </details>
       <a href="https://64cast.com/current-stock/" class="navlink">Current Stock</a>
+      <a href="https://64cast.com/inhand/" class="navlink">Inhand</a>
       <a href="https://64cast.com/current-stock/?status=preorder" class="navlink">Pre-Order</a>
       <a href="#faq" class="navlink" data-jump="faq">FAQ</a>
     </div>
@@ -397,19 +403,6 @@ function bindAdd(container){
   container.querySelectorAll('.product-card[data-product]').forEach(card => {
     card.addEventListener('click', () => openProductDetail(JSON.parse(card.dataset.product)));
   });
-  validateCardImages(container);
-}
-function validateCardImages(container){
-  const checkImg = src => new Promise(resolve => { const im = new Image(); im.onload = () => resolve(src); im.onerror = () => resolve(null); im.src = src; });
-  container.querySelectorAll('img[data-imgs]').forEach(img => {
-    let list; try { list = JSON.parse(img.dataset.imgs); } catch(e) { return; }
-    if (list.length <= 1) return;
-    Promise.all(list.map(checkImg)).then(results => {
-      const valid = results.filter(Boolean);
-      img.dataset.imgs = JSON.stringify(valid.length ? valid : [list[0]]);
-      img.dataset.cur = 0;
-    });
-  });
 }
 
 function cardHtml(p){
@@ -417,7 +410,7 @@ function cardHtml(p){
   return `
     <div class="product-card" data-product='${JSON.stringify(p).replace(/'/g,"&apos;")}' style="flex:0 0 220px;border-radius:18px;overflow:hidden;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.7);box-shadow:0 12px 30px rgba(0,0,0,.06);">
       <div style="position:relative;aspect-ratio:1/1;background:#fff;overflow:hidden;cursor:pointer;">
-        <img src="${imgs[0]}" data-imgs='${JSON.stringify(imgs)}' data-cur="0" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;touch-action:pan-y;" onerror="this.src='${fallbackImg}'"${imgs.length>1 ? ` onmouseenter="this.dataset.hoverCur=this.dataset.cur; this.dataset.cur=1; this.src=JSON.parse(this.dataset.imgs)[1];" onmouseleave="this.dataset.cur=this.dataset.hoverCur||0; this.src=JSON.parse(this.dataset.imgs)[Number(this.dataset.cur)];"` : ''}>
+        <img src="${imgs[0]}" data-imgs='${JSON.stringify(imgs)}' data-cur="0" alt="${p.name}" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;touch-action:pan-y;" onerror="this.src='${fallbackImg}'"${imgs.length>1 ? ` onmouseenter="this.dataset.hoverCur=this.dataset.cur; this.dataset.cur=1; this.src=JSON.parse(this.dataset.imgs)[1];" onmouseleave="this.dataset.cur=this.dataset.hoverCur||0; this.src=JSON.parse(this.dataset.imgs)[Number(this.dataset.cur)];"` : ''}>
         <div style="position:absolute;top:8px;left:8px;padding:3px 9px;border-radius:999px;font-size:.44rem;letter-spacing:1px;text-transform:uppercase;font-weight:550;background:rgba(255,255,255,.8);color:${p.badgeColor};">${p.badge}</div>
       </div>
       <div style="padding:12px 14px 14px;">
@@ -717,6 +710,20 @@ document.getElementById('sendWhatsappBtn').addEventListener('click', () => {
 
 renderStock();
 renderCart();
+</script>
+
+<button id="backToTopBtn" class="glossW" aria-label="Back to top" style="display:none;position:fixed;right:24px;bottom:28px;width:48px;height:48px;border-radius:999px;align-items:center;justify-content:center;z-index:140;">
+  <svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:#0a0a0a;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M18 15l-6-6-6 6"></path></svg>
+</button>
+<script>
+(function(){
+  var btn = document.getElementById('backToTopBtn');
+  function update(){ btn.style.display = (window.scrollY > 400 && window.innerWidth > 900) ? 'flex' : 'none'; }
+  window.addEventListener('scroll', update, {passive:true});
+  window.addEventListener('resize', update);
+  btn.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+  update();
+})();
 </script>
 </body>
 </html>

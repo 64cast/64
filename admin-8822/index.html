@@ -573,5 +573,19 @@ $('replaceBtn').onclick=function(){if(!confirm('Replace entire live product list
 initMonths();(async function(){if(await verify()){showApp(true);load().catch(function(e){showNotice(e.message);alert(e.message)})}else showApp(false)})();
 })();
 </script>
+
+<button id="backToTopBtn" class="glossW" aria-label="Back to top" style="display:none;position:fixed;right:24px;bottom:28px;width:48px;height:48px;border-radius:999px;align-items:center;justify-content:center;z-index:140;">
+  <svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:#0a0a0a;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M18 15l-6-6-6 6"></path></svg>
+</button>
+<script>
+(function(){
+  var btn = document.getElementById('backToTopBtn');
+  function update(){ btn.style.display = (window.scrollY > 400 && window.innerWidth > 900) ? 'flex' : 'none'; }
+  window.addEventListener('scroll', update, {passive:true});
+  window.addEventListener('resize', update);
+  btn.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+  update();
+})();
+</script>
 </body>
 </html>

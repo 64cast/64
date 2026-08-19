@@ -11,7 +11,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/64_LOGO_Falcon.png" type="image/png">
 <link href="https://fonts.googleapis.com" rel="preconnect">
-<link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root{--font:"Jost",sans-serif}
 *{box-sizing:border-box}
@@ -33,6 +33,8 @@ button{font-family:var(--font);cursor:pointer}
 .drawer-overlay.open{display:block;}
 .drawer-panel-right{transform:translateX(100%);transition:transform .35s cubic-bezier(.22,1,.36,1);overscroll-behavior:contain;}
 .drawer-overlay.open .drawer-panel-right{transform:translateX(0);}
+summary::-webkit-details-marker{display:none}
+summary::marker{content:''}
 .navlink{padding:12px 8px;font-size:.9rem;text-transform:uppercase;letter-spacing:1px;text-decoration:none;color:#0a0a0a;display:block;}
 input[type=range]{-webkit-appearance:none;width:100%;height:4px;background:none;}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#fff;border:2px solid #dd5912;cursor:pointer;margin-top:-5px;box-shadow:0 1px 3px rgba(0,0,0,.2);}
@@ -61,7 +63,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
   .filterDragHandle{display:block!important;}
 }
 #filterFab{display:none;position:fixed;right:20px;bottom:24px;width:52px;height:52px;border-radius:999px;align-items:center;justify-content:center;z-index:150;border:none;}
-@media (max-width:900px){ #filterFab{display:flex;} }
+@media (max-width:900px){ #filterFab{display:flex;} #backToTopBtn{display:none!important;} }
 @media (max-width:860px){
   nav img[alt="64CAST"]{height:16px!important;}
   #stockGrid{grid-template-columns:repeat(2,1fr)!important;gap:1px!important;padding:0!important;background:rgba(0,0,0,.06)!important;}
@@ -245,7 +247,12 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
       </div>
       <a href="/" class="navlink">Home</a>
       <a href="/new-arrivals" class="navlink">New Arrivals</a>
+      <details style="border:none;">
+        <summary class="navlink" style="cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;">Shop By Brand<svg viewBox="0 0 24 24" style="width:11px;height:11px;stroke:#888;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M6 9l6 6 6-6"></path></svg></summary>
+        <div style="display:flex;flex-direction:column;max-height:260px;overflow-y:auto;"><a href="/minigt" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Mini GT</a><a href="/tarmacworks" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Tarmac Works</a><a href="/inno64" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Inno64</a><a href="/poprace" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">PopRace</a><a href="/bburago" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Bburago</a><a href="/bbrmodels" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">BBR Models</a><a href="/cmmodel" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">CM Model</a><a href="/hobbyjapan" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Hobby Japan</a><a href="/kaidohouse" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Kaido House</a><a href="/lego" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Lego</a><a href="/motorhelix" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Motorhelix</a><a href="/arbox" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">ARbox</a><a href="/trendshobby" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Trends Hobby</a><a href="/americandiorama" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">American Diorama</a><a href="/gcd" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">GCD</a><a href="/tiny" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Tiny</a><a href="/sparky" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Sparky</a><a href="/uniquemodel" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Unique Model</a><a href="/pgm" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">PGM</a><a href="/kyosho" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Kyosho</a><a href="/bmcreations" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">BM Creations</a></div>
+      </details>
       <a href="/current-stock" class="navlink">Current Stock</a>
+      <a href="/inhand" class="navlink">Inhand</a>
       <a href="/current-stock?status=preorder" class="navlink">Pre-Order</a>
             <a href="/faq" class="navlink">FAQ</a>
     </div>
@@ -316,7 +323,7 @@ const EMBEDDED_DEMO_PRODUCTS = [
 const IMAGE_BASE_URL = 'https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/';
 const WA_NUMBER = '971552112588';
 const IS_PREORDER = new URLSearchParams(window.location.search).get('status') === 'preorder';
-let activeStatus = window.__BRAND_ROUTE__ ? 'all' : (IS_PREORDER ? 'preorder' : 'currentstock');
+let activeStatuses = window.__BRAND_ROUTE__ ? new Set(['inhand','currentstock','preorder','sold']) : new Set(['inhand','currentstock','preorder','sold']);
 function renderStatusList(){
   const counts = {inhand:0, currentstock:0, preorder:0, sold:0};
   allProducts.forEach(p => {
@@ -328,30 +335,26 @@ function renderStatusList(){
     else counts.currentstock++;
   });
   const total = counts.inhand + counts.currentstock + counts.preorder + counts.sold;
-  const rows = window.__BRAND_ROUTE__ ? [
-    {key:'all', label:'All', count:total},
-    {key:'preorder', label:'Pre-Order', count:counts.preorder},
-    {key:'inhand', label:'Inhand Items', count:counts.inhand},
-    {key:'currentstock', label:'Current Stock', count:counts.currentstock},
-    {key:'sold', label:'Sold Out', count:counts.sold}
-  ] : [
+  const rows = [
     {key:'inhand', label:'Inhand Items', count:counts.inhand},
     {key:'currentstock', label:'Current Stock', count:counts.currentstock},
     {key:'preorder', label:'Pre-Order', count:counts.preorder},
     {key:'sold', label:'Sold Out', count:counts.sold}
   ];
   document.getElementById('statusList').innerHTML = rows.map(r => {
-    const on = activeStatus === r.key;
-    return `<label data-status="${r.key}" style="display:flex;align-items:center;gap:10px;font-size:.82rem;color:${on?'#dd5912':'#0a0a0a'};cursor:pointer;font-weight:${on?'500':'400'};"><span style="width:14px;height:14px;border-radius:50%;border:1.5px solid ${on?'#dd5912':'#ccc'};display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span style="width:7px;height:7px;border-radius:50%;background:${on?'#dd5912':'transparent'};"></span></span>${r.label} (${r.count})</label>`;
+    const on = activeStatuses.has(r.key);
+    return `<label data-status="${r.key}" style="display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:.82rem;color:#0a0a0a;cursor:pointer;"><span>${r.label} (${r.count})</span><span style="position:relative;width:34px;height:19px;border-radius:999px;background:${on?'#dd5912':'#ccc'};flex-shrink:0;transition:background .15s;"><span style="position:absolute;top:2px;left:${on?'17px':'2px'};width:15px;height:15px;border-radius:50%;background:#fff;transition:left .15s;box-shadow:0 1px 2px rgba(0,0,0,.25);"></span></span></label>`;
   }).join('');
   document.querySelectorAll('#statusList [data-status]').forEach(el => el.addEventListener('click', () => {
-    activeStatus = el.dataset.status;
+    const key = el.dataset.status;
+    if (activeStatuses.has(key)) { if (activeStatuses.size > 1) activeStatuses.delete(key); }
+    else activeStatuses.add(key);
     updateHeading(); renderStatusList(); renderBrandRail(); renderVehicleBrandRail(); resetPaging();
   }));
 }
 function updateHeading(){
   const labels = { all:'All', inhand:'Inhand Items', currentstock:'Current Stock', preorder:'Pre-Order', sold:'Sold Out' };
-  const label = labels[activeStatus] || 'Current Stock';
+  const label = activeStatuses.size === 1 ? labels[[...activeStatuses][0]] : 'Current Stock';
   const title = window.__BRAND_ROUTE__ ? `${window.__BRAND_ROUTE__} — 64CAST` : label + ' — 64CAST';
   document.getElementById('pageTitle').textContent = title;
   document.getElementById('pageHeading').textContent = window.__BRAND_ROUTE__ ? label : label;
@@ -402,11 +405,10 @@ function statusLabel(s){
   return { currentstock:'Current Stock', readytocollect:'Ready to Collect', instock:'Current Stock', preorder:'Pre-Order', sold:'Sold' }[s] || s;
 }
 function passesStatus(p){
-  if (activeStatus === 'all') return true;
   const s = (p.STATUS||'').toLowerCase();
   const qty = Number(p.QTY||0);
   const bucket = (qty <= 0 || s === 'sold') ? 'sold' : s === 'preorder' ? 'preorder' : s === 'inhand' ? 'inhand' : 'currentstock';
-  return activeStatus === bucket;
+  return activeStatuses.has(bucket);
 }
 
 function renderBrandRail(){
@@ -529,7 +531,7 @@ function renderGrid(){
     return `
     <div class="product-card" data-product='${JSON.stringify(p).replace(/'/g,"&apos;")}' style="border-radius:18px;overflow:hidden;background:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.8);box-shadow:0 12px 30px rgba(0,0,0,.06);">
       <div style="position:relative;aspect-ratio:1/1;background:#fff;overflow:hidden;cursor:pointer;">
-        <img src="${imgs[0]}" data-imgs='${JSON.stringify(imgs)}' data-cur="0" alt="${name}" style="width:100%;height:100%;object-fit:cover;touch-action:pan-y;filter:${disabled?'grayscale(1)':'none'};" onerror="this.src='${fallbackImg}'"${imgs.length>1 ? ` onmouseenter="this.dataset.hoverCur=this.dataset.cur; this.dataset.cur=1; this.src=JSON.parse(this.dataset.imgs)[1];" onmouseleave="this.dataset.cur=this.dataset.hoverCur||0; this.src=JSON.parse(this.dataset.imgs)[Number(this.dataset.cur)];" ontouchstart="this.dataset.sx=event.touches[0].clientX" ontouchend="var im=JSON.parse(this.dataset.imgs);var dx=event.changedTouches[0].clientX-this.dataset.sx;if(Math.abs(dx)>30){var c=(Number(this.dataset.cur)+(dx<0?1:-1)+im.length)%im.length;this.dataset.cur=c;this.src=im[c];}"` : ''}>
+        <img src="${imgs[0]}" data-imgs='${JSON.stringify(imgs)}' data-cur="0" alt="${name}" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;touch-action:pan-y;filter:${disabled?'grayscale(1)':'none'};" onerror="this.src='${fallbackImg}'"${imgs.length>1 ? ` onmouseenter="this.dataset.hoverCur=this.dataset.cur; this.dataset.cur=1; this.src=JSON.parse(this.dataset.imgs)[1];" onmouseleave="this.dataset.cur=this.dataset.hoverCur||0; this.src=JSON.parse(this.dataset.imgs)[Number(this.dataset.cur)];" ontouchstart="this.dataset.sx=event.touches[0].clientX" ontouchend="var im=JSON.parse(this.dataset.imgs);var dx=event.changedTouches[0].clientX-this.dataset.sx;if(Math.abs(dx)>30){var c=(Number(this.dataset.cur)+(dx<0?1:-1)+im.length)%im.length;this.dataset.cur=c;this.src=im[c];}"` : ''}>
         ${badge ? `<div style="position:absolute;top:8px;left:8px;padding:3px 9px;border-radius:999px;font-size:.44rem;letter-spacing:1px;text-transform:uppercase;font-weight:550;background:${badge.bg};color:${badge.color};">${badge.label}</div>` : ''}
       </div>
       <div style="padding:12px 14px 14px;">
@@ -549,19 +551,6 @@ function renderGrid(){
     card.addEventListener('click', (e) => {
       if(e.target.closest('[data-add]')) return;
       openProductDetail(JSON.parse(card.dataset.product));
-    });
-  });
-  validateCardImages(grid);
-}
-function validateCardImages(grid){
-  const checkImg = src => new Promise(resolve => { const im = new Image(); im.onload = () => resolve(src); im.onerror = () => resolve(null); im.src = src; });
-  grid.querySelectorAll('img[data-imgs]').forEach(img => {
-    let list; try { list = JSON.parse(img.dataset.imgs); } catch(e) { return; }
-    if (list.length <= 1) return;
-    Promise.all(list.map(checkImg)).then(results => {
-      const valid = results.filter(Boolean);
-      img.dataset.imgs = JSON.stringify(valid.length ? valid : [list[0]]);
-      img.dataset.cur = 0;
     });
   });
 }
@@ -828,39 +817,50 @@ document.getElementById('sendWhatsappBtn').addEventListener('click', () => {
   renderCart();
 });
 
+function applyProducts(rows){
+  allProducts = Array.isArray(rows) ? rows : [];
+  if (QS_BRAND) {
+    const match = allProducts.find(p => (p.BRAND||'').trim().toLowerCase() === QS_BRAND.trim().toLowerCase());
+    activeBrand = match ? match.BRAND : QS_BRAND;
+  }
+  const prices = allProducts.filter(passesStatus).map(p => Number(p.PRICE||0));
+  const maxPrice = prices.length ? Math.ceil(Math.max(...prices) / 10) * 10 : 500;
+  document.getElementById('priceMin').max = maxPrice;
+  document.getElementById('priceMax').max = maxPrice;
+  document.getElementById('priceMax').value = maxPrice;
+  updatePriceLabel();
+  renderBrandRail(); renderVehicleBrandRail(); renderStatusList(); renderGrid(); updateFiltersCount(); renderBrandHero();
+}
+try {
+  const cached = JSON.parse(localStorage.getItem('64cast_products_cache')||'null');
+  if (cached && cached.length) applyProducts(cached);
+} catch(e) {}
 fetch(API_URL, { method: 'GET', cache: 'no-store' })
   .then(r => r.json())
   .then(rows => {
-    allProducts = Array.isArray(rows) ? rows : [];
-    if (QS_BRAND) {
-      const match = allProducts.find(p => (p.BRAND||'').trim().toLowerCase() === QS_BRAND.trim().toLowerCase());
-      activeBrand = match ? match.BRAND : QS_BRAND;
-    }
-    const prices = allProducts.filter(passesStatus).map(p => Number(p.PRICE||0));
-    const maxPrice = prices.length ? Math.ceil(Math.max(...prices) / 10) * 10 : 500;
-    document.getElementById('priceMin').max = maxPrice;
-    document.getElementById('priceMax').max = maxPrice;
-    document.getElementById('priceMax').value = maxPrice;
-    updatePriceLabel();
-    renderBrandRail(); renderVehicleBrandRail(); renderStatusList(); renderGrid(); updateFiltersCount(); renderBrandHero();
+    applyProducts(rows);
+    try { localStorage.setItem('64cast_products_cache', JSON.stringify(rows)); } catch(e) {}
     document.getElementById('loadMoreBtn').addEventListener('click', () => { visibleCount += PAGE_SIZE; renderGrid(); });
   })
   .catch(() => {
-    allProducts = EMBEDDED_DEMO_PRODUCTS.slice();
-    if (QS_BRAND) {
-      const match = allProducts.find(p => (p.BRAND||'').trim().toLowerCase() === QS_BRAND.trim().toLowerCase());
-      activeBrand = match ? match.BRAND : QS_BRAND;
-    }
-    const prices = allProducts.filter(passesStatus).map(p => Number(p.PRICE||0));
-    const maxPrice = prices.length ? Math.ceil(Math.max(...prices) / 10) * 10 : 500;
-    document.getElementById('priceMin').max = maxPrice;
-    document.getElementById('priceMax').max = maxPrice;
-    document.getElementById('priceMax').value = maxPrice;
-    updatePriceLabel();
-    renderBrandRail(); renderVehicleBrandRail(); renderStatusList(); renderGrid(); updateFiltersCount(); renderBrandHero();
+    if (!allProducts.length) applyProducts(EMBEDDED_DEMO_PRODUCTS.slice());
     document.getElementById('loadMoreBtn').addEventListener('click', () => { visibleCount += PAGE_SIZE; renderGrid(); });
   });
 renderCart();
+</script>
+
+<button id="backToTopBtn" class="glossW" aria-label="Back to top" style="display:none;position:fixed;right:24px;bottom:28px;width:48px;height:48px;border-radius:999px;align-items:center;justify-content:center;z-index:140;">
+  <svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:#0a0a0a;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M18 15l-6-6-6 6"></path></svg>
+</button>
+<script>
+(function(){
+  var btn = document.getElementById('backToTopBtn');
+  function update(){ btn.style.display = (window.scrollY > 400 && window.innerWidth > 900) ? 'flex' : 'none'; }
+  window.addEventListener('scroll', update, {passive:true});
+  window.addEventListener('resize', update);
+  btn.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+  update();
+})();
 </script>
 </body>
 </html>
