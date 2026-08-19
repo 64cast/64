@@ -10,16 +10,16 @@ const BRANDS = [
   { slug: "kaido-house", name: "Kaido House", logo: "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/kaidohouse.jpg" },
   { slug: "lego", name: "Lego", logo: "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/lego.jpg" },
   { slug: "motorhelix", name: "Motorhelix", logo: "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/motorhelix.jpg" },
-  { slug: "arbox", name: "ARbox", logo: "/assets/brands/arbox.webp" },
+  { slug: "arbox", name: "ARbox", logo: "/assets/brands/arbox.png" },
   { slug: "trends-hobby", name: "Trends Hobby", logo: "/assets/brands/trends-hobby.png" },
-  { slug: "american-diorama", name: "American Diorama", logo: "/assets/brands/american-diorama.webp" },
+  { slug: "american-diorama", name: "American Diorama", logo: "/assets/brands/american-diorama.png" },
   { slug: "gcd", name: "GCD", logo: "/assets/brands/gcd.png" },
-  { slug: "tiny", name: "Tiny", logo: "/assets/brands/tiny.jpg" },
+  { slug: "tiny", name: "Tiny", logo: "/assets/brands/tiny.png" },
   { slug: "sparky", name: "Sparky", logo: "/assets/brands/sparky.png" },
-  { slug: "unique-model", name: "Unique Model", logo: "/assets/brands/unique-model.webp" },
-  { slug: "pgm", name: "PGM", logo: "/assets/brands/pgm.webp" },
+  { slug: "unique-model", name: "Unique Model", logo: "/assets/brands/unique-model.png" },
+  { slug: "pgm", name: "PGM", logo: "/assets/brands/pgm.png" },
   { slug: "kyosho", name: "Kyosho", logo: "/assets/brands/kyosho.png" },
-  { slug: "bm-creations", name: "BM Creations", logo: "/assets/brands/bm-creations.webp" }
+  { slug: "bm-creations", name: "BM Creations", logo: "/assets/brands/bm-creations.png" }
 ];
 
 // Matches /Mini-GT, /mini-gt, /Tarmac-Works, etc. at the root level.
