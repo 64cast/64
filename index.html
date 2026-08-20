@@ -97,7 +97,8 @@ summary::marker{content:''}
 
     <div id="stickyBar" style="display:flex;align-items:center;gap:10px;padding:14px 40px;background:#fff;border-bottom:1px solid rgba(0,0,0,.08);">
       <button class="chip glossO" onclick="location.href='https://64cast.com/new-arrivals/'">New Arrivals</button>
-      <button class="chip glossW" onclick="location.href='https://64cast.com/current-stock/'">Current Stock</button>
+      <button class="chip glossW" onclick="location.href='https://64cast.com/current-stock/?status=currentstock'">Current Stock</button>
+      <button class="chip glossW" onclick="location.href='https://64cast.com/inhand/'">Inhand</button>
       <button class="chip glossW" onclick="location.href='https://64cast.com/current-stock/?status=preorder'">Pre-Order</button>
       <div style="position:relative;overflow:hidden;flex:1;display:flex;align-items:center;gap:8px;height:44px;border-radius:999px;padding:0 16px;background:rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.08);max-width:340px;margin-left:auto;">
         <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:#555;fill:none;stroke-width:1.6;flex-shrink:0"><circle cx="11" cy="11" r="8"></circle><line x1="21" x2="16.65" y1="21" y2="16.65"></line></svg>
@@ -228,8 +229,8 @@ summary::marker{content:''}
   <footer style="margin:20px 20px 20px;border-radius:34px;overflow:hidden;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.7);box-shadow:0 20px 60px rgba(0,0,0,.08),inset 0 1px 0 rgba(255,255,255,.9);backdrop-filter:blur(30px) saturate(1.4);-webkit-backdrop-filter:blur(30px) saturate(1.4);position:relative;z-index:1;">
     <div style="padding:22px 48px;display:flex;justify-content:center;border-bottom:1px solid rgba(255,255,255,.5);">
       <div style="display:flex;gap:26px;flex-wrap:wrap;justify-content:center;">
-        <span style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#0a0a0a;font-weight:550;opacity:.5;">Facebook</span>
-        <span style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#0a0a0a;font-weight:550;opacity:.5;">Instagram</span>
+        <a href="https://www.facebook.com/share/g/1HafJZq8tb/?mibextid=wwXIfr" target="_blank" rel="noopener" style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#0a0a0a;font-weight:550;opacity:.5;">Facebook</a>
+        <a href="https://www.instagram.com/64cast_?igsh=bHJob2ZwbGdxNmVv" target="_blank" rel="noopener" style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#0a0a0a;font-weight:550;opacity:.5;">Instagram</a>
         <a href="https://wa.me/971552112588" target="_blank" rel="noopener" style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#0a0a0a;font-weight:550;opacity:.5;">WhatsApp</a>
         <span style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#0a0a0a;font-weight:550;opacity:.5;">TikTok</span>
         <span style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#0a0a0a;font-weight:550;opacity:.5;">Snapchat</span>
@@ -574,9 +575,10 @@ function renderDetailBody(card, name, imgs){
     </div>
     <div style="margin-bottom:20px;">
       <div style="font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:#888;margin-bottom:10px;">Details</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:.75rem;line-height:1.6;">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;font-size:.75rem;line-height:1.6;">
         <div><span style="color:#888;">Model</span><br>${card.id||''}</div>
-        <div><span style="color:#888;">Vehicle Brand</span><br>${card.carbrand||'—'}</div>
+        <div><span style="color:#888;">Vehicle</span><br>${card.carbrand||'—'}</div>
+        <div><span style="color:#888;">Est. Arrival</span><br>${(card.raw && card.raw.ETA) || '—'}</div>
       </div>
     </div>
     <button id="detailAddBtn" class="glossO" ${card.status==='sold' ? 'disabled' : ''} style="width:100%;height:48px;border-radius:999px;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;font-weight:550;${card.status==='sold' ? 'opacity:.5;cursor:not-allowed;' : ''}">${card.status==='sold' ? 'Sold Out' : 'Add to Cart'}</button>

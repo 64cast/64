@@ -182,7 +182,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
           </div>
         </div>
         <div id="stockScrollArea">
-          <div id="stockGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:8px 8px 20px;"></div>
+          <div id="stockGrid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;padding:8px 8px 20px;"></div>
           <div id="loadMoreWrap" style="display:none;justify-content:center;padding:0 24px 28px;"><button id="loadMoreBtn" class="glossW" style="height:44px;padding:0 28px;border-radius:999px;font-size:.66rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:500;">Load More Models</button></div>
         </div>
       </div>
@@ -192,7 +192,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
   <footer id="siteFooter" style="margin:20px 20px 20px;border-radius:34px;overflow:hidden;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.7);box-shadow:0 20px 60px rgba(0,0,0,.08),inset 0 1px 0 rgba(255,255,255,.9);backdrop-filter:none;-webkit-backdrop-filter:none;position:relative;z-index:1;">
     <div style="padding:22px 48px;display:flex;justify-content:center;border-bottom:1px solid rgba(255,255,255,.5);">
       <div style="display:flex;gap:26px;flex-wrap:wrap;justify-content:center;">
-        <a href="https://www.facebook.com/groups/2352411988538489" target="_blank" rel="noopener" style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#0a0a0a;font-weight:550;opacity:.5;">Facebook</a>
+        <a href="https://www.facebook.com/share/g/1HafJZq8tb/?mibextid=wwXIfr" target="_blank" rel="noopener" style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#0a0a0a;font-weight:550;opacity:.5;">Facebook</a>
         <a href="https://www.instagram.com/64cast_?igsh=bHJob2ZwbGdxNmVv" target="_blank" rel="noopener" style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#0a0a0a;font-weight:550;opacity:.5;">Instagram</a>
         <a href="https://whatsapp.com/channel/0029VbCuMIU1dAw4M800JY0Y" target="_blank" rel="noopener" style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#0a0a0a;font-weight:550;opacity:.5;">WhatsApp</a>
         <span style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#0a0a0a;font-weight:550;opacity:.5;">TikTok</span>
@@ -323,7 +323,8 @@ const EMBEDDED_DEMO_PRODUCTS = [
 const IMAGE_BASE_URL = 'https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/';
 const WA_NUMBER = '971552112588';
 const IS_PREORDER = new URLSearchParams(window.location.search).get('status') === 'preorder';
-let activeStatuses = window.__BRAND_ROUTE__ ? new Set(['inhand','currentstock','preorder','sold']) : new Set(['inhand','currentstock','preorder','sold']);
+const QS_STATUS = new URLSearchParams(window.location.search).get('status');
+let activeStatuses = QS_STATUS === 'preorder' ? new Set(['preorder']) : QS_STATUS === 'currentstock' ? new Set(['currentstock','inhand']) : new Set(['inhand','currentstock','preorder']);
 function renderStatusList(){
   const counts = {inhand:0, currentstock:0, preorder:0, sold:0};
   allProducts.forEach(p => {
@@ -338,8 +339,7 @@ function renderStatusList(){
   const rows = [
     {key:'inhand', label:'Inhand Items', count:counts.inhand},
     {key:'currentstock', label:'Current Stock', count:counts.currentstock},
-    {key:'preorder', label:'Pre-Order', count:counts.preorder},
-    {key:'sold', label:'Sold Out', count:counts.sold}
+    {key:'preorder', label:'Pre-Order', count:counts.preorder}
   ];
   document.getElementById('statusList').innerHTML = rows.map(r => {
     const on = activeStatuses.has(r.key);
@@ -409,7 +409,8 @@ function statusLabel(s){
 function passesStatus(p){
   const s = (p.STATUS||'').toLowerCase();
   const qty = Number(p.QTY||0);
-  const bucket = (qty <= 0 || s === 'sold') ? 'sold' : s === 'preorder' ? 'preorder' : s === 'inhand' ? 'inhand' : 'currentstock';
+  if (qty <= 0 || s === 'sold') return false;
+  const bucket = s === 'preorder' ? 'preorder' : s === 'inhand' ? 'inhand' : 'currentstock';
   return activeStatuses.has(bucket);
 }
 
