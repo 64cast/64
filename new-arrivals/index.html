@@ -115,7 +115,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
     </div>
   </div>
 
-  <div style="padding:24px 40px 24px;position:relative;z-index:1;">
+  <div style="padding:24px 40px 24px;position:relative;z-index:auto;">
     <div id="stockContainer" style="display:flex;align-items:flex-start;overflow:visible;background:#fff;">
 
       <aside id="filterRail">
@@ -475,9 +475,18 @@ function renderGrid(){
   document.getElementById('resultCount').textContent = '(' + filtered.length + ')';
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   if (currentPage > totalPages) currentPage = totalPages;
-  const visible = filtered.slice((currentPage-1)*PAGE_SIZE, currentPage*PAGE_SIZE);
+  const isMobile = window.matchMedia('(max-width:860px)').matches;
+  const visible = isMobile ? filtered.slice(0, currentPage*PAGE_SIZE) : filtered.slice((currentPage-1)*PAGE_SIZE, currentPage*PAGE_SIZE);
   const loadMoreWrap = document.getElementById('loadMoreWrap');
-  if (totalPages > 1) {
+  if (isMobile) {
+    if (currentPage < totalPages) {
+      loadMoreWrap.style.display = 'flex';
+      loadMoreWrap.innerHTML = `<button data-pg="more" class="glossW" style="height:44px;padding:0 28px;border-radius:999px;font-size:.66rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:500;">Load More Models</button>`;
+      loadMoreWrap.querySelector('[data-pg]').addEventListener('click', () => { currentPage++; renderGrid(); });
+    } else {
+      loadMoreWrap.style.display = 'none';
+    }
+  } else if (totalPages > 1) {
     loadMoreWrap.style.display = 'flex';
     let pages = [];
     for (let i=1;i<=totalPages;i++) { if (i===1||i===totalPages||Math.abs(i-currentPage)<=1) pages.push(i); else if (pages[pages.length-1]!=='…') pages.push('…'); }
