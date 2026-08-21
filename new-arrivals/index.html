@@ -176,7 +176,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
         </div>
         <div id="stockScrollArea">
           <div id="stockGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:32px 24px;padding:8px 24px 28px;"></div>
-          <div id="loadMoreWrap" style="display:none;justify-content:center;padding:0 24px 28px;"><button id="loadMoreBtn" class="glossW" style="height:44px;padding:0 28px;border-radius:999px;font-size:.66rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:500;">Load More Models</button></div>
+          <div id="loadMoreWrap" style="display:none;justify-content:center;align-items:center;gap:6px;padding:0 24px 28px;flex-wrap:wrap;"></div>
         </div>
       </div>
     </div>
@@ -348,8 +348,8 @@ let sortMode = 'newest';
 if (QS_SEARCH) { document.getElementById('searchInput').value = QS_SEARCH; }
 let cart = [];
 try { cart = JSON.parse(localStorage.getItem('64cast_cart')||'[]'); } catch(e) { cart = []; }
-let visibleCount = 20;
-const PAGE_SIZE = 20;
+let currentPage = 1;
+const PAGE_SIZE = 25;
 
 function resolveImg(p){
   const raw = p['REF IMG'] || p.IMG1 || '';
@@ -473,9 +473,27 @@ function renderGrid(){
   else if (sortMode === 'price-desc') filtered.sort((a,b) => (Number(a.QTY||0)<=0) - (Number(b.QTY||0)<=0) || Number(b.PRICE||0) - Number(a.PRICE||0));
   else filtered.sort((a,b) => (Number(a.QTY||0)<=0) - (Number(b.QTY||0)<=0) || Number(b.SORTORDER||0) - Number(a.SORTORDER||0));
   document.getElementById('resultCount').textContent = '(' + filtered.length + ')';
-  const visible = filtered.slice(0, visibleCount);
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  if (currentPage > totalPages) currentPage = totalPages;
+  const visible = filtered.slice((currentPage-1)*PAGE_SIZE, currentPage*PAGE_SIZE);
   const loadMoreWrap = document.getElementById('loadMoreWrap');
-  loadMoreWrap.style.display = filtered.length > visibleCount ? 'flex' : 'none';
+  if (totalPages > 1) {
+    loadMoreWrap.style.display = 'flex';
+    let pages = [];
+    for (let i=1;i<=totalPages;i++) { if (i===1||i===totalPages||Math.abs(i-currentPage)<=1) pages.push(i); else if (pages[pages.length-1]!=='…') pages.push('…'); }
+    loadMoreWrap.innerHTML = `
+      <button data-pg="prev" ${currentPage===1?'disabled':''} style="height:36px;min-width:36px;padding:0 10px;border-radius:999px;border:1px solid rgba(0,0,0,.12);background:#fff;font-size:.7rem;cursor:pointer;">‹</button>
+      ${pages.map(p => p==='…' ? `<span style="padding:0 4px;color:#999;font-size:.7rem;">…</span>` : `<button data-pg="${p}" style="height:36px;min-width:36px;padding:0 10px;border-radius:999px;border:1px solid ${p===currentPage?'#0a0a0a':'rgba(0,0,0,.12)'};background:${p===currentPage?'#0a0a0a':'#fff'};color:${p===currentPage?'#fff':'#0a0a0a'};font-size:.7rem;cursor:pointer;">${p}</button>`).join('')}
+      <button data-pg="next" ${currentPage===totalPages?'disabled':''} style="height:36px;min-width:36px;padding:0 10px;border-radius:999px;border:1px solid rgba(0,0,0,.12);background:#fff;font-size:.7rem;cursor:pointer;">›</button>`;
+    loadMoreWrap.querySelectorAll('[data-pg]').forEach(btn => btn.addEventListener('click', () => {
+      const v = btn.dataset.pg;
+      currentPage = v==='prev' ? currentPage-1 : v==='next' ? currentPage+1 : Number(v);
+      renderGrid();
+      window.scrollTo({top:0,behavior:'smooth'});
+    }));
+  } else {
+    loadMoreWrap.style.display = 'none';
+  }
   const grid = document.getElementById('stockGrid');
   grid.innerHTML = visible.length ? visible.map(p => {
     const img = resolveImg(p);
@@ -512,7 +530,7 @@ function renderGrid(){
   });
 }
 
-function resetPaging(){ visibleCount = PAGE_SIZE; updateFiltersCount(); renderGrid(); }
+function resetPaging(){ currentPage = 1; updateFiltersCount(); renderGrid(); }
 
 function saveCart(){ try { localStorage.setItem('64cast_cart', JSON.stringify(cart)); } catch(e) {} }
 function addToCart(product){
@@ -820,7 +838,6 @@ fetch(API_URL, { method: 'GET', cache: 'no-store' })
   .then(rows => {
     applyProducts(rows);
     try { localStorage.setItem('64cast_arrivals_cache', JSON.stringify(rows)); } catch(e) {}
-    document.getElementById('loadMoreBtn').addEventListener('click', () => { visibleCount += PAGE_SIZE; renderGrid(); });
   })
   .catch(() => {
     if (!allProducts.length) applyProducts(EMBEDDED_DEMO_PRODUCTS.slice());
@@ -828,7 +845,6 @@ fetch(API_URL, { method: 'GET', cache: 'no-store' })
       const match = allProducts.find(p => (p.BRAND||'').trim().toLowerCase() === QS_BRAND.trim().toLowerCase());
       activeBrand = match ? match.BRAND : QS_BRAND;
     }
-    document.getElementById('loadMoreBtn').addEventListener('click', () => { visibleCount += PAGE_SIZE; renderGrid(); });
   });
 renderCart();
 </script>

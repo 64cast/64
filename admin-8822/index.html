@@ -118,9 +118,6 @@ tr.prow.drop-target td{border-top:2px solid var(--orange)}
       <button id="communityBtn" class="glossW btn" type="button">Community Signups</button>
       <button id="ordersBtn" class="glossW btn" type="button">Pending Orders</button>
       <button id="addBtn" class="glossO btn" type="button">+ Add Product</button>
-      <button id="importBtn" class="glossW btn" type="button">Import</button>
-      <button id="exportBtn" class="glossW btn" type="button">Export JSON</button>
-      <button id="exportCsvBtn" class="glossW btn" type="button">Export CSV</button>
       <button id="refreshBtn" class="glossW btn" type="button">Refresh</button>
       <button id="logoutBtn" class="btn danger" type="button">Logout</button>
     </div>
@@ -216,14 +213,6 @@ tr.prow.drop-target td{border-top:2px solid var(--orange)}
       <datalist id="brandList"></datalist><datalist id="carList"></datalist>
     </div>
     <div class="modal-foot"><button class="glossW btn" data-close="editModal" type="button">Cancel</button><button id="saveProductBtn" class="btn ok" type="button">Save Product</button></div>
-  </div>
-</div>
-
-<div id="importModal" class="modal-back">
-  <div class="modal small">
-    <div class="modal-head"><div class="modal-title">Import Products</div><button class="close" data-close="importModal" type="button">×</button></div>
-    <div class="modal-body"><div class="drop">Upload CSV, XLSX or JSON<br><input id="fileInput" type="file" accept=".csv,.xlsx,.xls,.json"></div><div id="importSummary" class="preview-box hide"></div></div>
-    <div class="modal-foot"><button id="importUpsertBtn" class="btn ok" disabled type="button">Import / Update</button><button id="replaceBtn" class="btn danger" disabled type="button">Replace All</button></div>
   </div>
 </div>
 
@@ -342,13 +331,13 @@ function updateBulkBar(){
 async function bulkSetStatus(status){
   if(!SELECTED_MODELS.size)return;
   PRODUCTS.forEach(function(p){if(SELECTED_MODELS.has(modelOf(p))){p.STATUS=status;if(status==='sold')p.QTY=0;else if(num(p.QTY,0)===0)p.QTY=1;}});
-  await persistProducts(PRODUCTS);
+  try{await persistProducts(PRODUCTS);}catch(e){alert('Save failed: '+(e.message||e));return;}
   toast('Updated status for '+SELECTED_MODELS.size+' product(s)');
 }
 async function bulkSetFlag(field,value){
   if(!SELECTED_MODELS.size)return;
   PRODUCTS.forEach(function(p){if(SELECTED_MODELS.has(modelOf(p)))p[field]=value?'yes':'';});
-  await persistProducts(PRODUCTS);
+  try{await persistProducts(PRODUCTS);}catch(e){alert('Save failed: '+(e.message||e));return;}
   toast((value?'Added to ':'Removed from ')+(field==='NEW'?'New Arrivals':'Featured'));
 }
 async function bulkSetText(field,value){
@@ -356,7 +345,7 @@ async function bulkSetText(field,value){
   var v=clean(value);
   if(!v){alert('Enter a value first.');return}
   PRODUCTS.forEach(function(p){if(SELECTED_MODELS.has(modelOf(p)))p[field]=v;});
-  await persistProducts(PRODUCTS);
+  try{await persistProducts(PRODUCTS);}catch(e){alert('Save failed: '+(e.message||e));return;}
   toast('Updated '+(field==='BRAND'?'Brand':'Car Brand')+' for '+SELECTED_MODELS.size+' product(s)');
 }
 async function bulkDelete(){
@@ -365,7 +354,7 @@ async function bulkDelete(){
   PRODUCTS=PRODUCTS.filter(function(p){return !SELECTED_MODELS.has(modelOf(p))});
   var count=SELECTED_MODELS.size;
   SELECTED_MODELS.clear();
-  await persistProducts(PRODUCTS);
+  try{await persistProducts(PRODUCTS);}catch(e){alert('Save failed: '+(e.message||e));return;}
   toast('Deleted '+count+' product(s)');
 }
 function syncStatusQty(statusEl,qtyEl){var st=statusOf({STATUS:statusEl.value,QTY:qtyEl.value}); if(st==='sold'){qtyEl.value=0;qtyEl.readOnly=true;statusEl.value='sold';}else{qtyEl.readOnly=false;if(num(qtyEl.value,0)===0&&st!=='preorder'){statusEl.value='sold';qtyEl.readOnly=true;}}}
@@ -409,16 +398,19 @@ async function persistProducts(list){
     try{
       await apiPost({action:'import',products:arr});
     }catch(e2){
+      var lastErr=e2;
       for(var i=0;i<arr.length;i++){
-        await apiPost({action:'update',product:arr[i]});
+        try{ await apiPost({action:'update',product:arr[i]}); lastErr=null; }
+        catch(e3){ lastErr=e3; }
       }
+      if(lastErr) throw lastErr;
     }
   }
   PRODUCTS=arr;
   render();
   return true;
 }
-async function saveProduct(){var old=$('fOriginalModel').value;var p=formProduct();var list=PRODUCTS.slice();if(old){var idx=list.findIndex(function(x){return modelOf(x)===old});if(idx>=0)list[idx]=p; if(old!==modelOf(p))await apiPost({action:'delete',modelNo:old});}else list.push(p);list=moveToPosition(list,modelOf(p),p.SORTORDER);await persistProducts(list);$('editModal').classList.remove('open');toast('Saved')}
+async function saveProduct(){var old=$('fOriginalModel').value;var p=formProduct();var list=PRODUCTS.slice();if(old){var idx=list.findIndex(function(x){return modelOf(x)===old});if(idx>=0)list[idx]=p; if(old!==modelOf(p))await apiPost({action:'delete',modelNo:old});}else list.push(p);list=moveToPosition(list,modelOf(p),p.SORTORDER);try{await persistProducts(list);}catch(e){alert('Save failed: '+(e.message||e));throw e;}$('editModal').classList.remove('open');toast('Saved')}
 async function deleteProduct(model){if(!confirm('Delete '+model+'?'))return;await apiPost({action:'delete',modelNo:model});PRODUCTS=PRODUCTS.filter(function(p){return modelOf(p)!==model});PRODUCTS=reindexStable(PRODUCTS);try{await persistProducts(PRODUCTS)}catch(e){}render();toast('Deleted')}
 async function quickQty(model,value){
   var p=PRODUCTS.find(function(x){return modelOf(x)===model});
@@ -427,14 +419,14 @@ async function quickQty(model,value){
   p.QTY=qty;
   if(qty===0&&statusOf(p)!=='preorder')p.STATUS='sold';
   if(qty>0&&statusOf(p)==='sold')p.STATUS='currentstock';
-  await persistProducts(PRODUCTS);
+  try{await persistProducts(PRODUCTS);}catch(e){alert('Save failed: '+(e.message||e));return;}
   toast('Inventory updated')
 }
 async function quickPrice(model,value){
   var p=PRODUCTS.find(function(x){return modelOf(x)===model});
   if(!p)return;
   p.PRICE=Math.max(0,num(value,p.PRICE));
-  await persistProducts(PRODUCTS);
+  try{await persistProducts(PRODUCTS);}catch(e){alert('Save failed: '+(e.message||e));return;}
   toast('Price updated')
 }
 async function quickStatusCycle(model){
@@ -445,12 +437,12 @@ async function quickStatusCycle(model){
   p.STATUS=next;
   if(next==='sold')p.QTY=0;
   else if(num(p.QTY,0)===0)p.QTY=1;
-  await persistProducts(PRODUCTS);
+  try{await persistProducts(PRODUCTS);}catch(e){alert('Save failed: '+(e.message||e));return;}
   toast('Status set to '+(next==='currentstock'?'Current Stock':next==='preorder'?'Pre-Order':'Sold Out'))
 }
 async function quickOrder(model,value){
   PRODUCTS=moveToPosition(PRODUCTS,model,value);
-  await persistProducts(PRODUCTS);
+  try{await persistProducts(PRODUCTS);}catch(e){alert('Save failed: '+(e.message||e));return;}
   toast('Order updated and saved to live site')
 }
 async function quickToggleInhand(model){
@@ -458,7 +450,7 @@ async function quickToggleInhand(model){
   if(!p)return;
   var isInhand=statusOf(p)==='inhand';
   p.STATUS=isInhand?'currentstock':'inhand';
-  await persistProducts(PRODUCTS);
+  try{await persistProducts(PRODUCTS);}catch(e){alert('Save failed: '+(e.message||e));return;}
   toast(isInhand?'Moved back to Current Stock':'Marked Inhand');
 }
 async function quickToggleNew(model){
@@ -466,7 +458,7 @@ async function quickToggleNew(model){
   if(!p)return;
   var isNew=clean(p.NEW).toLowerCase()==='yes';
   p.NEW=isNew?'':'yes';
-  await persistProducts(PRODUCTS);
+  try{await persistProducts(PRODUCTS);}catch(e){alert('Save failed: '+(e.message||e));return;}
   toast(isNew?'Removed from New Arrivals':'Added to New Arrivals')
 }
 function healthCheck(){var issues=[],seen={};PRODUCTS.forEach(function(p,i){var m=modelOf(p);if(!m)issues.push(['bad','Row '+(i+1)+' missing MODEL NO.']);else if(seen[m])issues.push(['bad','Duplicate MODEL NO.: '+m]);else seen[m]=1;if(!p['PRODUCT NAME'])issues.push(['bad',(m||'Row '+(i+1))+' missing product name']);if(num(p.PRICE,-1)<0)issues.push(['bad',m+' has invalid price']);if(statusOf(p)==='sold'&&num(p.QTY,0)!==0)issues.push(['bad',m+' is Sold Out but Qty is not 0']);if(num(p.QTY,0)===0&&statusOf(p)!=='preorder'&&statusOf(p)!=='sold')issues.push(['bad',m+' has Qty 0 but status is not Sold Out']);});var orders=PRODUCTS.map(function(p){return p.SORTORDER});var uniqueOrders=new Set(orders).size===orders.length;if(!uniqueOrders)issues.push(['bad','Duplicate sort order numbers found']);if(!issues.length)issues.push(['ok','No critical issues found.']);LAST_HEALTH=issues;$('healthPanel').classList.remove('hide');$('healthBody').innerHTML=issues.map(function(x){return '<div class="health-'+x[0]+'">'+esc(x[1])+'</div>'}).join('');}
@@ -552,7 +544,7 @@ function exportJson(){download('64cast-products.json',JSON.stringify(PRODUCTS,nu
 function exportCsv(){var heads=['BRAND','CARBRAND','SCALE','PRODUCT NAME','MODEL NO.','PRICE','ORIGPRICE','QTY','STATUS','ETA','SORTORDER','IMG1','IMG2','IMG3','IMG4','IMAGE_SCALE','NEW','DESCRIPTION'];var lines=[heads.join(',')].concat(currentOrdered().map(function(p){return heads.map(function(h){var s=clean(p[h]);return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s}).join(',')}));download('64cast-products.csv',lines.join('\n'),'text/csv')}
 function initMonths(){var now=new Date(),cur=now.getMonth();var opts=['<option value="">No ETA</option>'];for(var i=0;i<18;i++){var m=MONTHS[(cur+i)%12];var y=now.getFullYear()+Math.floor((cur+i)/12);opts.push('<option value="'+m+' '+y+'">'+m+' '+y+'</option>')} $('fEta').innerHTML=opts.join('')}
 $('loginForm').addEventListener('submit',async function(e){e.preventDefault();$('loginError').classList.add('hide');try{var res=await apiPost({action:'admin-login',password:$('loginPassword').value},false);setToken(res.token);showApp(true);await load()}catch(err){$('loginError').textContent=err.message||'Login failed';$('loginError').classList.remove('hide')}});
-$('logoutBtn').onclick=function(){setToken('');location.href='/admin-8822'};$('refreshBtn').onclick=function(){load().catch(function(e){showNotice(e.message);alert(e.message)})};$('addBtn').onclick=function(){openEdit('')};$('importBtn').onclick=function(){$('importModal').classList.add('open')};$('exportBtn').onclick=exportJson;$('exportCsvBtn').onclick=exportCsv;$('healthBtn').onclick=healthCheck;$('communityBtn').onclick=function(){loadCommunitySignups().catch(function(e){alert(e.message||e)})};$('ordersBtn').onclick=function(){loadPendingOrders().catch(function(e){alert(e.message||e)})};$('confirmAllOrdersBtn').onclick=function(){confirmAllOrders().catch(function(e){alert(e.message||e)})};$('rejectAllOrdersBtn').onclick=function(){rejectAllOrders().catch(function(e){alert(e.message||e)})};$('repairBtn').onclick=function(){repairAndSave().catch(function(e){alert(e.message||e)})};
+$('logoutBtn').onclick=function(){setToken('');location.href='/admin-8822'};$('refreshBtn').onclick=function(){load().catch(function(e){showNotice(e.message);alert(e.message)})};$('addBtn').onclick=function(){openEdit('')};$('healthBtn').onclick=healthCheck;$('communityBtn').onclick=function(){loadCommunitySignups().catch(function(e){alert(e.message||e)})};$('ordersBtn').onclick=function(){loadPendingOrders().catch(function(e){alert(e.message||e)})};$('confirmAllOrdersBtn').onclick=function(){confirmAllOrders().catch(function(e){alert(e.message||e)})};$('rejectAllOrdersBtn').onclick=function(){rejectAllOrders().catch(function(e){alert(e.message||e)})};$('repairBtn').onclick=function(){repairAndSave().catch(function(e){alert(e.message||e)})};
 ['searchInput','brandFilter','carFilter','statusFilter'].forEach(function(id){$(id).addEventListener('input',function(){CURRENT_PAGE=1;renderTable()});$(id).addEventListener('change',function(){CURRENT_PAGE=1;renderTable()})});
 ['fStatus','fQty'].forEach(function(id){$(id).addEventListener('input',function(){syncStatusQty($('fStatus'),$('fQty'))});$(id).addEventListener('change',function(){syncStatusQty($('fStatus'),$('fQty'))})});
 document.body.addEventListener('click',function(e){var close=e.target.getAttribute('data-close');if(close)$(close).classList.remove('open');var edit=e.target.getAttribute('data-edit');if(edit)openEdit(edit);var del=e.target.getAttribute('data-del');if(del)deleteProduct(del).catch(function(err){alert(err.message||err)});var isNewBtn=e.target.getAttribute('data-new');if(isNewBtn)quickToggleNew(isNewBtn).catch(function(err){alert(err.message||err)});var isInhandBtn=e.target.getAttribute('data-inhand');if(isInhandBtn)quickToggleInhand(isInhandBtn).catch(function(err){alert(err.message||err)});var delSignup=e.target.getAttribute('data-del-signup');if(delSignup)removeCommunitySignup(delSignup).catch(function(err){alert(err.message||err)});var confirmOrderId=e.target.getAttribute('data-confirm-order');if(confirmOrderId)confirmOrder(confirmOrderId).catch(function(err){alert(err.message||err)});var rejectOrderId=e.target.getAttribute('data-reject-order');if(rejectOrderId)rejectOrder(rejectOrderId).catch(function(err){alert(err.message||err)});var statusCycle=e.target.getAttribute('data-status-cycle');if(statusCycle)quickStatusCycle(statusCycle).catch(function(err){alert(err.message||err)})});
@@ -567,9 +559,6 @@ $('bulkCarbrandBtn').onclick=function(){bulkSetText('CARBRAND',$('bulkCarbrandIn
 $('bulkDeleteBtn').onclick=function(){bulkDelete().catch(function(e){alert(e.message||e)})};
 $('bulkClearBtn').onclick=function(){SELECTED_MODELS.clear();renderTable()};
 $('saveProductBtn').onclick=function(){saveProduct().catch(function(e){alert(e.message||e)})};
-$('fileInput').addEventListener('change',function(){var f=this.files&&this.files[0];if(!f)return;readFile(f).then(function(rows){IMPORT_ROWS=rows.filter(function(p){return modelOf(p)});$('importSummary').classList.remove('hide');$('importSummary').innerHTML='<strong>'+IMPORT_ROWS.length+' products ready.</strong><br>Brands: '+esc(Array.from(new Set(IMPORT_ROWS.map(function(p){return p.BRAND}).filter(Boolean))).sort().join(', '));$('importUpsertBtn').disabled=!IMPORT_ROWS.length;$('replaceBtn').disabled=!IMPORT_ROWS.length}).catch(function(e){IMPORT_ROWS=[];alert(e.message||e)})});
-$('importUpsertBtn').onclick=function(){var map={};PRODUCTS.forEach(function(p){map[modelOf(p)]=p});IMPORT_ROWS.forEach(function(p){map[modelOf(p)]=p});persistProducts(Object.keys(map).map(function(k){return map[k]})).then(function(){$('importModal').classList.remove('open');toast('Imported')}).catch(function(e){alert(e.message||e)})};
-$('replaceBtn').onclick=function(){if(!confirm('Replace entire live product list?'))return;persistProducts(IMPORT_ROWS).then(function(){$('importModal').classList.remove('open');toast('Replaced')}).catch(function(e){alert(e.message||e)})};
 initMonths();(async function(){if(await verify()){showApp(true);load().catch(function(e){showNotice(e.message);alert(e.message)})}else showApp(false)})();
 })();
 </script>
