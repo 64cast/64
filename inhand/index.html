@@ -853,7 +853,13 @@ document.getElementById('sendWhatsappBtn').addEventListener('click', () => {
 });
 
 function applyProducts(rows){
-  allProducts = Array.isArray(rows) ? rows : [];
+  allProducts = (Array.isArray(rows) ? rows : []).map(function(p){
+    if (/\[INHAND\]/i.test(p.DESCRIPTION || p.description || '')) {
+      p = Object.assign({}, p, {STATUS:'inhand', QTY: Number(p.QTY||0) > 0 ? p.QTY : 1});
+      p.DESCRIPTION = String(p.DESCRIPTION || p.description || '').replace(/\s*\[INHAND\]\s*/ig,' ').trim();
+    }
+    return p;
+  });
   if (QS_BRAND) {
     const match = allProducts.find(p => (p.BRAND||'').trim().toLowerCase() === QS_BRAND.trim().toLowerCase());
     activeBrand = match ? match.BRAND : QS_BRAND;

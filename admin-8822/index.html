@@ -257,14 +257,15 @@ function toast(msg){$('toast').textContent=msg;$('toast').classList.add('show');
 function showApp(ok){$('loginView').classList.toggle('hide',ok);$('app').classList.toggle('show',ok)}
 function showNotice(s){$('notice').textContent=s}
 function modelOf(p){return clean(p&&(p['MODEL NO.']||p.modelNo||p.model||p.MODELNO))}
-function statusOf(p){var s=clean(p&&(p.STATUS||p.status||p.tag)).toLowerCase().replace(/[\s_-]+/g,''); if(s==='soldout'||s==='outofstock'||s==='out')return 'sold'; if(s==='preorder'||s==='preorders'||s==='preorderitem')return 'preorder'; if(s==='ready'||s==='instock'||s==='available'||s==='currentstock')return 'currentstock'; return num(p&&(p.QTY||p.qty),0)===0?'sold':'currentstock'}
+function hasInhandMark(p){return /\[INHAND\]/i.test(clean(p&&(p.DESCRIPTION||p.description)))}
+function statusOf(p){if(hasInhandMark(p))return 'inhand'; var s=clean(p&&(p.STATUS||p.status||p.tag)).toLowerCase().replace(/[\s_-]+/g,''); if(s==='inhand'||s==='inhandnow'||s==='inhanditem')return 'inhand'; if(s==='soldout'||s==='outofstock'||s==='out')return 'sold'; if(s==='preorder'||s==='preorders'||s==='preorderitem')return 'preorder'; if(s==='ready'||s==='instock'||s==='available'||s==='currentstock')return 'currentstock'; return num(p&&(p.QTY||p.qty),0)===0?'sold':'currentstock'}
 function imageOf(p){return clean(p&&(p.IMG1||p.img1||(p.imgs&&p.imgs[0])))||imgUrl(modelOf(p),1)}
 function imgUrl(model,n){var m=clean(model).replace(/\//g,'-');return m?R2_BASE+m+'-'+String(n).padStart(2,'0')+'.jpg':''}
 function canonicalProduct(raw,i){var map={}; Object.keys(raw||{}).forEach(function(k){map[normKey(k)]=raw[k]});
   var model=clean(map.MODELNO||map.MODELNUMBER||map.MODEL||raw['MODEL NO.']);
   var status=statusOf({STATUS:map.STATUS||raw.STATUS||raw.status||raw.tag,QTY:map.QTY||raw.QTY||raw.qty});
   var qty=Math.max(0,Math.floor(num(map.QTY||map.QUANTITY||raw.QTY||raw.qty,0)));
-  if(status==='sold') qty=0; if(qty===0 && status!=='preorder') status='sold';
+  if(status==='sold') qty=0; if(status==='inhand'&&qty===0) qty=1; if(qty===0 && status!=='preorder' && status!=='inhand') status='sold';
   var price=num(map.PRICE||map.SALEPRICE||raw.PRICE||raw.price,0);
   var p={
     'REF IMG':clean(map.REFIMG||raw['REF IMG']||''),
@@ -282,6 +283,8 @@ function canonicalProduct(raw,i){var map={}; Object.keys(raw||{}).forEach(functi
     IMAGE_SCALE:Math.max(70,Math.min(130,num(map.IMAGESCALE||map.IMGSCALE||raw.IMAGE_SCALE||raw.IMGSCALE||raw['IMAGE SCALE'],100))),
     NEW:clean(map.NEW||map.NEWARRIVAL||raw.NEW||raw.newArrival||''), DESCRIPTION:clean(map.DESCRIPTION||raw.DESCRIPTION||raw.description||'')
   };
+  if(/\[INHAND\]/i.test(p.DESCRIPTION)){p.STATUS='inhand'; if(p.QTY===0)p.QTY=1;}
+  else if(p.STATUS==='inhand'){p.DESCRIPTION=clean(p.DESCRIPTION+' [INHAND]');}
   if(!p.IMG1&&model)p.IMG1=imgUrl(model,1); if(!p.IMG2&&model)p.IMG2=imgUrl(model,2); if(!p.IMG3&&model)p.IMG3=imgUrl(model,3); if(!p.IMG4&&model)p.IMG4=imgUrl(model,4);
   return p;
 }
@@ -469,9 +472,11 @@ async function quickToggleInhand(model){
   var p=PRODUCTS.find(function(x){return modelOf(x)===model});
   if(!p)return;
   var isInhand=statusOf(p)==='inhand';
-  p.STATUS=isInhand?'currentstock':'inhand';
+  var desc=clean(p.DESCRIPTION).replace(/\s*\[INHAND\]\s*/ig,' ').trim();
+  if(isInhand){p.STATUS='currentstock';p.DESCRIPTION=desc;if(num(p.QTY,0)===0)p.QTY=1;}
+  else{p.STATUS='inhand';p.DESCRIPTION=(desc?desc+' ':'')+'[INHAND]';if(num(p.QTY,0)===0)p.QTY=1;}
   try{await persistProducts(PRODUCTS);}catch(e){alert('Save failed: '+(e.message||e));return;}
-  toast(isInhand?'Moved back to Current Stock':'Marked Inhand');
+  toast(isInhand?'Removed from Inhand site':'Added to Inhand site');
 }
 function inhandRow(p,onSite){var m=modelOf(p);return '<div style="display:flex;align-items:center;gap:10px;padding:6px 8px;border:1px solid rgba(0,0,0,.08);border-radius:10px;background:rgba(255,255,255,.6)">'
   +'<img class="thumb" src="'+esc(imageOf(p))+'" alt="" style="width:34px;height:34px;object-fit:contain;flex-shrink:0" onerror="this.style.visibility=\'hidden\'">'
@@ -496,7 +501,7 @@ async function inhandRemoveAll(){
   var on=PRODUCTS.filter(function(p){return statusOf(p)==='inhand'});
   if(!on.length)return;
   if(!confirm('Remove all '+on.length+' product(s) from the inhand site?'))return;
-  on.forEach(function(p){p.STATUS='currentstock';if(num(p.QTY,0)===0)p.QTY=1;});
+  on.forEach(function(p){p.STATUS='currentstock';p.DESCRIPTION=clean(p.DESCRIPTION).replace(/\s*\[INHAND\]\s*/ig,' ').trim();if(num(p.QTY,0)===0)p.QTY=1;});
   try{await persistProducts(PRODUCTS);}catch(e){alert('Save failed: '+(e.message||e));return;}
   toast('Inhand site cleared');
 }
