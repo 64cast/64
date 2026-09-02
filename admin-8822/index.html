@@ -72,6 +72,7 @@ tr.prow.drop-target td{border-top:2px solid var(--orange)}
 .link-btn{background:none;border:none;color:#888;text-transform:uppercase;font-size:.66rem;letter-spacing:1px;padding:0;text-decoration:underline;text-underline-offset:2px}
 .link-btn.danger{color:var(--danger)}
 .link-btn.new-active{color:var(--orange);font-weight:500}
+@media (max-width:760px){#inhandPanel .panel-body{grid-template-columns:1fr!important}}
 .mini-input{height:30px;border:1px solid rgba(0,0,0,.12);padding:0 8px;background:rgba(255,255,255,.7);border-radius:8px}
 .qty-input{width:60px;text-align:center}
 .pagination{margin:0 32px 32px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px 18px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.7);border-top:none;border-radius:0 0 18px 18px;font-size:.72rem;color:#888}
@@ -116,6 +117,7 @@ tr.prow.drop-target td{border-top:2px solid var(--orange)}
     <div class="top-actions">
       <button id="healthBtn" class="glossW btn" type="button">Health Check</button>
       <button id="communityBtn" class="glossW btn" type="button">Community Signups</button>
+      <button id="inhandBtn" class="glossW btn" type="button">Inhand Site</button>
       <button id="ordersBtn" class="glossW btn" type="button">Pending Orders</button>
       <button id="addBtn" class="glossO btn" type="button">+ Add Product</button>
       <button id="refreshBtn" class="glossW btn" type="button">Refresh</button>
@@ -145,6 +147,24 @@ tr.prow.drop-target td{border-top:2px solid var(--orange)}
   <div id="ordersPanel" class="panel hide">
     <div class="panel-head"><div class="panel-title">Pending Orders</div><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><div class="muted" style="font-size:.68rem">Confirm deducts stock automatically. Reject removes it without touching stock.</div><button id="confirmAllOrdersBtn" class="btn ok" type="button">Confirm All</button><button id="rejectAllOrdersBtn" class="btn danger" type="button">Reject All</button></div></div>
     <div id="ordersBody" class="panel-body" style="display:grid;gap:12px"></div>
+  </div>
+
+  <div id="inhandPanel" class="panel hide">
+    <div class="panel-head"><div class="panel-title">Inhand Site Manager</div><div class="muted" style="font-size:.68rem">Left = live on /inhand. One click adds or removes and saves immediately.</div></div>
+    <div class="panel-body" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start">
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px">
+          <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:1.4px;font-weight:500">On Inhand Site (<span id="inhandOnCount">0</span>)</div>
+          <button id="inhandClearAllBtn" class="link-btn danger" type="button">Remove all</button>
+        </div>
+        <div id="inhandOnList" style="display:grid;gap:6px;max-height:460px;overflow:auto"></div>
+      </div>
+      <div>
+        <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:1.4px;font-weight:500;margin-bottom:10px">Add Products</div>
+        <input id="inhandSearch" class="mini-input" placeholder="Search product, model, brand..." style="width:100%;height:34px;margin-bottom:10px">
+        <div id="inhandOffList" style="display:grid;gap:6px;max-height:420px;overflow:auto"></div>
+      </div>
+    </div>
   </div>
 
   <div id="bulkBar" class="panel hide" style="position:sticky;top:60px;z-index:20;background:rgba(10,10,10,.9);color:#fff;border-color:rgba(10,10,10,.9)">
@@ -276,7 +296,7 @@ async function apiPost(body,auth){var headers={'Content-Type':'application/json'
 async function verify(){if(!token())return false;try{await apiPost({action:'admin-verify'});return true}catch(e){setToken('');return false}}
 async function load(){showNotice('Loading products...');var data=await apiGet();PRODUCTS=normaliseAll(Array.isArray(data)?data:(data.products||data.rows||[]));render();showNotice('Loaded '+PRODUCTS.length+' products.');}
 function fillSelect(id,label,items){var val=$(id).value;$(id).innerHTML='<option value="">'+esc(label)+'</option>'+items.map(function(x){return '<option value="'+esc(x)+'">'+esc(x)+'</option>'}).join('');$(id).value=items.indexOf(val)>=0?val:''}
-function render(){var brands=Array.from(new Set(PRODUCTS.map(function(p){return clean(p.BRAND)}).filter(Boolean))).sort();var cars=Array.from(new Set(PRODUCTS.map(function(p){return clean(p.CARBRAND)}).filter(Boolean))).sort();fillSelect('brandFilter','All Brands',brands);fillSelect('carFilter','All Car Brands',cars);fillSelect('statusFilter','All Status',['currentstock','preorder','sold']);$('brandList').innerHTML=brands.map(function(x){return '<option value="'+esc(x)+'"></option>'}).join('');$('carList').innerHTML=cars.map(function(x){return '<option value="'+esc(x)+'"></option>'}).join('');renderStats();renderTable();}
+function render(){var brands=Array.from(new Set(PRODUCTS.map(function(p){return clean(p.BRAND)}).filter(Boolean))).sort();var cars=Array.from(new Set(PRODUCTS.map(function(p){return clean(p.CARBRAND)}).filter(Boolean))).sort();fillSelect('brandFilter','All Brands',brands);fillSelect('carFilter','All Car Brands',cars);fillSelect('statusFilter','All Status',['currentstock','inhand','preorder','sold']);$('brandList').innerHTML=brands.map(function(x){return '<option value="'+esc(x)+'"></option>'}).join('');$('carList').innerHTML=cars.map(function(x){return '<option value="'+esc(x)+'"></option>'}).join('');renderStats();renderTable();renderInhandPanel();}
 function renderStats(){var total=PRODUCTS.length,ready=0,pre=0,sold=0,qty=0,brands={};PRODUCTS.forEach(function(p){var s=statusOf(p);if(s==='preorder')pre++;else if(s==='sold')sold++;else ready++;qty+=num(p.QTY,0);if(p.BRAND)brands[p.BRAND]=1});$('stats').innerHTML=[['Products',total],['Available Qty',qty],['Current Stock',ready],['Pre-Order',pre],['Sold Out',sold],['Brands',Object.keys(brands).length]].map(function(x){return '<div class="stat"><div class="stat-num">'+x[1]+'</div><div class="stat-label">'+x[0]+'</div></div>'}).join('')}
 function filtered(){var q=clean($('searchInput').value).toLowerCase(),b=$('brandFilter').value,c=$('carFilter').value,s=$('statusFilter').value;return currentOrdered().filter(function(p){var text=[p.BRAND,p.CARBRAND,p['PRODUCT NAME'],modelOf(p)].join(' ').toLowerCase();return (!q||text.indexOf(q)>=0)&&(!b||p.BRAND===b)&&(!c||p.CARBRAND===c)&&(!s||statusOf(p)===s)})}
 function renderPagination(total){
@@ -453,6 +473,33 @@ async function quickToggleInhand(model){
   try{await persistProducts(PRODUCTS);}catch(e){alert('Save failed: '+(e.message||e));return;}
   toast(isInhand?'Moved back to Current Stock':'Marked Inhand');
 }
+function inhandRow(p,onSite){var m=modelOf(p);return '<div style="display:flex;align-items:center;gap:10px;padding:6px 8px;border:1px solid rgba(0,0,0,.08);border-radius:10px;background:rgba(255,255,255,.6)">'
+  +'<img class="thumb" src="'+esc(imageOf(p))+'" alt="" style="width:34px;height:34px;object-fit:contain;flex-shrink:0" onerror="this.style.visibility=\'hidden\'">'
+  +'<div style="flex:1;min-width:0"><div class="name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(p['PRODUCT NAME']||m)+'</div>'
+  +'<div class="muted mono">'+esc(m)+(p.BRAND?' \u00b7 '+esc(p.BRAND):'')+'</div></div>'
+  +'<button class="link-btn'+(onSite?' danger':'')+'" data-inhand-toggle="'+esc(m)+'">'+(onSite?'Remove':'Add')+'</button>'
+  +'</div>'}
+function renderInhandPanel(){
+  var onList=$('inhandOnList'); if(!onList)return;
+  var q=clean(($('inhandSearch')||{}).value).toLowerCase();
+  var ordered=currentOrdered();
+  var on=ordered.filter(function(p){return statusOf(p)==='inhand'});
+  var off=ordered.filter(function(p){return statusOf(p)!=='inhand'}).filter(function(p){
+    if(!q)return true;
+    return [p.BRAND,p.CARBRAND,p['PRODUCT NAME'],modelOf(p)].join(' ').toLowerCase().indexOf(q)>=0;
+  });
+  $('inhandOnCount').textContent=on.length;
+  onList.innerHTML=on.length?on.map(function(p){return inhandRow(p,true)}).join(''):'<div class="muted" style="padding:18px;text-align:center;font-size:.78rem">Nothing on the inhand site yet. Add products from the right.</div>';
+  $('inhandOffList').innerHTML=off.length?off.slice(0,60).map(function(p){return inhandRow(p,false)}).join('')+(off.length>60?'<div class="muted" style="padding:8px;text-align:center;font-size:.7rem">'+(off.length-60)+' more \u2014 refine your search</div>':''):'<div class="muted" style="padding:18px;text-align:center;font-size:.78rem">No matches</div>';
+}
+async function inhandRemoveAll(){
+  var on=PRODUCTS.filter(function(p){return statusOf(p)==='inhand'});
+  if(!on.length)return;
+  if(!confirm('Remove all '+on.length+' product(s) from the inhand site?'))return;
+  on.forEach(function(p){p.STATUS='currentstock';if(num(p.QTY,0)===0)p.QTY=1;});
+  try{await persistProducts(PRODUCTS);}catch(e){alert('Save failed: '+(e.message||e));return;}
+  toast('Inhand site cleared');
+}
 async function quickToggleNew(model){
   var p=PRODUCTS.find(function(x){return modelOf(x)===model});
   if(!p)return;
@@ -545,6 +592,10 @@ function exportCsv(){var heads=['BRAND','CARBRAND','SCALE','PRODUCT NAME','MODEL
 function initMonths(){var now=new Date(),cur=now.getMonth();var opts=['<option value="">No ETA</option>'];for(var i=0;i<18;i++){var m=MONTHS[(cur+i)%12];var y=now.getFullYear()+Math.floor((cur+i)/12);opts.push('<option value="'+m+' '+y+'">'+m+' '+y+'</option>')} $('fEta').innerHTML=opts.join('')}
 $('loginForm').addEventListener('submit',async function(e){e.preventDefault();$('loginError').classList.add('hide');try{var res=await apiPost({action:'admin-login',password:$('loginPassword').value},false);setToken(res.token);showApp(true);await load()}catch(err){$('loginError').textContent=err.message||'Login failed';$('loginError').classList.remove('hide')}});
 $('logoutBtn').onclick=function(){setToken('');location.href='/admin-8822'};$('refreshBtn').onclick=function(){load().catch(function(e){showNotice(e.message);alert(e.message)})};$('addBtn').onclick=function(){openEdit('')};$('healthBtn').onclick=healthCheck;$('communityBtn').onclick=function(){loadCommunitySignups().catch(function(e){alert(e.message||e)})};$('ordersBtn').onclick=function(){loadPendingOrders().catch(function(e){alert(e.message||e)})};$('confirmAllOrdersBtn').onclick=function(){confirmAllOrders().catch(function(e){alert(e.message||e)})};$('rejectAllOrdersBtn').onclick=function(){rejectAllOrders().catch(function(e){alert(e.message||e)})};$('repairBtn').onclick=function(){repairAndSave().catch(function(e){alert(e.message||e)})};
+$('inhandBtn').onclick=function(){var el=$('inhandPanel');el.classList.toggle('hide');if(!el.classList.contains('hide')){renderInhandPanel();var s=$('inhandSearch');if(s)s.focus()}};
+$('inhandSearch').addEventListener('input',renderInhandPanel);
+$('inhandClearAllBtn').onclick=function(){inhandRemoveAll().catch(function(e){alert(e.message||e)})};
+document.body.addEventListener('click',function(e){var t=e.target.closest?e.target.closest('[data-inhand-toggle]'):null;if(t)quickToggleInhand(t.getAttribute('data-inhand-toggle')).catch(function(err){alert(err.message||err)})});
 ['searchInput','brandFilter','carFilter','statusFilter'].forEach(function(id){$(id).addEventListener('input',function(){CURRENT_PAGE=1;renderTable()});$(id).addEventListener('change',function(){CURRENT_PAGE=1;renderTable()})});
 ['fStatus','fQty'].forEach(function(id){$(id).addEventListener('input',function(){syncStatusQty($('fStatus'),$('fQty'))});$(id).addEventListener('change',function(){syncStatusQty($('fStatus'),$('fQty'))})});
 document.body.addEventListener('click',function(e){var close=e.target.getAttribute('data-close');if(close)$(close).classList.remove('open');var edit=e.target.getAttribute('data-edit');if(edit)openEdit(edit);var del=e.target.getAttribute('data-del');if(del)deleteProduct(del).catch(function(err){alert(err.message||err)});var isNewBtn=e.target.getAttribute('data-new');if(isNewBtn)quickToggleNew(isNewBtn).catch(function(err){alert(err.message||err)});var isInhandBtn=e.target.getAttribute('data-inhand');if(isInhandBtn)quickToggleInhand(isInhandBtn).catch(function(err){alert(err.message||err)});var delSignup=e.target.getAttribute('data-del-signup');if(delSignup)removeCommunitySignup(delSignup).catch(function(err){alert(err.message||err)});var confirmOrderId=e.target.getAttribute('data-confirm-order');if(confirmOrderId)confirmOrder(confirmOrderId).catch(function(err){alert(err.message||err)});var rejectOrderId=e.target.getAttribute('data-reject-order');if(rejectOrderId)rejectOrder(rejectOrderId).catch(function(err){alert(err.message||err)});var statusCycle=e.target.getAttribute('data-status-cycle');if(statusCycle)quickStatusCycle(statusCycle).catch(function(err){alert(err.message||err)})});
