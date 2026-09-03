@@ -381,6 +381,7 @@ const fallbackImg = "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.
 
 let allProducts = [];
 let INHAND_MODELS = [];
+let LIST_STATUS = 'pending';
 const ROUTE_BRAND = (window.__BRAND_ROUTE__ || '').trim();
 const QS_BRAND = (new URLSearchParams(window.location.search).get('brand') || ROUTE_BRAND || '').trim();
 const BRAND_LOCKED = !!ROUTE_BRAND;
@@ -581,7 +582,12 @@ function renderGrid(){
         </div>
       </div>
     </div>`;
-  }).join('') : '<div style="grid-column:1/-1;text-align:center;padding:60px 0;color:#999;font-size:.85rem;">No pieces match that search/filter.</div>';
+  }).join('') : '<div style="grid-column:1/-1;text-align:center;padding:60px 0;color:#999;font-size:.85rem;">' + (
+      LIST_STATUS === 'missing' ? 'inhand-list.json was not found on the server \u2014 upload it into the /inhand folder.'
+      : LIST_STATUS === 'notjson' ? 'inhand-list.json could not be read \u2014 it is not valid JSON.'
+      : LIST_STATUS === 'empty' ? 'No products selected yet. Pick them in the admin and upload the new inhand-list.json.'
+      : 'No pieces match that search/filter.'
+    ) + '</div>';
   grid.querySelectorAll('[data-add]:not([disabled])').forEach(btn => btn.addEventListener('click', () => { addToCart(JSON.parse(btn.dataset.add)); btn.classList.add('pulse'); setTimeout(() => btn.classList.remove('pulse'), 400); }));
   grid.querySelectorAll('.product-card[data-product]').forEach(card => {
     card.addEventListener('click', (e) => {
@@ -887,13 +893,18 @@ try {
   if (cached && cached.length) applyProducts(cached);
 } catch(e) {}
 Promise.all([
-  fetch('inhand-list.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : []).catch(() => []),
+  fetch('inhand-list.json', { cache: 'no-store' })
+    .then(r => r.ok ? r.text() : Promise.reject(new Error('http ' + r.status)))
+    .catch(() => fetch('/inhand/inhand-list.json', { cache: 'no-store' }).then(r => r.ok ? r.text() : Promise.reject(new Error('http ' + r.status))))
+    .then(txt => { try { return JSON.parse(txt) } catch(e) { LIST_STATUS = 'notjson'; return [] } })
+    .catch(() => { LIST_STATUS = 'missing'; return [] }),
   fetch(API_URL, { method: 'GET', cache: 'no-store' }).then(r => r.json())
 ])
   .then(([list, rows]) => {
     INHAND_MODELS = (Array.isArray(list) ? list : (list && (list.models || list.list) || []))
       .map(x => String(typeof x === 'string' ? x : (x && (x['MODEL NO.'] || x.model || x.modelNo) || '')).trim())
       .filter(Boolean);
+    if (LIST_STATUS === 'pending') LIST_STATUS = INHAND_MODELS.length ? 'ok' : 'empty';
     try { localStorage.setItem('64cast_inhand_list_cache', JSON.stringify(INHAND_MODELS)); } catch(e) {}
     applyProducts(rows);
     try { localStorage.setItem('64cast_inhand_cache', JSON.stringify(rows)); } catch(e) {}
