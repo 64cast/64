@@ -893,11 +893,13 @@ try {
   if (cached && cached.length) applyProducts(cached);
 } catch(e) {}
 Promise.all([
-  fetch('inhand-list.json', { cache: 'no-store' })
-    .then(r => r.ok ? r.text() : Promise.reject(new Error('http ' + r.status)))
-    .catch(() => fetch('/inhand/inhand-list.json', { cache: 'no-store' }).then(r => r.ok ? r.text() : Promise.reject(new Error('http ' + r.status))))
-    .then(txt => { try { return JSON.parse(txt) } catch(e) { LIST_STATUS = 'notjson'; return [] } })
-    .catch(() => { LIST_STATUS = 'missing'; return [] }),
+  fetch('/api/inhand', { cache: 'no-store' })
+    .then(r => r.ok ? r.json() : Promise.reject(new Error('http ' + r.status)))
+    .then(d => (d && d.models) || [])
+    .catch(() => fetch('inhand-list.json', { cache: 'no-store' })
+      .then(r => r.ok ? r.text() : Promise.reject(new Error('http ' + r.status)))
+      .then(txt => { try { return JSON.parse(txt) } catch(e) { LIST_STATUS = 'notjson'; return [] } })
+      .catch(() => { LIST_STATUS = 'missing'; return [] })),
   fetch(API_URL, { method: 'GET', cache: 'no-store' }).then(r => r.json())
 ])
   .then(([list, rows]) => {
