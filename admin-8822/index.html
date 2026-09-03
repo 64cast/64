@@ -150,7 +150,17 @@ tr.prow.drop-target td{border-top:2px solid var(--orange)}
   </div>
 
   <div id="inhandPanel" class="panel hide">
-    <div class="panel-head"><div class="panel-title">Inhand Site Manager</div><div class="muted" style="font-size:.68rem">Left = live on /inhand. One click adds or removes and saves immediately.</div></div>
+    <div class="panel-head">
+      <div>
+        <div class="panel-title">Inhand Site Manager</div>
+        <div class="muted" style="font-size:.68rem">Pick the products for /inhand, then download <span class="mono">inhand-list.json</span> and drop it into the <span class="mono">inhand</span> folder before deploying.</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <button id="inhandLoadBtn" class="glossW btn" type="button">Load existing file</button>
+        <button id="inhandDownloadBtn" class="glossO btn" type="button">Download inhand-list.json</button>
+        <input id="inhandFileInput" type="file" accept=".json,application/json" class="hide">
+      </div>
+    </div>
     <div class="panel-body" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start">
       <div>
         <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px">
@@ -244,6 +254,7 @@ tr.prow.drop-target td{border-top:2px solid var(--orange)}
 var API_URL='https://64cast-products-api.trailsec5.workers.dev';
 var R2_BASE='https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/';
 var TOKEN_KEY='64cast_admin_token';
+var SAVE_LOG=[];
 var PRODUCTS=[]; var IMPORT_ROWS=[]; var LAST_HEALTH=null; var CURRENT_PAGE=1; var PAGE_SIZE=25;
 var MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
 var $=function(id){return document.getElementById(id)};
@@ -257,8 +268,7 @@ function toast(msg){$('toast').textContent=msg;$('toast').classList.add('show');
 function showApp(ok){$('loginView').classList.toggle('hide',ok);$('app').classList.toggle('show',ok)}
 function showNotice(s){$('notice').textContent=s}
 function modelOf(p){return clean(p&&(p['MODEL NO.']||p.modelNo||p.model||p.MODELNO))}
-function hasInhandMark(p){return /\[INHAND\]/i.test(clean(p&&(p.DESCRIPTION||p.description)))}
-function statusOf(p){if(hasInhandMark(p))return 'inhand'; var s=clean(p&&(p.STATUS||p.status||p.tag)).toLowerCase().replace(/[\s_-]+/g,''); if(s==='inhand'||s==='inhandnow'||s==='inhanditem')return 'inhand'; if(s==='soldout'||s==='outofstock'||s==='out')return 'sold'; if(s==='preorder'||s==='preorders'||s==='preorderitem')return 'preorder'; if(s==='ready'||s==='instock'||s==='available'||s==='currentstock')return 'currentstock'; return num(p&&(p.QTY||p.qty),0)===0?'sold':'currentstock'}
+function statusOf(p){var s=clean(p&&(p.STATUS||p.status||p.tag)).toLowerCase().replace(/[\s_-]+/g,''); if(s==='inhand'||s==='inhandnow'||s==='inhanditem')return 'inhand'; if(s==='soldout'||s==='outofstock'||s==='out')return 'sold'; if(s==='preorder'||s==='preorders'||s==='preorderitem')return 'preorder'; if(s==='ready'||s==='instock'||s==='available'||s==='currentstock')return 'currentstock'; return num(p&&(p.QTY||p.qty),0)===0?'sold':'currentstock'}
 function imageOf(p){return clean(p&&(p.IMG1||p.img1||(p.imgs&&p.imgs[0])))||imgUrl(modelOf(p),1)}
 function imgUrl(model,n){var m=clean(model).replace(/\//g,'-');return m?R2_BASE+m+'-'+String(n).padStart(2,'0')+'.jpg':''}
 function canonicalProduct(raw,i){var map={}; Object.keys(raw||{}).forEach(function(k){map[normKey(k)]=raw[k]});
@@ -283,8 +293,6 @@ function canonicalProduct(raw,i){var map={}; Object.keys(raw||{}).forEach(functi
     IMAGE_SCALE:Math.max(70,Math.min(130,num(map.IMAGESCALE||map.IMGSCALE||raw.IMAGE_SCALE||raw.IMGSCALE||raw['IMAGE SCALE'],100))),
     NEW:clean(map.NEW||map.NEWARRIVAL||raw.NEW||raw.newArrival||''), DESCRIPTION:clean(map.DESCRIPTION||raw.DESCRIPTION||raw.description||'')
   };
-  if(/\[INHAND\]/i.test(p.DESCRIPTION)){p.STATUS='inhand'; if(p.QTY===0)p.QTY=1;}
-  else if(p.STATUS==='inhand'){p.DESCRIPTION=clean(p.DESCRIPTION+' [INHAND]');}
   if(!p.IMG1&&model)p.IMG1=imgUrl(model,1); if(!p.IMG2&&model)p.IMG2=imgUrl(model,2); if(!p.IMG3&&model)p.IMG3=imgUrl(model,3); if(!p.IMG4&&model)p.IMG4=imgUrl(model,4);
   return p;
 }
@@ -415,68 +423,64 @@ document.querySelectorAll('.img-drop').forEach(function(zone){
 function formProduct(){syncStatusQty($('fStatus'),$('fQty'));var model=clean($('fModel').value);if(!model)throw new Error('MODEL NO. is required');if(/[?#\\&%"'<>]/.test(model))throw new Error('MODEL NO. has unsafe characters. Avoid # ? \\ & % " \' < >');var old=$('fOriginalModel').value;var dup=PRODUCTS.find(function(p){return modelOf(p)===model && modelOf(p)!==old});if(dup)throw new Error('Duplicate MODEL NO.: '+model);var status=statusOf({STATUS:$('fStatus').value,QTY:$('fQty').value});var qty=Math.max(0,Math.floor(num($('fQty').value,0)));if(status==='sold')qty=0;if(qty===0&&status!=='preorder')status='sold';var price=num($('fPrice').value,0);var p={'REF IMG':'',BRAND:clean($('fBrand').value),CARBRAND:clean($('fCarbrand').value),SCALE:'1:64','PRODUCT NAME':clean($('fName').value),'MODEL NO.':model,PRICE:price,ORIGPRICE:num($('fOrigPrice').value,price),QTY:qty,STATUS:status,ETA:clean($('fEta').value),SORTORDER:Math.max(1,Math.floor(num($('fSort').value,PRODUCTS.length+1))),IMG1:clean($('fImg1').value)||imgUrl(model,1),IMG2:clean($('fImg2').value)||imgUrl(model,2),IMG3:clean($('fImg3').value)||imgUrl(model,3),IMG4:clean($('fImg4').value)||imgUrl(model,4),IMAGE_SCALE:Math.max(70,Math.min(130,num($('fImageScale').value,100))),NEW:clean($('fNew').value),DESCRIPTION:clean($('fDescription').value)};return p}
 async function persistProducts(list){
   var arr=normaliseAll(list);
+  SAVE_LOG=[];
+  var okAction=null;
   try{
-    await apiPost({action:'replace',products:arr});
+    await apiPost({action:'replace',products:arr}); okAction='replace';
   }catch(e1){
+    SAVE_LOG.push('replace failed: '+(e1.message||e1));
     try{
-      await apiPost({action:'import',products:arr});
+      await apiPost({action:'import',products:arr}); okAction='import';
     }catch(e2){
+      SAVE_LOG.push('import failed: '+(e2.message||e2));
       var lastErr=e2;
       for(var i=0;i<arr.length;i++){
         try{ await apiPost({action:'update',product:arr[i]}); lastErr=null; }
         catch(e3){ lastErr=e3; }
       }
-      if(lastErr) throw lastErr;
+      okAction='update-loop';
+      if(lastErr){SAVE_LOG.push('update failed: '+(lastErr.message||lastErr)); throw lastErr;}
     }
   }
+  SAVE_LOG.push('accepted via: '+okAction);
   PRODUCTS=arr;
   render();
   return true;
 }
-async function saveProduct(){var old=$('fOriginalModel').value;var p=formProduct();var list=PRODUCTS.slice();if(old){var idx=list.findIndex(function(x){return modelOf(x)===old});if(idx>=0)list[idx]=p; if(old!==modelOf(p))await apiPost({action:'delete',modelNo:old});}else list.push(p);list=moveToPosition(list,modelOf(p),p.SORTORDER);try{await persistProducts(list);}catch(e){alert('Save failed: '+(e.message||e));throw e;}$('editModal').classList.remove('open');toast('Saved')}
-async function deleteProduct(model){if(!confirm('Delete '+model+'?'))return;await apiPost({action:'delete',modelNo:model});PRODUCTS=PRODUCTS.filter(function(p){return modelOf(p)!==model});PRODUCTS=reindexStable(PRODUCTS);try{await persistProducts(PRODUCTS)}catch(e){}render();toast('Deleted')}
-async function quickQty(model,value){
-  var p=PRODUCTS.find(function(x){return modelOf(x)===model});
-  if(!p)return;
-  var qty=Math.max(0,Math.floor(num(value,0)));
-  p.QTY=qty;
-  if(qty===0&&statusOf(p)!=='preorder')p.STATUS='sold';
-  if(qty>0&&statusOf(p)==='sold')p.STATUS='currentstock';
-  try{await persistProducts(PRODUCTS);}catch(e){alert('Save failed: '+(e.message||e));return;}
-  toast('Inventory updated')
+var INHAND_KEY='64cast_inhand_models';
+var INHAND=[];
+try{ INHAND=JSON.parse(localStorage.getItem(INHAND_KEY)||'[]')||[] }catch(e){ INHAND=[] }
+function inhandStore(){ try{ localStorage.setItem(INHAND_KEY,JSON.stringify(INHAND)) }catch(e){} }
+function isOnInhand(p){ return INHAND.indexOf(modelOf(p))>=0 }
+function quickToggleInhand(model){
+  var i=INHAND.indexOf(model);
+  if(i>=0) INHAND.splice(i,1); else INHAND.push(model);
+  inhandStore(); renderInhandPanel();
+  toast(i>=0?'Removed \u2014 download the file to publish':'Added \u2014 download the file to publish');
+  return Promise.resolve();
 }
-async function quickPrice(model,value){
-  var p=PRODUCTS.find(function(x){return modelOf(x)===model});
-  if(!p)return;
-  p.PRICE=Math.max(0,num(value,p.PRICE));
-  try{await persistProducts(PRODUCTS);}catch(e){alert('Save failed: '+(e.message||e));return;}
-  toast('Price updated')
+function inhandRemoveAll(){
+  if(!INHAND.length) return Promise.resolve();
+  if(!confirm('Remove all '+INHAND.length+' product(s) from the inhand list?')) return Promise.resolve();
+  INHAND=[]; inhandStore(); renderInhandPanel(); toast('List cleared \u2014 download the file to publish');
+  return Promise.resolve();
 }
-async function quickStatusCycle(model){
-  var p=PRODUCTS.find(function(x){return modelOf(x)===model});
-  if(!p)return;
-  var cur=statusOf(p);
-  var next=STATUS_CYCLE[(STATUS_CYCLE.indexOf(cur)+1)%STATUS_CYCLE.length];
-  p.STATUS=next;
-  if(next==='sold')p.QTY=0;
-  else if(num(p.QTY,0)===0)p.QTY=1;
-  try{await persistProducts(PRODUCTS);}catch(e){alert('Save failed: '+(e.message||e));return;}
-  toast('Status set to '+(next==='currentstock'?'Current Stock':next==='preorder'?'Pre-Order':'Sold Out'))
+function inhandDownload(){
+  download('inhand-list.json', JSON.stringify(INHAND,null,2), 'application/json');
+  toast('Put this file in the inhand folder, then deploy');
 }
-async function quickOrder(model,value){
-  PRODUCTS=moveToPosition(PRODUCTS,model,value);
-  try{await persistProducts(PRODUCTS);}catch(e){alert('Save failed: '+(e.message||e));return;}
-  toast('Order updated and saved to live site')
-}
-async function quickToggleInhand(model){
-  var p=PRODUCTS.find(function(x){return modelOf(x)===model});
-  if(!p)return;
-  var isInhand=statusOf(p)==='inhand';
-  var desc=clean(p.DESCRIPTION).replace(/\s*\[INHAND\]\s*/ig,' ').trim();
-  if(isInhand){p.STATUS='currentstock';p.DESCRIPTION=desc;if(num(p.QTY,0)===0)p.QTY=1;}
-  else{p.STATUS='inhand';p.DESCRIPTION=(desc?desc+' ':'')+'[INHAND]';if(num(p.QTY,0)===0)p.QTY=1;}
-  try{await persistProducts(PRODUCTS);}catch(e){alert('Save failed: '+(e.message||e));return;}
-  toast(isInhand?'Removed from Inhand site':'Added to Inhand site');
+function inhandImport(file){
+  if(!file) return;
+  var fr=new FileReader();
+  fr.onload=function(){
+    try{
+      var data=JSON.parse(fr.result);
+      var arr=Array.isArray(data)?data:(data.models||data.list||[]);
+      INHAND=arr.map(function(x){ return clean(typeof x==='string'?x:(x&&(x['MODEL NO.']||x.model||x.modelNo))) }).filter(Boolean);
+      inhandStore(); renderInhandPanel(); toast('Loaded '+INHAND.length+' product(s)');
+    }catch(e){ alert('Could not read that file: '+(e.message||e)) }
+  };
+  fr.readAsText(file);
 }
 function inhandRow(p,onSite){var m=modelOf(p);return '<div style="display:flex;align-items:center;gap:10px;padding:6px 8px;border:1px solid rgba(0,0,0,.08);border-radius:10px;background:rgba(255,255,255,.6)">'
   +'<img class="thumb" src="'+esc(imageOf(p))+'" alt="" style="width:34px;height:34px;object-fit:contain;flex-shrink:0" onerror="this.style.visibility=\'hidden\'">'
@@ -488,22 +492,16 @@ function renderInhandPanel(){
   var onList=$('inhandOnList'); if(!onList)return;
   var q=clean(($('inhandSearch')||{}).value).toLowerCase();
   var ordered=currentOrdered();
-  var on=ordered.filter(function(p){return statusOf(p)==='inhand'});
-  var off=ordered.filter(function(p){return statusOf(p)!=='inhand'}).filter(function(p){
+  var on=INHAND.map(function(m){return ordered.filter(function(p){return modelOf(p)===m})[0]}).filter(Boolean);
+  var off=ordered.filter(function(p){return !isOnInhand(p)}).filter(function(p){
     if(!q)return true;
     return [p.BRAND,p.CARBRAND,p['PRODUCT NAME'],modelOf(p)].join(' ').toLowerCase().indexOf(q)>=0;
   });
-  $('inhandOnCount').textContent=on.length;
-  onList.innerHTML=on.length?on.map(function(p){return inhandRow(p,true)}).join(''):'<div class="muted" style="padding:18px;text-align:center;font-size:.78rem">Nothing on the inhand site yet. Add products from the right.</div>';
+  var missing=INHAND.filter(function(m){return !ordered.some(function(p){return modelOf(p)===m})});
+  $('inhandOnCount').textContent=INHAND.length;
+  onList.innerHTML=(on.length?on.map(function(p){return inhandRow(p,true)}).join(''):'<div class="muted" style="padding:18px;text-align:center;font-size:.78rem">Nothing on the inhand list yet. Add products from the right.</div>')
+    +(missing.length?'<div class="muted mono" style="padding:8px">'+missing.length+' model(s) in the list are no longer in the catalogue: '+esc(missing.join(', '))+'</div>':'');
   $('inhandOffList').innerHTML=off.length?off.slice(0,60).map(function(p){return inhandRow(p,false)}).join('')+(off.length>60?'<div class="muted" style="padding:8px;text-align:center;font-size:.7rem">'+(off.length-60)+' more \u2014 refine your search</div>':''):'<div class="muted" style="padding:18px;text-align:center;font-size:.78rem">No matches</div>';
-}
-async function inhandRemoveAll(){
-  var on=PRODUCTS.filter(function(p){return statusOf(p)==='inhand'});
-  if(!on.length)return;
-  if(!confirm('Remove all '+on.length+' product(s) from the inhand site?'))return;
-  on.forEach(function(p){p.STATUS='currentstock';p.DESCRIPTION=clean(p.DESCRIPTION).replace(/\s*\[INHAND\]\s*/ig,' ').trim();if(num(p.QTY,0)===0)p.QTY=1;});
-  try{await persistProducts(PRODUCTS);}catch(e){alert('Save failed: '+(e.message||e));return;}
-  toast('Inhand site cleared');
 }
 async function quickToggleNew(model){
   var p=PRODUCTS.find(function(x){return modelOf(x)===model});
@@ -599,8 +597,11 @@ $('loginForm').addEventListener('submit',async function(e){e.preventDefault();$(
 $('logoutBtn').onclick=function(){setToken('');location.href='/admin-8822'};$('refreshBtn').onclick=function(){load().catch(function(e){showNotice(e.message);alert(e.message)})};$('addBtn').onclick=function(){openEdit('')};$('healthBtn').onclick=healthCheck;$('communityBtn').onclick=function(){loadCommunitySignups().catch(function(e){alert(e.message||e)})};$('ordersBtn').onclick=function(){loadPendingOrders().catch(function(e){alert(e.message||e)})};$('confirmAllOrdersBtn').onclick=function(){confirmAllOrders().catch(function(e){alert(e.message||e)})};$('rejectAllOrdersBtn').onclick=function(){rejectAllOrders().catch(function(e){alert(e.message||e)})};$('repairBtn').onclick=function(){repairAndSave().catch(function(e){alert(e.message||e)})};
 $('inhandBtn').onclick=function(){var el=$('inhandPanel');el.classList.toggle('hide');if(!el.classList.contains('hide')){renderInhandPanel();var s=$('inhandSearch');if(s)s.focus()}};
 $('inhandSearch').addEventListener('input',renderInhandPanel);
-$('inhandClearAllBtn').onclick=function(){inhandRemoveAll().catch(function(e){alert(e.message||e)})};
-document.body.addEventListener('click',function(e){var t=e.target.closest?e.target.closest('[data-inhand-toggle]'):null;if(t)quickToggleInhand(t.getAttribute('data-inhand-toggle')).catch(function(err){alert(err.message||err)})});
+$('inhandClearAllBtn').onclick=function(){inhandRemoveAll()};
+$('inhandDownloadBtn').onclick=inhandDownload;
+$('inhandLoadBtn').onclick=function(){$('inhandFileInput').click()};
+$('inhandFileInput').addEventListener('change',function(){inhandImport(this.files&&this.files[0]);this.value=''});
+document.body.addEventListener('click',function(e){var t=e.target.closest?e.target.closest('[data-inhand-toggle]'):null;if(t)quickToggleInhand(t.getAttribute('data-inhand-toggle'))});
 ['searchInput','brandFilter','carFilter','statusFilter'].forEach(function(id){$(id).addEventListener('input',function(){CURRENT_PAGE=1;renderTable()});$(id).addEventListener('change',function(){CURRENT_PAGE=1;renderTable()})});
 ['fStatus','fQty'].forEach(function(id){$(id).addEventListener('input',function(){syncStatusQty($('fStatus'),$('fQty'))});$(id).addEventListener('change',function(){syncStatusQty($('fStatus'),$('fQty'))})});
 document.body.addEventListener('click',function(e){var close=e.target.getAttribute('data-close');if(close)$(close).classList.remove('open');var edit=e.target.getAttribute('data-edit');if(edit)openEdit(edit);var del=e.target.getAttribute('data-del');if(del)deleteProduct(del).catch(function(err){alert(err.message||err)});var isNewBtn=e.target.getAttribute('data-new');if(isNewBtn)quickToggleNew(isNewBtn).catch(function(err){alert(err.message||err)});var isInhandBtn=e.target.getAttribute('data-inhand');if(isInhandBtn)quickToggleInhand(isInhandBtn).catch(function(err){alert(err.message||err)});var delSignup=e.target.getAttribute('data-del-signup');if(delSignup)removeCommunitySignup(delSignup).catch(function(err){alert(err.message||err)});var confirmOrderId=e.target.getAttribute('data-confirm-order');if(confirmOrderId)confirmOrder(confirmOrderId).catch(function(err){alert(err.message||err)});var rejectOrderId=e.target.getAttribute('data-reject-order');if(rejectOrderId)rejectOrder(rejectOrderId).catch(function(err){alert(err.message||err)});var statusCycle=e.target.getAttribute('data-status-cycle');if(statusCycle)quickStatusCycle(statusCycle).catch(function(err){alert(err.message||err)})});
