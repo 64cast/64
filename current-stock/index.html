@@ -68,10 +68,6 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
   nav img[alt="64CAST"]{height:16px!important;}
   #stockGrid{grid-template-columns:repeat(2,1fr)!important;gap:1px!important;padding:0!important;background:rgba(0,0,0,.06)!important;}
   #stockGrid .product-card{border-radius:0!important;background:#fff!important;border:none!important;box-shadow:none!important;}
-  #stockGrid .product-card[data-feat="1"]{grid-column:1/-1!important;display:grid!important;grid-template-columns:1fr 1fr!important;align-items:stretch!important;}
-  #stockGrid .product-card[data-feat="1"] > div:last-child{display:flex!important;flex-direction:column!important;justify-content:center!important;padding:16px 16px!important;}
-  #stockGrid .product-card[data-feat="1"] .cardTitle{font-size:.86rem!important;white-space:normal!important;line-height:1.25!important;margin:4px 0 12px!important;}
-  #stockGrid .product-card[data-feat="1"] .addbtn{width:34px!important;height:34px!important;}
   .cardTitle{font-size:.66rem!important;}
   #stockContainer{border-radius:16px!important;}
   div:has(>#stockContainer){padding:0!important;}
@@ -256,7 +252,6 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
         <div style="display:flex;flex-direction:column;max-height:260px;overflow-y:auto;"><a href="/minigt" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Mini GT</a><a href="/tarmacworks" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Tarmac Works</a><a href="/inno64" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Inno64</a><a href="/poprace" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">PopRace</a><a href="/bburago" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Bburago</a><a href="/bbrmodels" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">BBR Models</a><a href="/cmmodel" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">CM Model</a><a href="/hobbyjapan" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Hobby Japan</a><a href="/kaidohouse" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Kaido House</a><a href="/lego" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Lego</a><a href="/motorhelix" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Motorhelix</a><a href="/arbox" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">ARbox</a><a href="/trendshobby" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Trends Hobby</a><a href="/americandiorama" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">American Diorama</a><a href="/gcd" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">GCD</a><a href="/tiny" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Tiny</a><a href="/sparky" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Sparky</a><a href="/uniquemodel" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Unique Model</a><a href="/pgm" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">PGM</a><a href="/kyosho" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Kyosho</a><a href="/bmcreations" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">BM Creations</a></div>
       </details>
       <a href="/current-stock" class="navlink">Current Stock</a>
-      <a href="/inhand" class="navlink">Inhand</a>
       <a href="/current-stock?status=preorder" class="navlink">Pre-Order</a>
             <a href="/faq" class="navlink">FAQ</a>
     </div>
@@ -328,20 +323,18 @@ const IMAGE_BASE_URL = 'https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/'
 const WA_NUMBER = '971552112588';
 const IS_PREORDER = new URLSearchParams(window.location.search).get('status') === 'preorder';
 const QS_STATUS = new URLSearchParams(window.location.search).get('status');
-let activeStatuses = QS_STATUS === 'preorder' ? new Set(['preorder']) : QS_STATUS === 'currentstock' ? new Set(['currentstock','inhand']) : new Set(['inhand','currentstock','preorder']);
+let activeStatuses = QS_STATUS === 'preorder' ? new Set(['preorder']) : QS_STATUS === 'currentstock' ? new Set(['currentstock']) : new Set(['currentstock','preorder']);
 function renderStatusList(){
-  const counts = {inhand:0, currentstock:0, preorder:0, sold:0};
+  const counts = {currentstock:0, preorder:0, sold:0};
   allProducts.forEach(p => {
     const s = (p.STATUS||'').toLowerCase();
     const qty = Number(p.QTY||0);
     if (qty <= 0 || s === 'sold') counts.sold++;
     else if (s === 'preorder') counts.preorder++;
-    else if (['inhand'].includes(s)) counts.inhand++;
     else counts.currentstock++;
   });
-  const total = counts.inhand + counts.currentstock + counts.preorder + counts.sold;
+  const total = counts.currentstock + counts.preorder + counts.sold;
   const rows = [
-    {key:'inhand', label:'Inhand Items', count:counts.inhand},
     {key:'currentstock', label:'Current Stock', count:counts.currentstock},
     {key:'preorder', label:'Pre-Order', count:counts.preorder}
   ];
@@ -357,7 +350,7 @@ function renderStatusList(){
   }));
 }
 function updateHeading(){
-  const labels = { all:'All', inhand:'Inhand Items', currentstock:'Current Stock', preorder:'Pre-Order', sold:'Sold Out' };
+  const labels = { all:'All', currentstock:'Current Stock', preorder:'Pre-Order', sold:'Sold Out' };
   const label = activeStatuses.size === 1 ? labels[[...activeStatuses][0]] : 'Current Stock';
   const title = window.__BRAND_ROUTE__ ? `${window.__BRAND_ROUTE__} — 64CAST` : label + ' — 64CAST';
   const titleEl = document.getElementById('pageTitle');
@@ -414,7 +407,7 @@ function passesStatus(p){
   const s = (p.STATUS||'').toLowerCase();
   const qty = Number(p.QTY||0);
   if (qty <= 0 || s === 'sold') return false;
-  const bucket = s === 'preorder' ? 'preorder' : s === 'inhand' ? 'inhand' : 'currentstock';
+  const bucket = s === 'preorder' ? 'preorder' : 'currentstock';
   return activeStatuses.has(bucket);
 }
 
@@ -552,7 +545,7 @@ function renderGrid(){
     loadMoreWrap.style.display = 'none';
   }
   const grid = document.getElementById('stockGrid');
-  grid.innerHTML = visible.length ? visible.map((p, pIdx) => {
+  grid.innerHTML = visible.length ? visible.map(p => {
     const img = resolveImg(p);
     const img2 = resolveImg2(p);
     const resolveAny = raw => !raw ? '' : (/^https?:|^data:/.test(raw) ? raw : IMAGE_BASE_URL + raw);
@@ -561,9 +554,9 @@ function renderGrid(){
     const qty = Number(p.QTY||0);
     const disabled = qty <= 0;
     const s = (p.STATUS||'').toLowerCase();
-    const badge = disabled ? {bg:'rgba(10,10,10,.75)', color:'#fff', label:'Sold'} : s === 'preorder' ? {bg:'rgba(10,10,10,.85)', color:'#fff', label:'Pre-Order'} : s === 'inhand' ? {bg:'rgba(240,112,14,.15)', color:'#dd5912', label:'Inhand'} : null;
+    const badge = disabled ? {bg:'rgba(10,10,10,.75)', color:'#fff', label:'Sold'} : s === 'preorder' ? {bg:'rgba(10,10,10,.85)', color:'#fff', label:'Pre-Order'} : null;
     return `
-    <div class="product-card" data-feat="${pIdx % 5 === 4 ? '1' : ''}" data-product='${JSON.stringify(p).replace(/'/g,"&apos;")}' style="border-radius:18px;overflow:hidden;background:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.8);box-shadow:0 12px 30px rgba(0,0,0,.06);">
+    <div class="product-card" data-product='${JSON.stringify(p).replace(/'/g,"&apos;")}' style="border-radius:18px;overflow:hidden;background:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.8);box-shadow:0 12px 30px rgba(0,0,0,.06);">
       <div style="position:relative;aspect-ratio:1/1;background:#fff;overflow:hidden;cursor:pointer;">
         <img src="${imgs[0]}" data-imgs='${JSON.stringify(imgs)}' data-cur="0" alt="${name}" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;touch-action:pan-y;filter:${disabled?'grayscale(1)':'none'};" onerror="this.src='${fallbackImg}'"${imgs.length>1 ? ` onmouseenter="this.dataset.hoverCur=this.dataset.cur; this.dataset.cur=1; this.src=JSON.parse(this.dataset.imgs)[1];" onmouseleave="this.dataset.cur=this.dataset.hoverCur||0; this.src=JSON.parse(this.dataset.imgs)[Number(this.dataset.cur)];" ontouchstart="this.dataset.sx=event.touches[0].clientX" ontouchend="var im=JSON.parse(this.dataset.imgs);var dx=event.changedTouches[0].clientX-this.dataset.sx;if(Math.abs(dx)>30){var c=(Number(this.dataset.cur)+(dx<0?1:-1)+im.length)%im.length;this.dataset.cur=c;this.src=im[c];}"` : ''}>
         ${badge ? `<div style="position:absolute;top:8px;left:8px;padding:3px 9px;border-radius:999px;font-size:.44rem;letter-spacing:1px;text-transform:uppercase;font-weight:550;background:${badge.bg};color:${badge.color};">${badge.label}</div>` : ''}
@@ -678,7 +671,7 @@ function openProductDetail(product){
 }
 function etaLabel(product){
   const s = (product.STATUS||'').toLowerCase();
-  if (['inhand','readytocollect'].includes(s)) return 'Ready to Collect';
+  if (s === 'readytocollect') return 'Ready to Collect';
   if (['currentstock','instock'].includes(s)) return '< 15 Days';
   if (s === 'preorder') return product.ETA || 'TBD';
   return '';
