@@ -18,23 +18,23 @@ button{cursor:pointer}
 .hide{display:none!important}
 .glossW{background:linear-gradient(180deg,#ffffff 0%,#f1f1f2 55%,#e3e4e6 100%);border:1px solid rgba(255,255,255,.9);box-shadow:0 6px 14px rgba(0,0,0,.14),inset 0 1px 1px rgba(255,255,255,.9),inset 0 -2px 3px rgba(0,0,0,.06);color:#0a0a0a}
 .glossO{background:linear-gradient(180deg,#f9905a 0%,#ea6a1f 55%,#dd5912 100%);border:1px solid rgba(255,255,255,.5);box-shadow:0 6px 14px rgba(203,80,15,.35),inset 0 1px 1px rgba(255,255,255,.6),inset 0 -2px 3px rgba(0,0,0,.12);color:#fff}
-.btn{border:none;min-height:36px;padding:0 16px;text-transform:uppercase;letter-spacing:1.4px;font-size:.6rem;font-weight:600;border-radius:999px}
+.btn{border:none;min-height:36px;padding:0 16px;text-transform:uppercase;letter-spacing:1.4px;font-size:.6rem;font-weight:500;border-radius:999px}
 .btn.danger{background:var(--danger);color:#fff}
 .btn.ok{background:var(--ok);color:#fff}
 .btn.warn{background:#b54708;color:#fff}
 .btn:disabled{opacity:.45;cursor:not-allowed}
 .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
 .login-card{width:min(420px,100%);border-radius:24px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.7);box-shadow:0 20px 60px rgba(0,0,0,.1);padding:34px;backdrop-filter:blur(14px)}
-.login-title{text-transform:uppercase;letter-spacing:3px;font-size:.75rem;font-weight:600;margin-bottom:24px}
+.login-title{text-transform:uppercase;letter-spacing:3px;font-size:.75rem;font-weight:500;margin-bottom:24px}
 .app{display:none}.app.show{display:block}
 .field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
-.field label{text-transform:uppercase;letter-spacing:1.4px;font-size:.65rem;color:#888;font-weight:600}
+.field label{text-transform:uppercase;letter-spacing:1.4px;font-size:.65rem;color:#888;font-weight:500}
 .field input,.field select,.field textarea{border:1px solid rgba(0,0,0,.12);background:rgba(255,255,255,.7);min-height:40px;padding:0 12px;outline:none;border-radius:8px;font-family:var(--font)}
 .field textarea{min-height:90px;padding:10px 12px;resize:vertical}
 .field small{font-size:.68rem;color:#888}
 .error{color:var(--danger);font-size:.78rem;margin:10px 0}
 .top{min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:0 32px;position:sticky;top:0;z-index:30;background:rgba(255,255,255,.6);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.7)}
-.brand{font-weight:600;letter-spacing:2px;text-transform:uppercase;font-size:.8rem}
+.brand{font-weight:500;letter-spacing:2px;text-transform:uppercase;font-size:.8rem}
 .top-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:10px 0}
 .stats{display:grid;grid-template-columns:repeat(6,minmax(120px,1fr));gap:14px;padding:20px 32px}
 .stat{border-radius:16px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.7);padding:16px 18px;box-shadow:0 10px 30px rgba(0,0,0,.05)}
@@ -42,10 +42,10 @@ button{cursor:pointer}
 .stat-label{text-transform:uppercase;letter-spacing:1.5px;font-size:.65rem;color:#888;margin-top:6px}
 .toolbar{padding:0 32px 14px;display:grid;grid-template-columns:1.4fr repeat(3,minmax(140px,.4fr));gap:10px}
 .search,.sel{height:40px;border-radius:999px;border:1px solid rgba(0,0,0,.12);background:rgba(255,255,255,.6);padding:0 16px;outline:none;font-family:var(--font);font-size:.75rem}
-.notice{margin:0 32px 14px;font-size:.72rem;letter-spacing:.5px;color:#888;text-transform:uppercase}
+.notice{margin:0 32px 6px;font-size:.72rem;letter-spacing:.5px;color:#888;text-transform:uppercase}
 .panel{margin:0 32px 18px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.7);border-radius:18px;box-shadow:0 12px 30px rgba(0,0,0,.05)}
 .panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid rgba(0,0,0,.06);flex-wrap:wrap}
-.panel-title{text-transform:uppercase;letter-spacing:2px;font-size:.72rem;font-weight:600}
+.panel-title{text-transform:uppercase;letter-spacing:2px;font-size:.72rem;font-weight:500}
 .panel-body{padding:16px 18px}
 .health-list{display:grid;gap:8px;font-size:.76rem}
 .health-bad{color:var(--danger)}.health-ok{color:var(--ok)}
@@ -61,8 +61,9 @@ tr.prow.drop-target td{border-top:2px solid var(--orange)}
 .name{font-weight:500;line-height:1.3;max-width:260px}
 .muted{color:#888}
 .mono{font-family:ui-monospace,Menlo,monospace;font-size:.68rem}
-.status-pill{display:inline-flex;align-items:center;gap:6px;border:none;padding:5px 10px;border-radius:999px;text-transform:uppercase;font-size:.62rem;letter-spacing:1px;font-weight:600;cursor:pointer}
+.status-pill{display:inline-flex;align-items:center;gap:6px;border:none;padding:5px 10px;border-radius:999px;text-transform:uppercase;font-size:.62rem;letter-spacing:1px;font-weight:500;cursor:pointer}
 .status-pill.currentstock{background:rgba(26,122,74,.15);color:var(--ok)}
+.status-pill.inhand{background:rgba(10,10,10,.1);color:#0a0a0a}
 .status-pill.preorder{background:rgba(221,89,18,.15);color:var(--orange)}
 .status-pill.sold{background:rgba(180,35,24,.12);color:var(--danger)}
 .price-input{width:74px;height:30px;border:1px solid transparent;border-radius:8px;padding:0 8px;background:transparent;font-family:var(--font);font-size:.78rem}
@@ -70,7 +71,8 @@ tr.prow.drop-target td{border-top:2px solid var(--orange)}
 .row-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .link-btn{background:none;border:none;color:#888;text-transform:uppercase;font-size:.66rem;letter-spacing:1px;padding:0;text-decoration:underline;text-underline-offset:2px}
 .link-btn.danger{color:var(--danger)}
-.link-btn.new-active{color:var(--orange);font-weight:600}
+.link-btn.new-active{color:var(--orange);font-weight:500}
+@media (max-width:760px){#inhandPanel .panel-body{grid-template-columns:1fr!important}}
 .mini-input{height:30px;border:1px solid rgba(0,0,0,.12);padding:0 8px;background:rgba(255,255,255,.7);border-radius:8px}
 .qty-input{width:60px;text-align:center}
 .pagination{margin:0 32px 32px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px 18px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.7);border-top:none;border-radius:0 0 18px 18px;font-size:.72rem;color:#888}
@@ -86,7 +88,7 @@ tr.prow.drop-target td{border-top:2px solid var(--orange)}
 .modal{background:rgba(255,255,255,.98);width:min(900px,100%);box-shadow:0 20px 60px rgba(0,0,0,.25);border-radius:20px;margin:auto}
 .modal.small{width:min(560px,100%)}
 .modal-head{height:56px;border-bottom:1px solid rgba(0,0,0,.06);display:flex;align-items:center;justify-content:space-between;padding:0 20px}
-.modal-title{text-transform:uppercase;letter-spacing:2px;font-size:.68rem;font-weight:600}
+.modal-title{text-transform:uppercase;letter-spacing:2px;font-size:.68rem;font-weight:500}
 .close{width:30px;height:30px;border-radius:999px;background:rgba(0,0,0,.05);border:none;font-size:1rem}
 .modal-body{padding:20px}
 .modal-foot{border-top:1px solid rgba(0,0,0,.06);padding:16px 20px;display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
@@ -94,7 +96,7 @@ tr.prow.drop-target td{border-top:2px solid var(--orange)}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .drop{border:2px dashed #c8c8c8;background:#fff;padding:22px;text-align:center;border-radius:12px}
 .preview-box{max-height:220px;overflow:auto;border:1px solid rgba(0,0,0,.08);margin-top:14px;text-align:left;background:#fafafa;padding:12px;font-size:.72rem;border-radius:10px}
-.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(12px);background:#0a0a0a;color:#fff;padding:12px 20px;text-transform:uppercase;letter-spacing:1.4px;font-size:.56rem;font-weight:600;border-radius:999px;opacity:0;pointer-events:none;transition:.25s;z-index:100}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(12px);background:#0a0a0a;color:#fff;padding:12px 20px;text-transform:uppercase;letter-spacing:1.4px;font-size:.56rem;font-weight:500;border-radius:999px;opacity:0;pointer-events:none;transition:.25s;z-index:100}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 @media(max-width:900px){.top{flex-direction:column;align-items:flex-start;padding:12px 16px}.stats{grid-template-columns:repeat(2,1fr);padding-left:16px;padding-right:16px}.toolbar{grid-template-columns:1fr;padding-left:16px;padding-right:16px}.notice,.panel,.table-wrap,.pagination{margin-left:16px;margin-right:16px}.grid2,.grid3{grid-template-columns:1fr}}
 </style>
@@ -115,11 +117,9 @@ tr.prow.drop-target td{border-top:2px solid var(--orange)}
     <div class="top-actions">
       <button id="healthBtn" class="glossW btn" type="button">Health Check</button>
       <button id="communityBtn" class="glossW btn" type="button">Community Signups</button>
+      <button id="inhandBtn" class="glossW btn" type="button">Inhand Site</button>
       <button id="ordersBtn" class="glossW btn" type="button">Pending Orders</button>
       <button id="addBtn" class="glossO btn" type="button">+ Add Product</button>
-      <button id="importBtn" class="glossW btn" type="button">Import</button>
-      <button id="exportBtn" class="glossW btn" type="button">Export JSON</button>
-      <button id="exportCsvBtn" class="glossW btn" type="button">Export CSV</button>
       <button id="refreshBtn" class="glossW btn" type="button">Refresh</button>
       <button id="logoutBtn" class="btn danger" type="button">Logout</button>
     </div>
@@ -149,12 +149,44 @@ tr.prow.drop-target td{border-top:2px solid var(--orange)}
     <div id="ordersBody" class="panel-body" style="display:grid;gap:12px"></div>
   </div>
 
+  <div id="inhandPanel" class="panel hide">
+    <div class="panel-head">
+      <div>
+        <div class="panel-title">Inhand Site Manager</div>
+        <div class="muted" style="font-size:.68rem">Pick the products, then hit <strong>Publish live</strong> — the /inhand site updates instantly, no redeploy. <span id="inhandLiveState"></span></div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <input id="inhandKey" class="mini-input" type="password" placeholder="Publish key" style="height:34px;width:130px">
+        <button id="inhandPullBtn" class="glossW btn" type="button">Pull live list</button>
+        <button id="inhandPublishBtn" class="glossO btn" type="button">Publish live</button>
+        <button id="inhandLoadBtn" class="link-btn" type="button">Load file</button>
+        <button id="inhandDownloadBtn" class="link-btn" type="button">Download file</button>
+        <input id="inhandFileInput" type="file" accept=".json,application/json" class="hide">
+      </div>
+    </div>
+    <div class="panel-body" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start">
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px">
+          <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:1.4px;font-weight:500">On Inhand Site (<span id="inhandOnCount">0</span>)</div>
+          <button id="inhandClearAllBtn" class="link-btn danger" type="button">Remove all</button>
+        </div>
+        <div id="inhandOnList" style="display:grid;gap:6px;max-height:460px;overflow:auto"></div>
+      </div>
+      <div>
+        <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:1.4px;font-weight:500;margin-bottom:10px">Add Products</div>
+        <input id="inhandSearch" class="mini-input" placeholder="Search product, model, brand..." style="width:100%;height:34px;margin-bottom:10px">
+        <div id="inhandOffList" style="display:grid;gap:6px;max-height:420px;overflow:auto"></div>
+      </div>
+    </div>
+  </div>
+
   <div id="bulkBar" class="panel hide" style="position:sticky;top:60px;z-index:20;background:rgba(10,10,10,.9);color:#fff;border-color:rgba(10,10,10,.9)">
     <div class="panel-head" style="border-bottom:0;flex-wrap:wrap;gap:10px">
-      <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:1.4px;font-weight:600"><span id="bulkCount">0</span> selected</div>
+      <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:1.4px;font-weight:500"><span id="bulkCount">0</span> selected</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
         <select id="bulkStatusSel" class="sel" style="height:32px">
           <option value="currentstock">Current Stock</option>
+          <option value="inhand">Inhand</option>
           <option value="preorder">Pre-Order</option>
           <option value="sold">Sold Out</option>
         </select>
@@ -165,6 +197,7 @@ tr.prow.drop-target td{border-top:2px solid var(--orange)}
         <button id="bulkCarbrandBtn" class="glossW btn" type="button">Apply Car Brand</button>
         <button id="bulkNewOnBtn" class="glossW btn" type="button">+ New Arrival</button>
         <button id="bulkNewOffBtn" class="glossW btn" type="button">- New Arrival</button>
+        <button id="bulkInhandBtn" class="glossW btn" type="button">Set Inhand</button>
         <button id="bulkDeleteBtn" class="btn danger" type="button">Delete Selected</button>
         <button id="bulkClearBtn" class="glossW btn" type="button">Clear</button>
       </div>
@@ -173,7 +206,7 @@ tr.prow.drop-target td{border-top:2px solid var(--orange)}
 
   <div class="table-wrap">
     <table class="table">
-      <thead><tr><th style="width:32px"><input type="checkbox" id="selectAllCk"></th><th style="width:28px"></th><th>Image</th><th>Product</th><th>Brand</th><th>Car Brand</th><th>Model No.</th><th>Status</th><th>ETA</th><th>Qty</th><th>Price</th><th>Actions</th></tr></thead>
+      <thead><tr><th style="width:32px"><input type="checkbox" id="selectAllCk"></th><th style="width:28px"></th><th style="width:64px">Image</th><th>Product</th><th>Brand</th><th>Car Brand</th><th>Model No.</th><th>Status</th><th>ETA</th><th>Qty</th><th>Price</th><th>Actions</th></tr></thead>
       <tbody id="tbody"></tbody>
     </table>
   </div>
@@ -192,7 +225,7 @@ tr.prow.drop-target td{border-top:2px solid var(--orange)}
         <div class="field"><label>Car Brand</label><input id="fCarbrand" list="carList"></div>
       </div>
       <div class="grid3">
-        <div class="field"><label>Status</label><select id="fStatus"><option value="currentstock">Current Stock</option><option value="preorder">Pre-Order</option><option value="sold">Sold Out</option></select></div>
+        <div class="field"><label>Status</label><select id="fStatus"><option value="currentstock">Current Stock</option><option value="inhand">Inhand</option><option value="preorder">Pre-Order</option><option value="sold">Sold Out</option></select></div>
         <div class="field"><label>ETA Month</label><select id="fEta"><option value="">No ETA</option></select></div>
         <div class="field"><label>Sort Position</label><input id="fSort" type="number" min="1" step="1"><small>Or just drag the row on the table.</small></div>
         <div class="field"><label>Qty</label><input id="fQty" type="number" min="0" step="1"></div>
@@ -216,14 +249,6 @@ tr.prow.drop-target td{border-top:2px solid var(--orange)}
   </div>
 </div>
 
-<div id="importModal" class="modal-back">
-  <div class="modal small">
-    <div class="modal-head"><div class="modal-title">Import Products</div><button class="close" data-close="importModal" type="button">×</button></div>
-    <div class="modal-body"><div class="drop">Upload CSV, XLSX or JSON<br><input id="fileInput" type="file" accept=".csv,.xlsx,.xls,.json"></div><div id="importSummary" class="preview-box hide"></div></div>
-    <div class="modal-foot"><button id="importUpsertBtn" class="btn ok" disabled type="button">Import / Update</button><button id="replaceBtn" class="btn danger" disabled type="button">Replace All</button></div>
-  </div>
-</div>
-
 <div id="toast" class="toast"></div>
 
 <script>
@@ -232,6 +257,7 @@ tr.prow.drop-target td{border-top:2px solid var(--orange)}
 var API_URL='https://64cast-products-api.trailsec5.workers.dev';
 var R2_BASE='https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/';
 var TOKEN_KEY='64cast_admin_token';
+var SAVE_LOG=[];
 var PRODUCTS=[]; var IMPORT_ROWS=[]; var LAST_HEALTH=null; var CURRENT_PAGE=1; var PAGE_SIZE=25;
 var MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
 var $=function(id){return document.getElementById(id)};
@@ -245,14 +271,14 @@ function toast(msg){$('toast').textContent=msg;$('toast').classList.add('show');
 function showApp(ok){$('loginView').classList.toggle('hide',ok);$('app').classList.toggle('show',ok)}
 function showNotice(s){$('notice').textContent=s}
 function modelOf(p){return clean(p&&(p['MODEL NO.']||p.modelNo||p.model||p.MODELNO))}
-function statusOf(p){var s=clean(p&&(p.STATUS||p.status||p.tag)).toLowerCase().replace(/[\s_-]+/g,''); if(s==='soldout'||s==='outofstock'||s==='out')return 'sold'; if(s==='preorder'||s==='preorders'||s==='preorderitem')return 'preorder'; if(s==='ready'||s==='instock'||s==='available'||s==='currentstock')return 'currentstock'; return num(p&&(p.QTY||p.qty),0)===0?'sold':'currentstock'}
+function statusOf(p){var s=clean(p&&(p.STATUS||p.status||p.tag)).toLowerCase().replace(/[\s_-]+/g,''); if(s==='inhand'||s==='inhandnow'||s==='inhanditem')return 'inhand'; if(s==='soldout'||s==='outofstock'||s==='out')return 'sold'; if(s==='preorder'||s==='preorders'||s==='preorderitem')return 'preorder'; if(s==='ready'||s==='instock'||s==='available'||s==='currentstock')return 'currentstock'; return num(p&&(p.QTY||p.qty),0)===0?'sold':'currentstock'}
 function imageOf(p){return clean(p&&(p.IMG1||p.img1||(p.imgs&&p.imgs[0])))||imgUrl(modelOf(p),1)}
 function imgUrl(model,n){var m=clean(model).replace(/\//g,'-');return m?R2_BASE+m+'-'+String(n).padStart(2,'0')+'.jpg':''}
 function canonicalProduct(raw,i){var map={}; Object.keys(raw||{}).forEach(function(k){map[normKey(k)]=raw[k]});
   var model=clean(map.MODELNO||map.MODELNUMBER||map.MODEL||raw['MODEL NO.']);
   var status=statusOf({STATUS:map.STATUS||raw.STATUS||raw.status||raw.tag,QTY:map.QTY||raw.QTY||raw.qty});
   var qty=Math.max(0,Math.floor(num(map.QTY||map.QUANTITY||raw.QTY||raw.qty,0)));
-  if(status==='sold') qty=0; if(qty===0 && status!=='preorder') status='sold';
+  if(status==='sold') qty=0; if(status==='inhand'&&qty===0) qty=1; if(qty===0 && status!=='preorder' && status!=='inhand') status='sold';
   var price=num(map.PRICE||map.SALEPRICE||raw.PRICE||raw.price,0);
   var p={
     'REF IMG':clean(map.REFIMG||raw['REF IMG']||''),
@@ -284,7 +310,7 @@ async function apiPost(body,auth){var headers={'Content-Type':'application/json'
 async function verify(){if(!token())return false;try{await apiPost({action:'admin-verify'});return true}catch(e){setToken('');return false}}
 async function load(){showNotice('Loading products...');var data=await apiGet();PRODUCTS=normaliseAll(Array.isArray(data)?data:(data.products||data.rows||[]));render();showNotice('Loaded '+PRODUCTS.length+' products.');}
 function fillSelect(id,label,items){var val=$(id).value;$(id).innerHTML='<option value="">'+esc(label)+'</option>'+items.map(function(x){return '<option value="'+esc(x)+'">'+esc(x)+'</option>'}).join('');$(id).value=items.indexOf(val)>=0?val:''}
-function render(){var brands=Array.from(new Set(PRODUCTS.map(function(p){return clean(p.BRAND)}).filter(Boolean))).sort();var cars=Array.from(new Set(PRODUCTS.map(function(p){return clean(p.CARBRAND)}).filter(Boolean))).sort();fillSelect('brandFilter','All Brands',brands);fillSelect('carFilter','All Car Brands',cars);fillSelect('statusFilter','All Status',['currentstock','preorder','sold']);$('brandList').innerHTML=brands.map(function(x){return '<option value="'+esc(x)+'"></option>'}).join('');$('carList').innerHTML=cars.map(function(x){return '<option value="'+esc(x)+'"></option>'}).join('');renderStats();renderTable();}
+function render(){var brands=Array.from(new Set(PRODUCTS.map(function(p){return clean(p.BRAND)}).filter(Boolean))).sort();var cars=Array.from(new Set(PRODUCTS.map(function(p){return clean(p.CARBRAND)}).filter(Boolean))).sort();fillSelect('brandFilter','All Brands',brands);fillSelect('carFilter','All Car Brands',cars);fillSelect('statusFilter','All Status',['currentstock','inhand','preorder','sold']);$('brandList').innerHTML=brands.map(function(x){return '<option value="'+esc(x)+'"></option>'}).join('');$('carList').innerHTML=cars.map(function(x){return '<option value="'+esc(x)+'"></option>'}).join('');renderStats();renderTable();renderInhandPanel();}
 function renderStats(){var total=PRODUCTS.length,ready=0,pre=0,sold=0,qty=0,brands={};PRODUCTS.forEach(function(p){var s=statusOf(p);if(s==='preorder')pre++;else if(s==='sold')sold++;else ready++;qty+=num(p.QTY,0);if(p.BRAND)brands[p.BRAND]=1});$('stats').innerHTML=[['Products',total],['Available Qty',qty],['Current Stock',ready],['Pre-Order',pre],['Sold Out',sold],['Brands',Object.keys(brands).length]].map(function(x){return '<div class="stat"><div class="stat-num">'+x[1]+'</div><div class="stat-label">'+x[0]+'</div></div>'}).join('')}
 function filtered(){var q=clean($('searchInput').value).toLowerCase(),b=$('brandFilter').value,c=$('carFilter').value,s=$('statusFilter').value;return currentOrdered().filter(function(p){var text=[p.BRAND,p.CARBRAND,p['PRODUCT NAME'],modelOf(p)].join(' ').toLowerCase();return (!q||text.indexOf(q)>=0)&&(!b||p.BRAND===b)&&(!c||p.CARBRAND===c)&&(!s||statusOf(p)===s)})}
 function renderPagination(total){
@@ -306,9 +332,9 @@ function renderPagination(total){
   if(next)next.onclick=function(){CURRENT_PAGE++;renderTable()};
   if(sizeSel)sizeSel.onchange=function(){PAGE_SIZE=num(this.value,25);CURRENT_PAGE=1;renderTable()};
 }
-var STATUS_CYCLE=['currentstock','preorder','sold'];
-function statusPill(st){return '<button type="button" class="status-pill '+esc(st)+'" data-status-cycle="__MODEL__" title="Click to change status">'+(st==='currentstock'?'Current Stock':st==='preorder'?'Pre-Order':'Sold Out')+'</button>'}
-function renderTable(){var all=filtered();renderPagination(all.length);var rows=all.slice((CURRENT_PAGE-1)*PAGE_SIZE,CURRENT_PAGE*PAGE_SIZE);$('tbody').innerHTML=rows.length?rows.map(function(p){var st=statusOf(p),m=modelOf(p),isNew=clean(p.NEW).toLowerCase()==='yes';return '<tr class="prow" draggable="true" data-model="'+esc(m)+'"><td><input type="checkbox" class="row-ck" data-ck="'+esc(m)+'" '+(SELECTED_MODELS.has(m)?'checked':'')+'></td><td><span class="drag-handle">\u22ee\u22ee</span></td><td><img class="thumb" src="'+esc(imageOf(p))+'" alt="'+esc(p['PRODUCT NAME']||m)+'" onerror="this.style.visibility=\'hidden\'"></td><td><div class="name">'+esc(p['PRODUCT NAME'])+'</div><div class="muted mono">'+esc(p.SCALE)+'</div></td><td>'+esc(p.BRAND)+'</td><td>'+esc(p.CARBRAND||'-')+'</td><td class="mono">'+esc(m)+'</td><td>'+statusPill(st).replace('__MODEL__',esc(m))+'</td><td>'+esc(p.ETA||'-')+'</td><td><input class="mini-input qty-input" data-qty="'+esc(m)+'" type="number" min="0" step="1" value="'+esc(p.QTY)+'" '+(st==='sold'?'readonly':'')+'></td><td><input class="price-input" data-price="'+esc(m)+'" type="number" min="0" step="0.01" value="'+esc(p.PRICE)+'"></td><td><div class="row-actions"><button class="link-btn'+(isNew?' new-active':'')+'" data-new="'+esc(m)+'" title="Toggle New Arrival">'+(isNew?'\u2605 New':'+ New')+'</button><button class="link-btn" data-edit="'+esc(m)+'">Edit</button><button class="link-btn danger" data-del="'+esc(m)+'">Delete</button></div></td></tr>'}).join(''):'<tr><td colspan="12" style="text-align:center;padding:40px;color:#999">No products found</td></tr>';attachDrag();}
+var STATUS_CYCLE=['currentstock','inhand','preorder','sold'];
+function statusPill(st){return '<button type="button" class="status-pill '+esc(st)+'" data-status-cycle="__MODEL__" title="Click to change status">'+(st==='currentstock'?'Current Stock':st==='inhand'?'Inhand':st==='preorder'?'Pre-Order':'Sold Out')+'</button>'}
+function renderTable(){var all=filtered();renderPagination(all.length);var rows=all.slice((CURRENT_PAGE-1)*PAGE_SIZE,CURRENT_PAGE*PAGE_SIZE);$('tbody').innerHTML=rows.length?rows.map(function(p){var st=statusOf(p),m=modelOf(p),isNew=clean(p.NEW).toLowerCase()==='yes';return '<tr class="prow" draggable="true" data-model="'+esc(m)+'"><td><input type="checkbox" class="row-ck" data-ck="'+esc(m)+'" '+(SELECTED_MODELS.has(m)?'checked':'')+'></td><td><span class="drag-handle">\u22ee\u22ee</span></td><td><img class="thumb" src="'+esc(imageOf(p))+'" alt="'+esc(p['PRODUCT NAME']||m)+'" onerror="this.style.visibility=\'hidden\'"></td><td><div class="name">'+esc(p['PRODUCT NAME'])+'</div><div class="muted mono">'+esc(p.SCALE)+'</div></td><td>'+esc(p.BRAND)+'</td><td>'+esc(p.CARBRAND||'-')+'</td><td class="mono">'+esc(m)+'</td><td>'+statusPill(st).replace('__MODEL__',esc(m))+'</td><td>'+esc(p.ETA||'-')+'</td><td><input class="mini-input qty-input" data-qty="'+esc(m)+'" type="number" min="0" step="1" value="'+esc(p.QTY)+'" '+(st==='sold'?'readonly':'')+'></td><td><input class="price-input" data-price="'+esc(m)+'" type="number" min="0" step="0.01" value="'+esc(p.PRICE)+'"></td><td><div class="row-actions"><button class="link-btn'+(isNew?' new-active':'')+'" data-new="'+esc(m)+'" title="Toggle New Arrival">'+(isNew?'\u2605 New':'+ New')+'</button><button class="link-btn'+(st==='inhand'?' new-active':'')+'" data-inhand="'+esc(m)+'" title="Toggle Inhand">'+(st==='inhand'?'\u2605 Inhand':'+ Inhand')+'</button><button class="link-btn" data-edit="'+esc(m)+'">Edit</button><button class="link-btn danger" data-del="'+esc(m)+'">Delete</button></div></td></tr>'}).join(''):'<tr><td colspan="12" style="text-align:center;padding:40px;color:#999">No products found</td></tr>';attachDrag();}
 function attachDrag(){
   var dragModel=null;
   document.querySelectorAll('tr.prow').forEach(function(row){
@@ -339,13 +365,13 @@ function updateBulkBar(){
 async function bulkSetStatus(status){
   if(!SELECTED_MODELS.size)return;
   PRODUCTS.forEach(function(p){if(SELECTED_MODELS.has(modelOf(p))){p.STATUS=status;if(status==='sold')p.QTY=0;else if(num(p.QTY,0)===0)p.QTY=1;}});
-  await persistProducts(PRODUCTS);
+  try{await persistProducts(PRODUCTS);}catch(e){alert('Save failed: '+(e.message||e));return;}
   toast('Updated status for '+SELECTED_MODELS.size+' product(s)');
 }
 async function bulkSetFlag(field,value){
   if(!SELECTED_MODELS.size)return;
   PRODUCTS.forEach(function(p){if(SELECTED_MODELS.has(modelOf(p)))p[field]=value?'yes':'';});
-  await persistProducts(PRODUCTS);
+  try{await persistProducts(PRODUCTS);}catch(e){alert('Save failed: '+(e.message||e));return;}
   toast((value?'Added to ':'Removed from ')+(field==='NEW'?'New Arrivals':'Featured'));
 }
 async function bulkSetText(field,value){
@@ -353,7 +379,7 @@ async function bulkSetText(field,value){
   var v=clean(value);
   if(!v){alert('Enter a value first.');return}
   PRODUCTS.forEach(function(p){if(SELECTED_MODELS.has(modelOf(p)))p[field]=v;});
-  await persistProducts(PRODUCTS);
+  try{await persistProducts(PRODUCTS);}catch(e){alert('Save failed: '+(e.message||e));return;}
   toast('Updated '+(field==='BRAND'?'Brand':'Car Brand')+' for '+SELECTED_MODELS.size+' product(s)');
 }
 async function bulkDelete(){
@@ -362,7 +388,7 @@ async function bulkDelete(){
   PRODUCTS=PRODUCTS.filter(function(p){return !SELECTED_MODELS.has(modelOf(p))});
   var count=SELECTED_MODELS.size;
   SELECTED_MODELS.clear();
-  await persistProducts(PRODUCTS);
+  try{await persistProducts(PRODUCTS);}catch(e){alert('Save failed: '+(e.message||e));return;}
   toast('Deleted '+count+' product(s)');
 }
 function syncStatusQty(statusEl,qtyEl){var st=statusOf({STATUS:statusEl.value,QTY:qtyEl.value}); if(st==='sold'){qtyEl.value=0;qtyEl.readOnly=true;statusEl.value='sold';}else{qtyEl.readOnly=false;if(num(qtyEl.value,0)===0&&st!=='preorder'){statusEl.value='sold';qtyEl.readOnly=true;}}}
@@ -400,62 +426,116 @@ document.querySelectorAll('.img-drop').forEach(function(zone){
 function formProduct(){syncStatusQty($('fStatus'),$('fQty'));var model=clean($('fModel').value);if(!model)throw new Error('MODEL NO. is required');if(/[?#\\&%"'<>]/.test(model))throw new Error('MODEL NO. has unsafe characters. Avoid # ? \\ & % " \' < >');var old=$('fOriginalModel').value;var dup=PRODUCTS.find(function(p){return modelOf(p)===model && modelOf(p)!==old});if(dup)throw new Error('Duplicate MODEL NO.: '+model);var status=statusOf({STATUS:$('fStatus').value,QTY:$('fQty').value});var qty=Math.max(0,Math.floor(num($('fQty').value,0)));if(status==='sold')qty=0;if(qty===0&&status!=='preorder')status='sold';var price=num($('fPrice').value,0);var p={'REF IMG':'',BRAND:clean($('fBrand').value),CARBRAND:clean($('fCarbrand').value),SCALE:'1:64','PRODUCT NAME':clean($('fName').value),'MODEL NO.':model,PRICE:price,ORIGPRICE:num($('fOrigPrice').value,price),QTY:qty,STATUS:status,ETA:clean($('fEta').value),SORTORDER:Math.max(1,Math.floor(num($('fSort').value,PRODUCTS.length+1))),IMG1:clean($('fImg1').value)||imgUrl(model,1),IMG2:clean($('fImg2').value)||imgUrl(model,2),IMG3:clean($('fImg3').value)||imgUrl(model,3),IMG4:clean($('fImg4').value)||imgUrl(model,4),IMAGE_SCALE:Math.max(70,Math.min(130,num($('fImageScale').value,100))),NEW:clean($('fNew').value),DESCRIPTION:clean($('fDescription').value)};return p}
 async function persistProducts(list){
   var arr=normaliseAll(list);
+  SAVE_LOG=[];
+  var okAction=null;
   try{
-    await apiPost({action:'replace',products:arr});
+    await apiPost({action:'replace',products:arr}); okAction='replace';
   }catch(e1){
+    SAVE_LOG.push('replace failed: '+(e1.message||e1));
     try{
-      await apiPost({action:'import',products:arr});
+      await apiPost({action:'import',products:arr}); okAction='import';
     }catch(e2){
+      SAVE_LOG.push('import failed: '+(e2.message||e2));
+      var lastErr=e2;
       for(var i=0;i<arr.length;i++){
-        await apiPost({action:'update',product:arr[i]});
+        try{ await apiPost({action:'update',product:arr[i]}); lastErr=null; }
+        catch(e3){ lastErr=e3; }
       }
+      okAction='update-loop';
+      if(lastErr){SAVE_LOG.push('update failed: '+(lastErr.message||lastErr)); throw lastErr;}
     }
   }
+  SAVE_LOG.push('accepted via: '+okAction);
   PRODUCTS=arr;
   render();
   return true;
 }
-async function saveProduct(){var old=$('fOriginalModel').value;var p=formProduct();var list=PRODUCTS.slice();if(old){var idx=list.findIndex(function(x){return modelOf(x)===old});if(idx>=0)list[idx]=p; if(old!==modelOf(p))await apiPost({action:'delete',modelNo:old});}else list.push(p);list=moveToPosition(list,modelOf(p),p.SORTORDER);await persistProducts(list);$('editModal').classList.remove('open');toast('Saved')}
-async function deleteProduct(model){if(!confirm('Delete '+model+'?'))return;await apiPost({action:'delete',modelNo:model});PRODUCTS=PRODUCTS.filter(function(p){return modelOf(p)!==model});PRODUCTS=reindexStable(PRODUCTS);try{await persistProducts(PRODUCTS)}catch(e){}render();toast('Deleted')}
-async function quickQty(model,value){
-  var p=PRODUCTS.find(function(x){return modelOf(x)===model});
-  if(!p)return;
-  var qty=Math.max(0,Math.floor(num(value,0)));
-  p.QTY=qty;
-  if(qty===0&&statusOf(p)!=='preorder')p.STATUS='sold';
-  if(qty>0&&statusOf(p)==='sold')p.STATUS='currentstock';
-  await persistProducts(PRODUCTS);
-  toast('Inventory updated')
+var INHAND_KEY='64cast_inhand_models';
+var INHAND=[];
+try{ INHAND=JSON.parse(localStorage.getItem(INHAND_KEY)||'[]')||[] }catch(e){ INHAND=[] }
+function inhandStore(){ try{ localStorage.setItem(INHAND_KEY,JSON.stringify(INHAND)) }catch(e){} }
+function isOnInhand(p){ return INHAND.indexOf(modelOf(p))>=0 }
+function quickToggleInhand(model){
+  var i=INHAND.indexOf(model);
+  if(i>=0) INHAND.splice(i,1); else INHAND.push(model);
+  inhandStore(); renderInhandPanel();
+  inhandState('Unpublished changes \u2014 hit Publish live.',true);
+  toast(i>=0?'Removed \u2014 hit Publish live':'Added \u2014 hit Publish live');
+  return Promise.resolve();
 }
-async function quickPrice(model,value){
-  var p=PRODUCTS.find(function(x){return modelOf(x)===model});
-  if(!p)return;
-  p.PRICE=Math.max(0,num(value,p.PRICE));
-  await persistProducts(PRODUCTS);
-  toast('Price updated')
+function inhandRemoveAll(){
+  if(!INHAND.length) return Promise.resolve();
+  if(!confirm('Remove all '+INHAND.length+' product(s) from the inhand list?')) return Promise.resolve();
+  INHAND=[]; inhandStore(); renderInhandPanel(); inhandState('Unpublished changes \u2014 hit Publish live.',true); toast('List cleared \u2014 hit Publish live');
+  return Promise.resolve();
 }
-async function quickStatusCycle(model){
-  var p=PRODUCTS.find(function(x){return modelOf(x)===model});
-  if(!p)return;
-  var cur=statusOf(p);
-  var next=STATUS_CYCLE[(STATUS_CYCLE.indexOf(cur)+1)%STATUS_CYCLE.length];
-  p.STATUS=next;
-  if(next==='sold')p.QTY=0;
-  else if(num(p.QTY,0)===0)p.QTY=1;
-  await persistProducts(PRODUCTS);
-  toast('Status set to '+(next==='currentstock'?'Current Stock':next==='preorder'?'Pre-Order':'Sold Out'))
+var INHAND_KEY_STORE='64cast_inhand_publish_key';
+function inhandKey(){ var el=$('inhandKey'); return el?clean(el.value):'' }
+function inhandState(msg,bad){ var el=$('inhandLiveState'); if(el){el.textContent=msg||''; el.style.color=bad?'#c0392b':'#1e8449'} }
+async function inhandPublish(){
+  var key=inhandKey();
+  if(!key){ inhandState('Enter the publish key first.',true); return }
+  try{ localStorage.setItem(INHAND_KEY_STORE,key) }catch(e){}
+  inhandState('Publishing\u2026');
+  var res=await fetch('/api/inhand',{method:'POST',headers:{'content-type':'application/json','x-admin-key':key},body:JSON.stringify({models:INHAND})});
+  var data=null; try{ data=await res.json() }catch(e){}
+  if(!res.ok){ inhandState('Publish failed: '+((data&&data.error)||('HTTP '+res.status)),true); return }
+  inhandState('Live \u2014 '+((data&&data.count)||0)+' product(s) published just now.');
+  toast('Published to the inhand site');
 }
-async function quickOrder(model,value){
-  PRODUCTS=moveToPosition(PRODUCTS,model,value);
-  await persistProducts(PRODUCTS);
-  toast('Order updated and saved to live site')
+async function inhandPull(){
+  inhandState('Loading live list\u2026');
+  var res=await fetch('/api/inhand',{cache:'no-store'});
+  var data=null; try{ data=await res.json() }catch(e){}
+  if(!res.ok||!data){ inhandState('Could not read live list: '+((data&&data.error)||('HTTP '+res.status)),true); return }
+  INHAND=(data.models||[]).map(clean).filter(Boolean);
+  inhandStore(); renderInhandPanel();
+  inhandState('Loaded '+INHAND.length+' product(s) from the live site.');
+}
+function inhandDownload(){
+  download('inhand-list.json', JSON.stringify(INHAND,null,2), 'application/json');
+  toast('Put this file in the inhand folder, then deploy');
+}
+function inhandImport(file){
+  if(!file) return;
+  var fr=new FileReader();
+  fr.onload=function(){
+    try{
+      var data=JSON.parse(fr.result);
+      var arr=Array.isArray(data)?data:(data.models||data.list||[]);
+      INHAND=arr.map(function(x){ return clean(typeof x==='string'?x:(x&&(x['MODEL NO.']||x.model||x.modelNo))) }).filter(Boolean);
+      inhandStore(); renderInhandPanel(); toast('Loaded '+INHAND.length+' product(s)');
+    }catch(e){ alert('Could not read that file: '+(e.message||e)) }
+  };
+  fr.readAsText(file);
+}
+function inhandRow(p,onSite){var m=modelOf(p);return '<div style="display:flex;align-items:center;gap:10px;padding:6px 8px;border:1px solid rgba(0,0,0,.08);border-radius:10px;background:rgba(255,255,255,.6)">'
+  +'<img class="thumb" src="'+esc(imageOf(p))+'" alt="" style="width:34px;height:34px;object-fit:contain;flex-shrink:0" onerror="this.style.visibility=\'hidden\'">'
+  +'<div style="flex:1;min-width:0"><div class="name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(p['PRODUCT NAME']||m)+'</div>'
+  +'<div class="muted mono">'+esc(m)+(p.BRAND?' \u00b7 '+esc(p.BRAND):'')+'</div></div>'
+  +'<button class="link-btn'+(onSite?' danger':'')+'" data-inhand-toggle="'+esc(m)+'">'+(onSite?'Remove':'Add')+'</button>'
+  +'</div>'}
+function renderInhandPanel(){
+  var onList=$('inhandOnList'); if(!onList)return;
+  var q=clean(($('inhandSearch')||{}).value).toLowerCase();
+  var ordered=currentOrdered();
+  var on=INHAND.map(function(m){return ordered.filter(function(p){return modelOf(p)===m})[0]}).filter(Boolean);
+  var off=ordered.filter(function(p){return !isOnInhand(p)}).filter(function(p){
+    if(!q)return true;
+    return [p.BRAND,p.CARBRAND,p['PRODUCT NAME'],modelOf(p)].join(' ').toLowerCase().indexOf(q)>=0;
+  });
+  var missing=INHAND.filter(function(m){return !ordered.some(function(p){return modelOf(p)===m})});
+  $('inhandOnCount').textContent=INHAND.length;
+  onList.innerHTML=(on.length?on.map(function(p){return inhandRow(p,true)}).join(''):'<div class="muted" style="padding:18px;text-align:center;font-size:.78rem">Nothing on the inhand list yet. Add products from the right.</div>')
+    +(missing.length?'<div class="muted mono" style="padding:8px">'+missing.length+' model(s) in the list are no longer in the catalogue: '+esc(missing.join(', '))+'</div>':'');
+  $('inhandOffList').innerHTML=off.length?off.slice(0,60).map(function(p){return inhandRow(p,false)}).join('')+(off.length>60?'<div class="muted" style="padding:8px;text-align:center;font-size:.7rem">'+(off.length-60)+' more \u2014 refine your search</div>':''):'<div class="muted" style="padding:18px;text-align:center;font-size:.78rem">No matches</div>';
 }
 async function quickToggleNew(model){
   var p=PRODUCTS.find(function(x){return modelOf(x)===model});
   if(!p)return;
   var isNew=clean(p.NEW).toLowerCase()==='yes';
   p.NEW=isNew?'':'yes';
-  await persistProducts(PRODUCTS);
+  try{await persistProducts(PRODUCTS);}catch(e){alert('Save failed: '+(e.message||e));return;}
   toast(isNew?'Removed from New Arrivals':'Added to New Arrivals')
 }
 function healthCheck(){var issues=[],seen={};PRODUCTS.forEach(function(p,i){var m=modelOf(p);if(!m)issues.push(['bad','Row '+(i+1)+' missing MODEL NO.']);else if(seen[m])issues.push(['bad','Duplicate MODEL NO.: '+m]);else seen[m]=1;if(!p['PRODUCT NAME'])issues.push(['bad',(m||'Row '+(i+1))+' missing product name']);if(num(p.PRICE,-1)<0)issues.push(['bad',m+' has invalid price']);if(statusOf(p)==='sold'&&num(p.QTY,0)!==0)issues.push(['bad',m+' is Sold Out but Qty is not 0']);if(num(p.QTY,0)===0&&statusOf(p)!=='preorder'&&statusOf(p)!=='sold')issues.push(['bad',m+' has Qty 0 but status is not Sold Out']);});var orders=PRODUCTS.map(function(p){return p.SORTORDER});var uniqueOrders=new Set(orders).size===orders.length;if(!uniqueOrders)issues.push(['bad','Duplicate sort order numbers found']);if(!issues.length)issues.push(['ok','No critical issues found.']);LAST_HEALTH=issues;$('healthPanel').classList.remove('hide');$('healthBody').innerHTML=issues.map(function(x){return '<div class="health-'+x[0]+'">'+esc(x[1])+'</div>'}).join('');}
@@ -490,8 +570,8 @@ async function loadPendingOrders(){
           var items=(o.items||[]).map(function(it){return '<div style="display:flex;justify-content:space-between;gap:8px;font-size:.72rem;padding:3px 0"><span>'+esc(it.qty)+'x '+esc(it.name||it.modelNo)+' <span class="muted mono">('+esc(it.modelNo)+')</span></span><span>'+fmtMoney(it.price*it.qty)+'</span></div>'}).join('');
           return '<div style="border:1px solid rgba(0,0,0,.08);border-radius:12px;padding:14px">'
             +'<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap">'
-            +'<div><div style="font-weight:600;font-size:.8rem">'+esc(o.customerName||'Unnamed customer')+'</div><div class="muted mono" style="font-size:.7rem">'+esc(o.customerPhone||'No phone provided')+'</div><div class="muted" style="font-size:.68rem;margin-top:2px">'+esc(fmtDate(o.createdAt))+' &middot; '+esc(o.id)+'</div></div>'
-            +'<div style="text-align:right"><div style="font-weight:600">'+fmtMoney(o.total)+'</div><div class="row-actions" style="margin-top:8px;justify-content:flex-end"><button class="btn ok" data-confirm-order="'+esc(o.id)+'">Confirm</button><button class="btn danger" data-reject-order="'+esc(o.id)+'">Reject</button></div></div>'
+            +'<div><div style="font-weight:500;font-size:.8rem">'+esc(o.customerName||'Unnamed customer')+'</div><div class="muted mono" style="font-size:.7rem">'+esc(o.customerPhone||'No phone provided')+'</div><div class="muted" style="font-size:.68rem;margin-top:2px">'+esc(fmtDate(o.createdAt))+' &middot; '+esc(o.id)+'</div></div>'
+            +'<div style="text-align:right"><div style="font-weight:500">'+fmtMoney(o.total)+'</div><div class="row-actions" style="margin-top:8px;justify-content:flex-end"><button class="btn ok" data-confirm-order="'+esc(o.id)+'">Confirm</button><button class="btn danger" data-reject-order="'+esc(o.id)+'">Reject</button></div></div>'
             +'</div>'
             +(o.note?'<div class="muted" style="font-size:.72rem;margin-top:8px">Note: '+esc(o.note)+'</div>':'')
             +'<div style="margin-top:10px;border-top:1px solid rgba(0,0,0,.06);padding-top:8px">'+items+'</div>'
@@ -541,24 +621,46 @@ function exportJson(){download('64cast-products.json',JSON.stringify(PRODUCTS,nu
 function exportCsv(){var heads=['BRAND','CARBRAND','SCALE','PRODUCT NAME','MODEL NO.','PRICE','ORIGPRICE','QTY','STATUS','ETA','SORTORDER','IMG1','IMG2','IMG3','IMG4','IMAGE_SCALE','NEW','DESCRIPTION'];var lines=[heads.join(',')].concat(currentOrdered().map(function(p){return heads.map(function(h){var s=clean(p[h]);return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s}).join(',')}));download('64cast-products.csv',lines.join('\n'),'text/csv')}
 function initMonths(){var now=new Date(),cur=now.getMonth();var opts=['<option value="">No ETA</option>'];for(var i=0;i<18;i++){var m=MONTHS[(cur+i)%12];var y=now.getFullYear()+Math.floor((cur+i)/12);opts.push('<option value="'+m+' '+y+'">'+m+' '+y+'</option>')} $('fEta').innerHTML=opts.join('')}
 $('loginForm').addEventListener('submit',async function(e){e.preventDefault();$('loginError').classList.add('hide');try{var res=await apiPost({action:'admin-login',password:$('loginPassword').value},false);setToken(res.token);showApp(true);await load()}catch(err){$('loginError').textContent=err.message||'Login failed';$('loginError').classList.remove('hide')}});
-$('logoutBtn').onclick=function(){setToken('');location.href='/admin-8822'};$('refreshBtn').onclick=function(){load().catch(function(e){showNotice(e.message);alert(e.message)})};$('addBtn').onclick=function(){openEdit('')};$('importBtn').onclick=function(){$('importModal').classList.add('open')};$('exportBtn').onclick=exportJson;$('exportCsvBtn').onclick=exportCsv;$('healthBtn').onclick=healthCheck;$('communityBtn').onclick=function(){loadCommunitySignups().catch(function(e){alert(e.message||e)})};$('ordersBtn').onclick=function(){loadPendingOrders().catch(function(e){alert(e.message||e)})};$('confirmAllOrdersBtn').onclick=function(){confirmAllOrders().catch(function(e){alert(e.message||e)})};$('rejectAllOrdersBtn').onclick=function(){rejectAllOrders().catch(function(e){alert(e.message||e)})};$('repairBtn').onclick=function(){repairAndSave().catch(function(e){alert(e.message||e)})};
+$('logoutBtn').onclick=function(){setToken('');location.href='/admin-8822'};$('refreshBtn').onclick=function(){load().catch(function(e){showNotice(e.message);alert(e.message)})};$('addBtn').onclick=function(){openEdit('')};$('healthBtn').onclick=healthCheck;$('communityBtn').onclick=function(){loadCommunitySignups().catch(function(e){alert(e.message||e)})};$('ordersBtn').onclick=function(){loadPendingOrders().catch(function(e){alert(e.message||e)})};$('confirmAllOrdersBtn').onclick=function(){confirmAllOrders().catch(function(e){alert(e.message||e)})};$('rejectAllOrdersBtn').onclick=function(){rejectAllOrders().catch(function(e){alert(e.message||e)})};$('repairBtn').onclick=function(){repairAndSave().catch(function(e){alert(e.message||e)})};
+$('inhandBtn').onclick=function(){var el=$('inhandPanel');el.classList.toggle('hide');if(!el.classList.contains('hide')){renderInhandPanel();var s=$('inhandSearch');if(s)s.focus()}};
+$('inhandSearch').addEventListener('input',renderInhandPanel);
+$('inhandClearAllBtn').onclick=function(){inhandRemoveAll()};
+$('inhandDownloadBtn').onclick=inhandDownload;
+$('inhandPublishBtn').onclick=function(){inhandPublish().catch(function(e){inhandState('Publish error: '+(e.message||e),true)})};
+$('inhandPullBtn').onclick=function(){inhandPull().catch(function(e){inhandState('Load error: '+(e.message||e),true)})};
+try{ var savedKey=localStorage.getItem(INHAND_KEY_STORE); if(savedKey)$('inhandKey').value=savedKey }catch(e){}
+$('inhandLoadBtn').onclick=function(){$('inhandFileInput').click()};
+$('inhandFileInput').addEventListener('change',function(){inhandImport(this.files&&this.files[0]);this.value=''});
+document.body.addEventListener('click',function(e){var t=e.target.closest?e.target.closest('[data-inhand-toggle]'):null;if(t)quickToggleInhand(t.getAttribute('data-inhand-toggle'))});
 ['searchInput','brandFilter','carFilter','statusFilter'].forEach(function(id){$(id).addEventListener('input',function(){CURRENT_PAGE=1;renderTable()});$(id).addEventListener('change',function(){CURRENT_PAGE=1;renderTable()})});
 ['fStatus','fQty'].forEach(function(id){$(id).addEventListener('input',function(){syncStatusQty($('fStatus'),$('fQty'))});$(id).addEventListener('change',function(){syncStatusQty($('fStatus'),$('fQty'))})});
-document.body.addEventListener('click',function(e){var close=e.target.getAttribute('data-close');if(close)$(close).classList.remove('open');var edit=e.target.getAttribute('data-edit');if(edit)openEdit(edit);var del=e.target.getAttribute('data-del');if(del)deleteProduct(del).catch(function(err){alert(err.message||err)});var isNewBtn=e.target.getAttribute('data-new');if(isNewBtn)quickToggleNew(isNewBtn).catch(function(err){alert(err.message||err)});var delSignup=e.target.getAttribute('data-del-signup');if(delSignup)removeCommunitySignup(delSignup).catch(function(err){alert(err.message||err)});var confirmOrderId=e.target.getAttribute('data-confirm-order');if(confirmOrderId)confirmOrder(confirmOrderId).catch(function(err){alert(err.message||err)});var rejectOrderId=e.target.getAttribute('data-reject-order');if(rejectOrderId)rejectOrder(rejectOrderId).catch(function(err){alert(err.message||err)});var statusCycle=e.target.getAttribute('data-status-cycle');if(statusCycle)quickStatusCycle(statusCycle).catch(function(err){alert(err.message||err)})});
+document.body.addEventListener('click',function(e){var close=e.target.getAttribute('data-close');if(close)$(close).classList.remove('open');var edit=e.target.getAttribute('data-edit');if(edit)openEdit(edit);var del=e.target.getAttribute('data-del');if(del)deleteProduct(del).catch(function(err){alert(err.message||err)});var isNewBtn=e.target.getAttribute('data-new');if(isNewBtn)quickToggleNew(isNewBtn).catch(function(err){alert(err.message||err)});var isInhandBtn=e.target.getAttribute('data-inhand');if(isInhandBtn)quickToggleInhand(isInhandBtn).catch(function(err){alert(err.message||err)});var delSignup=e.target.getAttribute('data-del-signup');if(delSignup)removeCommunitySignup(delSignup).catch(function(err){alert(err.message||err)});var confirmOrderId=e.target.getAttribute('data-confirm-order');if(confirmOrderId)confirmOrder(confirmOrderId).catch(function(err){alert(err.message||err)});var rejectOrderId=e.target.getAttribute('data-reject-order');if(rejectOrderId)rejectOrder(rejectOrderId).catch(function(err){alert(err.message||err)});var statusCycle=e.target.getAttribute('data-status-cycle');if(statusCycle)quickStatusCycle(statusCycle).catch(function(err){alert(err.message||err)})});
 document.body.addEventListener('change',function(e){var m=e.target.getAttribute('data-qty');if(m)quickQty(m,e.target.value).catch(function(err){alert(err.message||err)});var pr=e.target.getAttribute('data-price');if(pr)quickPrice(pr,e.target.value).catch(function(err){alert(err.message||err)});var ck=e.target.getAttribute('data-ck');if(ck){if(e.target.checked)SELECTED_MODELS.add(ck);else SELECTED_MODELS.delete(ck);updateBulkBar()}});
 $('selectAllCk').addEventListener('change',function(){var boxes=document.querySelectorAll('.row-ck');boxes.forEach(function(c){var m=c.getAttribute('data-ck');c.checked=$('selectAllCk').checked;if($('selectAllCk').checked)SELECTED_MODELS.add(m);else SELECTED_MODELS.delete(m)});updateBulkBar()});
 $('bulkStatusBtn').onclick=function(){bulkSetStatus($('bulkStatusSel').value).catch(function(e){alert(e.message||e)})};
 $('bulkNewOnBtn').onclick=function(){bulkSetFlag('NEW',true).catch(function(e){alert(e.message||e)})};
+$('bulkInhandBtn').onclick=function(){bulkSetStatus('inhand').catch(function(e){alert(e.message||e)})};
 $('bulkNewOffBtn').onclick=function(){bulkSetFlag('NEW',false).catch(function(e){alert(e.message||e)})};
 $('bulkBrandBtn').onclick=function(){bulkSetText('BRAND',$('bulkBrandInp').value).then(function(){$('bulkBrandInp').value=''}).catch(function(e){alert(e.message||e)})};
 $('bulkCarbrandBtn').onclick=function(){bulkSetText('CARBRAND',$('bulkCarbrandInp').value).then(function(){$('bulkCarbrandInp').value=''}).catch(function(e){alert(e.message||e)})};
 $('bulkDeleteBtn').onclick=function(){bulkDelete().catch(function(e){alert(e.message||e)})};
 $('bulkClearBtn').onclick=function(){SELECTED_MODELS.clear();renderTable()};
 $('saveProductBtn').onclick=function(){saveProduct().catch(function(e){alert(e.message||e)})};
-$('fileInput').addEventListener('change',function(){var f=this.files&&this.files[0];if(!f)return;readFile(f).then(function(rows){IMPORT_ROWS=rows.filter(function(p){return modelOf(p)});$('importSummary').classList.remove('hide');$('importSummary').innerHTML='<strong>'+IMPORT_ROWS.length+' products ready.</strong><br>Brands: '+esc(Array.from(new Set(IMPORT_ROWS.map(function(p){return p.BRAND}).filter(Boolean))).sort().join(', '));$('importUpsertBtn').disabled=!IMPORT_ROWS.length;$('replaceBtn').disabled=!IMPORT_ROWS.length}).catch(function(e){IMPORT_ROWS=[];alert(e.message||e)})});
-$('importUpsertBtn').onclick=function(){var map={};PRODUCTS.forEach(function(p){map[modelOf(p)]=p});IMPORT_ROWS.forEach(function(p){map[modelOf(p)]=p});persistProducts(Object.keys(map).map(function(k){return map[k]})).then(function(){$('importModal').classList.remove('open');toast('Imported')}).catch(function(e){alert(e.message||e)})};
-$('replaceBtn').onclick=function(){if(!confirm('Replace entire live product list?'))return;persistProducts(IMPORT_ROWS).then(function(){$('importModal').classList.remove('open');toast('Replaced')}).catch(function(e){alert(e.message||e)})};
 initMonths();(async function(){if(await verify()){showApp(true);load().catch(function(e){showNotice(e.message);alert(e.message)})}else showApp(false)})();
+})();
+</script>
+
+<button id="backToTopBtn" class="glossW" aria-label="Back to top" style="display:none;position:fixed;right:24px;bottom:28px;width:48px;height:48px;border-radius:999px;align-items:center;justify-content:center;z-index:140;">
+  <svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:#0a0a0a;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M18 15l-6-6-6 6"></path></svg>
+</button>
+<script>
+(function(){
+  var btn = document.getElementById('backToTopBtn');
+  function update(){ btn.style.display = (window.scrollY > 400 && window.innerWidth > 900) ? 'flex' : 'none'; }
+  window.addEventListener('scroll', update, {passive:true});
+  window.addEventListener('resize', update);
+  btn.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+  update();
 })();
 </script>
 </body>
