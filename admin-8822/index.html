@@ -70,7 +70,6 @@ tr.prow.drop-target td{border-top:2px solid var(--orange)}
 .row-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .link-btn{background:none;border:none;color:#888;text-transform:uppercase;font-size:.66rem;letter-spacing:1px;padding:0;text-decoration:underline;text-underline-offset:2px}
 .link-btn.danger{color:var(--danger)}
-.link-btn.new-active{color:var(--orange);font-weight:500}
 .mini-input{height:30px;border:1px solid rgba(0,0,0,.12);padding:0 8px;background:rgba(255,255,255,.7);border-radius:8px}
 .qty-input{width:60px;text-align:center}
 .pagination{margin:0 32px 32px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px 18px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.7);border-top:none;border-radius:0 0 18px 18px;font-size:.72rem;color:#888}
@@ -160,8 +159,6 @@ tr.prow.drop-target td{border-top:2px solid var(--orange)}
         <button id="bulkBrandBtn" class="glossW btn" type="button">Apply Brand</button>
         <input id="bulkCarbrandInp" class="mini-input" placeholder="Set Car Brand..." style="width:130px">
         <button id="bulkCarbrandBtn" class="glossW btn" type="button">Apply Car Brand</button>
-        <button id="bulkNewOnBtn" class="glossW btn" type="button">+ New Arrival</button>
-        <button id="bulkNewOffBtn" class="glossW btn" type="button">- New Arrival</button>
         <button id="bulkDeleteBtn" class="btn danger" type="button">Delete Selected</button>
         <button id="bulkClearBtn" class="glossW btn" type="button">Clear</button>
       </div>
@@ -298,7 +295,7 @@ function renderPagination(total){
 }
 var STATUS_CYCLE=['currentstock','preorder','sold'];
 function statusPill(st){return '<button type="button" class="status-pill '+esc(st)+'" data-status-cycle="__MODEL__" title="Click to change status">'+(st==='currentstock'?'Current Stock':st==='preorder'?'Pre-Order':'Sold Out')+'</button>'}
-function renderTable(){var all=filtered();renderPagination(all.length);var rows=all.slice((CURRENT_PAGE-1)*PAGE_SIZE,CURRENT_PAGE*PAGE_SIZE);$('tbody').innerHTML=rows.length?rows.map(function(p){var st=statusOf(p),m=modelOf(p),isNew=clean(p.NEW).toLowerCase()==='yes';return '<tr class="prow" draggable="true" data-model="'+esc(m)+'"><td><input type="checkbox" class="row-ck" data-ck="'+esc(m)+'" '+(SELECTED_MODELS.has(m)?'checked':'')+'></td><td><span class="drag-handle">\u22ee\u22ee</span></td><td><img class="thumb" src="'+esc(imageOf(p))+'" alt="'+esc(p['PRODUCT NAME']||m)+'" onerror="this.style.visibility=\'hidden\'"></td><td><div class="name">'+esc(p['PRODUCT NAME'])+'</div><div class="muted mono">'+esc(p.SCALE)+'</div></td><td>'+esc(p.BRAND)+'</td><td>'+esc(p.CARBRAND||'-')+'</td><td class="mono">'+esc(m)+'</td><td>'+statusPill(st).replace('__MODEL__',esc(m))+'</td><td>'+esc(p.ETA||'-')+'</td><td><input class="mini-input qty-input" data-qty="'+esc(m)+'" type="number" min="0" step="1" value="'+esc(p.QTY)+'" '+(st==='sold'?'readonly':'')+'></td><td><input class="price-input" data-price="'+esc(m)+'" type="number" min="0" step="0.01" value="'+esc(p.PRICE)+'"></td><td><div class="row-actions"><button class="link-btn'+(isNew?' new-active':'')+'" data-new="'+esc(m)+'" title="Toggle New Arrival">'+(isNew?'\u2605 New':'+ New')+'</button><button class="link-btn" data-edit="'+esc(m)+'">Edit</button><button class="link-btn danger" data-del="'+esc(m)+'">Delete</button></div></td></tr>'}).join(''):'<tr><td colspan="12" style="text-align:center;padding:40px;color:#999">No products found</td></tr>';attachDrag();}
+function renderTable(){var all=filtered();renderPagination(all.length);var rows=all.slice((CURRENT_PAGE-1)*PAGE_SIZE,CURRENT_PAGE*PAGE_SIZE);$('tbody').innerHTML=rows.length?rows.map(function(p){var st=statusOf(p),m=modelOf(p);return '<tr class="prow" draggable="true" data-model="'+esc(m)+'"><td><input type="checkbox" class="row-ck" data-ck="'+esc(m)+'" '+(SELECTED_MODELS.has(m)?'checked':'')+'></td><td><span class="drag-handle">\u22ee\u22ee</span></td><td><img class="thumb" src="'+esc(imageOf(p))+'" alt="'+esc(p['PRODUCT NAME']||m)+'" onerror="this.style.visibility=\'hidden\'"></td><td><div class="name">'+esc(p['PRODUCT NAME'])+'</div><div class="muted mono">'+esc(p.SCALE)+'</div></td><td>'+esc(p.BRAND)+'</td><td>'+esc(p.CARBRAND||'-')+'</td><td class="mono">'+esc(m)+'</td><td>'+statusPill(st).replace('__MODEL__',esc(m))+'</td><td>'+esc(p.ETA||'-')+'</td><td><input class="mini-input qty-input" data-qty="'+esc(m)+'" type="number" min="0" step="1" value="'+esc(p.QTY)+'" '+(st==='sold'?'readonly':'')+'></td><td><input class="price-input" data-price="'+esc(m)+'" type="number" min="0" step="0.01" value="'+esc(p.PRICE)+'"></td><td><div class="row-actions"><button class="link-btn" data-edit="'+esc(m)+'">Edit</button><button class="link-btn danger" data-del="'+esc(m)+'">Delete</button></div></td></tr>'}).join(''):'<tr><td colspan="12" style="text-align:center;padding:40px;color:#999">No products found</td></tr>';attachDrag();}
 function attachDrag(){
   var dragModel=null;
   document.querySelectorAll('tr.prow').forEach(function(row){
@@ -414,13 +411,52 @@ async function persistProducts(list){
   render();
   return true;
 }
-async function quickToggleNew(model){
-  var p=PRODUCTS.find(function(x){return modelOf(x)===model});
-  if(!p)return;
-  var isNew=clean(p.NEW).toLowerCase()==='yes';
-  p.NEW=isNew?'':'yes';
-  try{await persistProducts(PRODUCTS);}catch(e){alert('Save failed: '+(e.message||e));return;}
-  toast(isNew?'Removed from New Arrivals':'Added to New Arrivals')
+async function saveProduct(){
+  var p=formProduct();
+  var oldModel=clean($('fOriginalModel').value);
+  var list=PRODUCTS.slice();
+  var idx=oldModel?list.findIndex(function(x){return modelOf(x)===oldModel}):-1;
+  if(idx>=0)list[idx]=p; else list.push(p);
+  list=moveToPosition(list,modelOf(p),num($('fSort').value,list.length));
+  var btn=$('saveProductBtn'); btn.disabled=true; var lbl=btn.textContent; btn.textContent='Saving...';
+  try{
+    await persistProducts(list);
+    $('editModal').classList.remove('open');
+    toast(idx>=0?'Product updated':'Product added');
+  }finally{ btn.disabled=false; btn.textContent=lbl; }
+}
+async function deleteProduct(model){
+  if(!confirm('Delete '+model+'? This cannot be undone.'))return;
+  var list=PRODUCTS.filter(function(p){return modelOf(p)!==model});
+  SELECTED_MODELS.delete(model);
+  await persistProducts(list);
+  toast('Deleted '+model);
+}
+async function updateOne(model,mutate){
+  var list=PRODUCTS.slice();
+  var p=list.find(function(x){return modelOf(x)===model});
+  if(!p)throw new Error('Product not found: '+model);
+  mutate(p);
+  await persistProducts(list);
+}
+async function quickQty(model,value){
+  var q=Math.max(0,Math.floor(num(value,0)));
+  await updateOne(model,function(p){p.QTY=q;if(q===0&&statusOf(p)!=='preorder')p.STATUS='sold';else if(q>0&&statusOf(p)==='sold')p.STATUS='currentstock';});
+  toast('Qty updated');
+}
+async function quickPrice(model,value){
+  var v=Math.max(0,num(value,0));
+  await updateOne(model,function(p){p.PRICE=v});
+  toast('Price updated');
+}
+async function quickStatusCycle(model){
+  var order=['currentstock','preorder','sold'];
+  await updateOne(model,function(p){
+    var next=order[(order.indexOf(statusOf(p))+1)%order.length];
+    p.STATUS=next;
+    if(next==='sold')p.QTY=0; else if(num(p.QTY,0)===0)p.QTY=1;
+  });
+  toast('Status updated');
 }
 function healthCheck(){var issues=[],seen={};PRODUCTS.forEach(function(p,i){var m=modelOf(p);if(!m)issues.push(['bad','Row '+(i+1)+' missing MODEL NO.']);else if(seen[m])issues.push(['bad','Duplicate MODEL NO.: '+m]);else seen[m]=1;if(!p['PRODUCT NAME'])issues.push(['bad',(m||'Row '+(i+1))+' missing product name']);if(num(p.PRICE,-1)<0)issues.push(['bad',m+' has invalid price']);if(statusOf(p)==='sold'&&num(p.QTY,0)!==0)issues.push(['bad',m+' is Sold Out but Qty is not 0']);if(num(p.QTY,0)===0&&statusOf(p)!=='preorder'&&statusOf(p)!=='sold')issues.push(['bad',m+' has Qty 0 but status is not Sold Out']);});var orders=PRODUCTS.map(function(p){return p.SORTORDER});var uniqueOrders=new Set(orders).size===orders.length;if(!uniqueOrders)issues.push(['bad','Duplicate sort order numbers found']);if(!issues.length)issues.push(['ok','No critical issues found.']);LAST_HEALTH=issues;$('healthPanel').classList.remove('hide');$('healthBody').innerHTML=issues.map(function(x){return '<div class="health-'+x[0]+'">'+esc(x[1])+'</div>'}).join('');}
 function fmtDate(iso){try{return new Date(iso).toLocaleString();}catch(e){return iso||'';}}
@@ -508,12 +544,10 @@ $('loginForm').addEventListener('submit',async function(e){e.preventDefault();$(
 $('logoutBtn').onclick=function(){setToken('');location.href='/admin-8822'};$('refreshBtn').onclick=function(){load().catch(function(e){showNotice(e.message);alert(e.message)})};$('addBtn').onclick=function(){openEdit('')};$('healthBtn').onclick=healthCheck;$('communityBtn').onclick=function(){loadCommunitySignups().catch(function(e){alert(e.message||e)})};$('ordersBtn').onclick=function(){loadPendingOrders().catch(function(e){alert(e.message||e)})};$('confirmAllOrdersBtn').onclick=function(){confirmAllOrders().catch(function(e){alert(e.message||e)})};$('rejectAllOrdersBtn').onclick=function(){rejectAllOrders().catch(function(e){alert(e.message||e)})};$('repairBtn').onclick=function(){repairAndSave().catch(function(e){alert(e.message||e)})};
 ['searchInput','brandFilter','carFilter','statusFilter'].forEach(function(id){$(id).addEventListener('input',function(){CURRENT_PAGE=1;renderTable()});$(id).addEventListener('change',function(){CURRENT_PAGE=1;renderTable()})});
 ['fStatus','fQty'].forEach(function(id){$(id).addEventListener('input',function(){syncStatusQty($('fStatus'),$('fQty'))});$(id).addEventListener('change',function(){syncStatusQty($('fStatus'),$('fQty'))})});
-document.body.addEventListener('click',function(e){var close=e.target.getAttribute('data-close');if(close)$(close).classList.remove('open');var edit=e.target.getAttribute('data-edit');if(edit)openEdit(edit);var del=e.target.getAttribute('data-del');if(del)deleteProduct(del).catch(function(err){alert(err.message||err)});var isNewBtn=e.target.getAttribute('data-new');if(isNewBtn)quickToggleNew(isNewBtn).catch(function(err){alert(err.message||err)});var delSignup=e.target.getAttribute('data-del-signup');if(delSignup)removeCommunitySignup(delSignup).catch(function(err){alert(err.message||err)});var confirmOrderId=e.target.getAttribute('data-confirm-order');if(confirmOrderId)confirmOrder(confirmOrderId).catch(function(err){alert(err.message||err)});var rejectOrderId=e.target.getAttribute('data-reject-order');if(rejectOrderId)rejectOrder(rejectOrderId).catch(function(err){alert(err.message||err)});var statusCycle=e.target.getAttribute('data-status-cycle');if(statusCycle)quickStatusCycle(statusCycle).catch(function(err){alert(err.message||err)})});
+document.body.addEventListener('click',function(e){var close=e.target.getAttribute('data-close');if(close)$(close).classList.remove('open');var edit=e.target.getAttribute('data-edit');if(edit)openEdit(edit);var del=e.target.getAttribute('data-del');if(del)deleteProduct(del).catch(function(err){alert(err.message||err)});var delSignup=e.target.getAttribute('data-del-signup');if(delSignup)removeCommunitySignup(delSignup).catch(function(err){alert(err.message||err)});var confirmOrderId=e.target.getAttribute('data-confirm-order');if(confirmOrderId)confirmOrder(confirmOrderId).catch(function(err){alert(err.message||err)});var rejectOrderId=e.target.getAttribute('data-reject-order');if(rejectOrderId)rejectOrder(rejectOrderId).catch(function(err){alert(err.message||err)});var statusCycle=e.target.getAttribute('data-status-cycle');if(statusCycle)quickStatusCycle(statusCycle).catch(function(err){alert(err.message||err)})});
 document.body.addEventListener('change',function(e){var m=e.target.getAttribute('data-qty');if(m)quickQty(m,e.target.value).catch(function(err){alert(err.message||err)});var pr=e.target.getAttribute('data-price');if(pr)quickPrice(pr,e.target.value).catch(function(err){alert(err.message||err)});var ck=e.target.getAttribute('data-ck');if(ck){if(e.target.checked)SELECTED_MODELS.add(ck);else SELECTED_MODELS.delete(ck);updateBulkBar()}});
 $('selectAllCk').addEventListener('change',function(){var boxes=document.querySelectorAll('.row-ck');boxes.forEach(function(c){var m=c.getAttribute('data-ck');c.checked=$('selectAllCk').checked;if($('selectAllCk').checked)SELECTED_MODELS.add(m);else SELECTED_MODELS.delete(m)});updateBulkBar()});
 $('bulkStatusBtn').onclick=function(){bulkSetStatus($('bulkStatusSel').value).catch(function(e){alert(e.message||e)})};
-$('bulkNewOnBtn').onclick=function(){bulkSetFlag('NEW',true).catch(function(e){alert(e.message||e)})};
-$('bulkNewOffBtn').onclick=function(){bulkSetFlag('NEW',false).catch(function(e){alert(e.message||e)})};
 $('bulkBrandBtn').onclick=function(){bulkSetText('BRAND',$('bulkBrandInp').value).then(function(){$('bulkBrandInp').value=''}).catch(function(e){alert(e.message||e)})};
 $('bulkCarbrandBtn').onclick=function(){bulkSetText('CARBRAND',$('bulkCarbrandInp').value).then(function(){$('bulkCarbrandInp').value=''}).catch(function(e){alert(e.message||e)})};
 $('bulkDeleteBtn').onclick=function(){bulkDelete().catch(function(e){alert(e.message||e)})};
