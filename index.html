@@ -48,10 +48,9 @@ button{font-family:var(--font);cursor:pointer}
   #navSearchWrap{display:flex!important;}
   #brandRow{padding:8px 16px 32px!important;display:grid!important;grid-template-columns:repeat(4,1fr)!important;gap:10px!important;}
   #brandRow button{width:100%!important;height:auto!important;aspect-ratio:1/1!important;}
-  #newArrivalsRow,#stockGrid,#preorderGrid{padding-left:16px!important;padding-right:16px!important;}
-  #stockGrid,#preorderGrid{grid-template-columns:repeat(2,1fr)!important;gap:12px!important;}
+  #stockGrid,#preorderGrid{padding-left:16px!important;padding-right:16px!important;grid-template-columns:repeat(2,1fr)!important;gap:12px!important;}
   #faq{padding:32px 20px!important;grid-template-columns:1fr 1fr!important;gap:24px!important;}
-  #newArrivals,#brands,#stock,#preorder{padding-left:16px!important;padding-right:16px!important;}
+  #brands,#stock,#preorder{padding-left:16px!important;padding-right:16px!important;}
 }
 @media (max-width:480px){
   #faq{grid-template-columns:1fr!important;}
@@ -70,6 +69,9 @@ summary::marker{content:''}
 .navlink{padding:12px 8px;font-size:.9rem;text-transform:uppercase;letter-spacing:1px;text-decoration:none;color:#0a0a0a;display:block;}
 @keyframes shimmer{0%{background-position:-220px 0}100%{background-position:220px 0}}
 .skel-card{flex:0 0 220px;aspect-ratio:.72/1;border-radius:18px;background:#eee linear-gradient(90deg,#eee 0%,#f6f6f6 20%,#eee 40%);background-size:220px 100%;animation:shimmer 1.3s ease-in-out infinite;}
+
+/* image protection */
+img{-webkit-user-drag:none;user-drag:none;-webkit-touch-callout:none;user-select:none;-webkit-user-select:none}
 </style>
 </head>
 <body>
@@ -96,8 +98,7 @@ summary::marker{content:''}
     </nav>
 
     <div id="stickyBar" style="display:flex;align-items:center;gap:10px;padding:14px 40px;background:#fff;border-bottom:1px solid rgba(0,0,0,.08);">
-      <button class="chip glossO" onclick="location.href='https://64cast.com/new-arrivals/'">New Arrivals</button>
-      <button class="chip glossW" onclick="location.href='https://64cast.com/current-stock/?status=currentstock'">Current Stock</button>
+      <button class="chip glossO" onclick="location.href='https://64cast.com/current-stock/?status=currentstock'">Current Stock</button>
       <button class="chip glossW" onclick="location.href='https://64cast.com/current-stock/?status=preorder'">Pre-Order</button>
       <div style="position:relative;overflow:hidden;flex:1;display:flex;align-items:center;gap:8px;height:44px;border-radius:999px;padding:0 16px;background:rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.08);max-width:340px;margin-left:auto;">
         <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:#555;fill:none;stroke-width:1.6;flex-shrink:0"><circle cx="11" cy="11" r="8"></circle><line x1="21" x2="16.65" y1="21" y2="16.65"></line></svg>
@@ -128,14 +129,6 @@ summary::marker{content:''}
         <a href="https://64cast.com/current-stock/" target="_blank" rel="noopener" class="glossO" style="position:relative;overflow:hidden;display:inline-flex;align-items:center;height:46px;padding:0 26px;border-radius:999px;font-size:.66rem;letter-spacing:2px;text-transform:uppercase;font-weight:500;">Shop Now</a>
       </div>
     </div>
-  </div>
-
-  <div id="newArrivals" style="padding:8px 5vw 10px;display:flex;align-items:baseline;justify-content:space-between;position:relative;z-index:1;">
-    <div style="font-size:1.3rem;letter-spacing:1px;text-transform:uppercase;font-weight:400;">New Arrivals</div>
-    <a href="https://64cast.com/new-arrivals/" style="font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:#555;">View All →</a>
-  </div>
-  <div id="newArrivalsRow" style="display:flex;gap:20px;overflow-x:auto;padding:8px 5vw 44px;position:relative;z-index:1;">
-    <div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div>
   </div>
 
   <div id="brands" style="padding:8px 5vw 10px;position:relative;z-index:1;">
@@ -255,7 +248,6 @@ summary::marker{content:''}
         <div style="font-size:.55rem;letter-spacing:2.5px;text-transform:uppercase;color:#888;margin-bottom:14px;">Explore</div>
         <a href="#" style="display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.5px;color:#333;margin-bottom:12px;">Home</a>
         <a href="https://64cast.com/current-stock/" style="display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.5px;color:#333;margin-bottom:12px;">Current Stocks</a>
-        <a href="https://64cast.com/new-arrivals/" style="display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.5px;color:#333;margin-bottom:12px;">New Arrivals</a>
         <a href="https://64cast.com/current-stock/?status=preorder" style="display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.5px;color:#333;margin-bottom:12px;">Pre-Order</a>
         <a href="#faq" style="display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.5px;color:#333;">FAQ</a>
       </div>
@@ -282,7 +274,6 @@ summary::marker{content:''}
         <input id="navSearchInput" placeholder="Search model, brand..." style="border:none;outline:none;background:none;font-family:var(--font);font-size:.75rem;color:#0a0a0a;width:100%;">
       </div>
       <a href="#" class="navlink" data-jump="top">Home</a>
-      <a href="https://64cast.com/new-arrivals/" class="navlink">New Arrivals</a>
       <details style="border:none;">
         <summary class="navlink" style="cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;">Shop By Brand<svg viewBox="0 0 24 24" style="width:11px;height:11px;stroke:#888;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M6 9l6 6 6-6"></path></svg></summary>
         <div style="display:flex;flex-direction:column;max-height:260px;overflow-y:auto;"><a href="https://64cast.com/minigt" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Mini GT</a><a href="https://64cast.com/tarmacworks" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Tarmac Works</a><a href="https://64cast.com/inno64" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Inno64</a><a href="https://64cast.com/poprace" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">PopRace</a><a href="https://64cast.com/bburago" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Bburago</a><a href="https://64cast.com/bbrmodels" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">BBR Models</a><a href="https://64cast.com/cmmodel" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">CM Model</a><a href="https://64cast.com/hobbyjapan" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Hobby Japan</a><a href="https://64cast.com/kaidohouse" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Kaido House</a><a href="https://64cast.com/lego" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Lego</a><a href="https://64cast.com/motorhelix" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Motorhelix</a><a href="https://64cast.com/arbox" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">ARbox</a><a href="https://64cast.com/trendshobby" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Trends Hobby</a><a href="https://64cast.com/americandiorama" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">American Diorama</a><a href="https://64cast.com/gcd" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">GCD</a><a href="https://64cast.com/tiny" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Tiny</a><a href="https://64cast.com/sparky" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Sparky</a><a href="https://64cast.com/uniquemodel" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Unique Model</a><a href="https://64cast.com/pgm" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">PGM</a><a href="https://64cast.com/kyosho" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Kyosho</a><a href="https://64cast.com/bmcreations" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">BM Creations</a></div>
@@ -343,19 +334,7 @@ summary::marker{content:''}
 <script>
 const WA_NUMBER = '971552112588';
 const API_URL = 'https://64cast-products-api.trailsec5.workers.dev';
-const EMBEDDED_DEMO_PRODUCTS = [
-  {"MODEL NO.":"MGT00456","PRODUCT NAME":"Nissan Skyline GT-R R34 V-Spec II Nur","BRAND":"Mini GT","CARBRAND":"Nissan","PRICE":95,"STATUS":"currentstock","SORTORDER":1,"NEW":true,"IMG1":"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22400%22%20height%3D%22400%22%20viewBox%3D%220%200%20400%20400%22%3E%3Crect%20width%3D%22400%22%20height%3D%22400%22%20fill%3D%22%23e6e6e6%22%2F%3E%3C%2Fsvg%3E"},
-  {"MODEL NO.":"INN64-021","PRODUCT NAME":"Honda Civic EG6 SiR-II","BRAND":"Inno64","CARBRAND":"Honda","PRICE":88,"STATUS":"currentstock","SORTORDER":2,"NEW":true,"IMG1":"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22400%22%20height%3D%22400%22%20viewBox%3D%220%200%20400%20400%22%3E%3Crect%20width%3D%22400%22%20height%3D%22400%22%20fill%3D%22%23e6e6e6%22%2F%3E%3C%2Fsvg%3E"},
-  {"MODEL NO.":"BBR-F1-16","PRODUCT NAME":"1/43 F1 Ferrari SF-24 #16 Charles Leclerc","BRAND":"Bburago","CARBRAND":"Ferrari","PRICE":50,"STATUS":"currentstock","SORTORDER":3,"NEW":false,"IMG1":"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22400%22%20height%3D%22400%22%20viewBox%3D%220%200%20400%20400%22%3E%3Crect%20width%3D%22400%22%20height%3D%22400%22%20fill%3D%22%23e6e6e6%22%2F%3E%3C%2Fsvg%3E"},
-  {"MODEL NO.":"KH-SUP-01","PRODUCT NAME":"Toyota Supra MK4 Kaido Racer","BRAND":"Kaido House","CARBRAND":"Toyota","PRICE":75,"STATUS":"currentstock","SORTORDER":4,"NEW":false,"IMG1":"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22400%22%20height%3D%22400%22%20viewBox%3D%220%200%20400%20400%22%3E%3Crect%20width%3D%22400%22%20height%3D%22400%22%20fill%3D%22%23e6e6e6%22%2F%3E%3C%2Fsvg%3E"},
-  {"MODEL NO.":"CM-LFA-01","PRODUCT NAME":"Lexus LFA Nurburgring Edition","BRAND":"CM Model","CARBRAND":"Lexus","PRICE":110,"STATUS":"currentstock","SORTORDER":5,"NEW":false,"IMG1":"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22400%22%20height%3D%22400%22%20viewBox%3D%220%200%20400%20400%22%3E%3Crect%20width%3D%22400%22%20height%3D%22400%22%20fill%3D%22%23e6e6e6%22%2F%3E%3C%2Fsvg%3E"},
-  {"MODEL NO.":"MH-RX7-01","PRODUCT NAME":"Mazda RX-7 FD3S Veilside","BRAND":"Motorhelix","CARBRAND":"Mazda","PRICE":98,"STATUS":"currentstock","SORTORDER":6,"NEW":false,"IMG1":"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22400%22%20height%3D%22400%22%20viewBox%3D%220%200%20400%20400%22%3E%3Crect%20width%3D%22400%22%20height%3D%22400%22%20fill%3D%22%23e6e6e6%22%2F%3E%3C%2Fsvg%3E"},
-  {"MODEL NO.":"HJ-R32-01","PRODUCT NAME":"Nissan Skyline GT-R R32 Group A","BRAND":"Hobby Japan","CARBRAND":"Nissan","PRICE":102,"STATUS":"currentstock","SORTORDER":7,"NEW":false,"IMG1":"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22400%22%20height%3D%22400%22%20viewBox%3D%220%200%20400%20400%22%3E%3Crect%20width%3D%22400%22%20height%3D%22400%22%20fill%3D%22%23e6e6e6%22%2F%3E%3C%2Fsvg%3E"},
-  {"MODEL NO.":"LEGO-CIV-01","PRODUCT NAME":"Speed Champions Civic Type R","BRAND":"Lego","CARBRAND":"Honda","PRICE":45,"STATUS":"currentstock","SORTORDER":8,"NEW":false,"IMG1":"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22400%22%20height%3D%22400%22%20viewBox%3D%220%200%20400%20400%22%3E%3Crect%20width%3D%22400%22%20height%3D%22400%22%20fill%3D%22%23e6e6e6%22%2F%3E%3C%2Fsvg%3E"},
-  {"MODEL NO.":"TW-GR-01","PRODUCT NAME":"Toyota GR Supra Global64 Racing","BRAND":"Tarmac Works","CARBRAND":"Toyota","PRICE":120,"STATUS":"preorder","SORTORDER":9,"NEW":false,"IMG1":"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22400%22%20height%3D%22400%22%20viewBox%3D%220%200%20400%20400%22%3E%3Crect%20width%3D%22400%22%20height%3D%22400%22%20fill%3D%22%23e6e6e6%22%2F%3E%3C%2Fsvg%3E"},
-  {"MODEL NO.":"PR-GTR-35","PRODUCT NAME":"Nissan GT-R R35 Liberty Walk","BRAND":"PopRace","CARBRAND":"Nissan","PRICE":105,"STATUS":"preorder","SORTORDER":10,"NEW":false,"IMG1":"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22400%22%20height%3D%22400%22%20viewBox%3D%220%200%20400%20400%22%3E%3Crect%20width%3D%22400%22%20height%3D%22400%22%20fill%3D%22%23e6e6e6%22%2F%3E%3C%2Fsvg%3E"}
-];
-const fallbackImg = "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22400%22%20height%3D%22400%22%20viewBox%3D%220%200%20400%20400%22%3E%3Crect%20width%3D%22400%22%20height%3D%22400%22%20fill%3D%22%23f2f2f2%22%2F%3E%3Cdefs%3E%3Cpattern%20id%3D%22s%22%20width%3D%2214%22%20height%3D%2214%22%20patternTransform%3D%22rotate(45)%22%20patternUnits%3D%22userSpaceOnUse%22%3E%3Crect%20width%3D%227%22%20height%3D%2214%22%20fill%3D%22%23e9e9e9%22%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D%22400%22%20height%3D%22400%22%20fill%3D%22url(%23s)%22%2F%3E%3Ctext%20x%3D%22200%22%20y%3D%22200%22%20font-family%3D%22monospace%22%20font-size%3D%2213%22%20fill%3D%22%238a8a8a%22%20text-anchor%3D%22middle%22%3Eproduct%20photo%3C%2Ftext%3E%3C%2Fsvg%3E";
+const fallbackImg = "/assets/no-image.png";
 
 function statusOf(p){
   const s = (p.STATUS||'').toLowerCase().replace(/[\s_-]+/g,'');
@@ -373,12 +352,11 @@ function toCard(p){
     name: p['PRODUCT NAME'] || p.name || '',
     price: 'AED ' + Number(p.PRICE||0),
     priceValue: Number(p.PRICE||0),
-    badge: status==='preorder' ? 'Pre-Order' : (p.NEW ? 'New' : 'In Stock'),
-    badgeColor: status==='preorder' ? '#0a0a0a' : (p.NEW ? '#f0701e' : '#1a7a4a'),
+    badge: status==='preorder' ? 'Pre-Order' : 'In Stock',
+    badgeColor: status==='preorder' ? '#0a0a0a' : '#1a7a4a',
     img: p.IMG1 || fallbackImg,
     imgs: imgs.length ? imgs : [fallbackImg],
     sortOrder: Number(p.SORTORDER||999999),
-    isNew: !!p.NEW,
     status,
     raw: p
   };
@@ -386,7 +364,6 @@ function toCard(p){
 function bySortOrder(a,b){ return a.sortOrder - b.sortOrder; }
 let allProducts = [];
 let preOrderProducts = [];
-let newArrivalsProducts = [];
 let allProductsFull = [];
 
 let activeFilter = 'All';
@@ -409,7 +386,7 @@ function cardHtml(p){
   return `
     <div class="product-card" data-product='${JSON.stringify(p).replace(/'/g,"&apos;")}' style="flex:0 0 220px;border-radius:18px;overflow:hidden;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.7);box-shadow:0 12px 30px rgba(0,0,0,.06);">
       <div style="position:relative;aspect-ratio:1/1;background:#fff;overflow:hidden;cursor:pointer;">
-        <img src="${imgs[0]}" data-imgs='${JSON.stringify(imgs)}' data-cur="0" alt="${p.name}" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;touch-action:pan-y;" onerror="this.src='${fallbackImg}'"${imgs.length>1 ? ` onmouseenter="this.dataset.hoverCur=this.dataset.cur; this.dataset.cur=1; this.src=JSON.parse(this.dataset.imgs)[1];" onmouseleave="this.dataset.cur=this.dataset.hoverCur||0; this.src=JSON.parse(this.dataset.imgs)[Number(this.dataset.cur)];"` : ''}>
+        <img src="${imgs[0]}" data-imgs='${JSON.stringify(imgs)}' data-cur="0" alt="${p.name}" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;touch-action:pan-y;" onerror="this.onerror=null;this.src='${fallbackImg}'"${imgs.length>1 ? ` onmouseenter="this.dataset.hoverCur=this.dataset.cur; this.dataset.cur=1; this.src=JSON.parse(this.dataset.imgs)[1];" onmouseleave="this.dataset.cur=this.dataset.hoverCur||0; this.src=JSON.parse(this.dataset.imgs)[Number(this.dataset.cur)];"` : ''}>
         <div style="position:absolute;top:8px;left:8px;padding:3px 9px;border-radius:999px;font-size:.44rem;letter-spacing:1px;text-transform:uppercase;font-weight:550;background:rgba(255,255,255,.8);color:${p.badgeColor};">${p.badge}</div>
       </div>
       <div style="padding:12px 14px 14px;">
@@ -423,11 +400,6 @@ function cardHtml(p){
         </div>
       </div>
     </div>`;
-}
-function renderNewArrivals(){
-  const row = document.getElementById('newArrivalsRow');
-  row.innerHTML = newArrivalsProducts.length ? newArrivalsProducts.map(cardHtml).join('') : '<div style="color:#999;font-size:.85rem;">No new arrivals yet.</div>';
-  bindAdd(row);
 }
 function renderStock() {
   const q = document.getElementById('searchInput').value.trim().toLowerCase();
@@ -451,24 +423,15 @@ fetch(API_URL, { method: 'GET', cache: 'no-store' })
     allProductsFull = products;
     allProducts = products.filter(p => p.status === 'currentstock').sort(bySortOrder).slice(0, 6);
     preOrderProducts = products.filter(p => p.status === 'preorder').sort(bySortOrder).slice(0, 6);
-    newArrivalsProducts = products.filter(p => p.isNew && p.status !== 'sold').sort(bySortOrder).slice(0, 6);
-    if (!newArrivalsProducts.length) newArrivalsProducts = products.filter(p => p.status !== 'sold').sort(bySortOrder).slice(0, 6);
-    renderNewArrivals();
     renderStock();
     renderPreorder();
   })
   .then(openRoutedProductIfAny)
   .catch(() => {
-    const products = EMBEDDED_DEMO_PRODUCTS.map(toCard);
-    allProductsFull = products;
-    allProducts = products.filter(p => p.status === 'currentstock').sort(bySortOrder).slice(0, 6);
-    preOrderProducts = products.filter(p => p.status === 'preorder').sort(bySortOrder).slice(0, 6);
-    newArrivalsProducts = products.filter(p => p.isNew && p.status !== 'sold').sort(bySortOrder).slice(0, 6);
-    if (!newArrivalsProducts.length) newArrivalsProducts = products.filter(p => p.status !== 'sold').sort(bySortOrder).slice(0, 6);
-    renderNewArrivals();
-    renderStock();
-    renderPreorder();
-    openRoutedProductIfAny();
+    ['stockGrid','preorderGrid'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = '<div style="width:100%;text-align:center;padding:40px 0;color:#999;font-size:.85rem;">Could not load stock right now. Please refresh.</div>';
+    });
   });
 
 function addToCart(product) {
@@ -591,7 +554,7 @@ function renderDetailBody(card, name, imgs){
   });
   const shareBtn = document.getElementById('detailShareBtn');
   if (shareBtn) shareBtn.addEventListener('click', async () => {
-    const url = `${location.origin}/product/${encodeURIComponent(card.id||'')}`;
+    const url = `${location.origin}/current-stock/?q=${encodeURIComponent(card.id||'')}`;
     const imgUrl = imgs[0];
     let file = null;
     try {
@@ -638,13 +601,9 @@ function jumpTo(id) {
   closeNav();
   if (id === 'top') { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
   const el = document.getElementById(id);
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 60, behavior: 'smooth' });
 }
 
-document.querySelectorAll('[data-jump]').forEach(btn => btn.addEventListener('click', () => {
-  const target = document.getElementById(btn.dataset.jump);
-  if(target) target.scrollIntoView({behavior:'smooth'});
-}));
 document.getElementById('navToggle').addEventListener('click', openNav);
 document.getElementById('navSearchInput').addEventListener('keydown', e => {
   if (e.key !== 'Enter') return;
@@ -685,7 +644,7 @@ document.getElementById('joinBtn').addEventListener('click', () => {
 });
 let pendingOrder = null;
 function buildOrderMessage(){
-  const lines = cart.map((i,idx) => `${idx+1}. ${i.brand ? i.brand+' — '+i.name : i.name} (${i.id})\nhttps://64cast.com/product/${i.id}\nQty ${i.qty} × ${i.price} = AED ${i.priceValue*i.qty}`).join('\n\n');
+  const lines = cart.map((i,idx) => `${idx+1}. ${i.brand ? i.brand+' — '+i.name : i.name} (${i.id})\nhttps://64cast.com/current-stock/?q=${encodeURIComponent(i.id)}\nQty ${i.qty} × ${i.price} = AED ${i.priceValue*i.qty}`).join('\n\n');
   const subtotal = cart.reduce((s,i) => s + i.priceValue * i.qty, 0);
   const orderId = '64C-' + Math.random().toString(36).slice(2,10).toUpperCase();
   const msg = `${lines}\n\nPending Order ID: ${orderId}`;
@@ -723,6 +682,13 @@ renderCart();
   window.addEventListener('resize', update);
   btn.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
   update();
+})();
+</script>
+<script>
+(function(){
+  function isImg(t){return t && (t.tagName==='IMG' || (t.closest && t.closest('.product-card img, picture')));}
+  document.addEventListener('contextmenu',function(e){if(isImg(e.target))e.preventDefault();},true);
+  document.addEventListener('dragstart',function(e){if(isImg(e.target))e.preventDefault();},true);
 })();
 </script>
 </body>

@@ -72,6 +72,7 @@ tr.prow.drop-target td{border-top:2px solid var(--orange)}
 .link-btn.danger{color:var(--danger)}
 .mini-input{height:30px;border:1px solid rgba(0,0,0,.12);padding:0 8px;background:rgba(255,255,255,.7);border-radius:8px}
 .qty-input{width:60px;text-align:center}
+.pos-input{width:56px;text-align:center;font-weight:500}
 .pagination{margin:0 32px 32px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px 18px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.7);border-top:none;border-radius:0 0 18px 18px;font-size:.72rem;color:#888}
 .pagination .page-btns{display:flex;gap:8px;align-items:center}
 .pagination select{height:30px;border-radius:8px;border:1px solid rgba(0,0,0,.12);background:#fff;padding:0 6px}
@@ -167,7 +168,7 @@ tr.prow.drop-target td{border-top:2px solid var(--orange)}
 
   <div class="table-wrap">
     <table class="table">
-      <thead><tr><th style="width:32px"><input type="checkbox" id="selectAllCk"></th><th style="width:28px"></th><th style="width:64px">Image</th><th>Product</th><th>Brand</th><th>Car Brand</th><th>Model No.</th><th>Status</th><th>ETA</th><th>Qty</th><th>Price</th><th>Actions</th></tr></thead>
+      <thead><tr><th style="width:32px"><input type="checkbox" id="selectAllCk"></th><th style="width:64px" title="1 = top of site">Pos</th><th style="width:64px">Image</th><th>Product</th><th>Brand</th><th>Car Brand</th><th>Model No.</th><th>Status</th><th>ETA</th><th>Qty</th><th>Price</th><th>Actions</th></tr></thead>
       <tbody id="tbody"></tbody>
     </table>
   </div>
@@ -188,7 +189,7 @@ tr.prow.drop-target td{border-top:2px solid var(--orange)}
       <div class="grid3">
         <div class="field"><label>Status</label><select id="fStatus"><option value="currentstock">Current Stock</option><option value="preorder">Pre-Order</option><option value="sold">Sold Out</option></select></div>
         <div class="field"><label>ETA Month</label><select id="fEta"><option value="">No ETA</option></select></div>
-        <div class="field"><label>Sort Position</label><input id="fSort" type="number" min="1" step="1"><small>Or just drag the row on the table.</small></div>
+        <div class="field"><label>Sort Position</label><input id="fSort" type="number" min="1" step="1"><small>1 = top of the site. Others shift down.</small></div>
         <div class="field"><label>Qty</label><input id="fQty" type="number" min="0" step="1"></div>
         <div class="field"><label>Price AED</label><input id="fPrice" type="number" min="0" step="0.01"></div>
         <div class="field"><label>Original Price AED</label><input id="fOrigPrice" type="number" min="0" step="0.01"></div>
@@ -295,26 +296,7 @@ function renderPagination(total){
 }
 var STATUS_CYCLE=['currentstock','preorder','sold'];
 function statusPill(st){return '<button type="button" class="status-pill '+esc(st)+'" data-status-cycle="__MODEL__" title="Click to change status">'+(st==='currentstock'?'Current Stock':st==='preorder'?'Pre-Order':'Sold Out')+'</button>'}
-function renderTable(){var all=filtered();renderPagination(all.length);var rows=all.slice((CURRENT_PAGE-1)*PAGE_SIZE,CURRENT_PAGE*PAGE_SIZE);$('tbody').innerHTML=rows.length?rows.map(function(p){var st=statusOf(p),m=modelOf(p);return '<tr class="prow" draggable="true" data-model="'+esc(m)+'"><td><input type="checkbox" class="row-ck" data-ck="'+esc(m)+'" '+(SELECTED_MODELS.has(m)?'checked':'')+'></td><td><span class="drag-handle">\u22ee\u22ee</span></td><td><img class="thumb" src="'+esc(imageOf(p))+'" alt="'+esc(p['PRODUCT NAME']||m)+'" onerror="this.style.visibility=\'hidden\'"></td><td><div class="name">'+esc(p['PRODUCT NAME'])+'</div><div class="muted mono">'+esc(p.SCALE)+'</div></td><td>'+esc(p.BRAND)+'</td><td>'+esc(p.CARBRAND||'-')+'</td><td class="mono">'+esc(m)+'</td><td>'+statusPill(st).replace('__MODEL__',esc(m))+'</td><td>'+esc(p.ETA||'-')+'</td><td><input class="mini-input qty-input" data-qty="'+esc(m)+'" type="number" min="0" step="1" value="'+esc(p.QTY)+'" '+(st==='sold'?'readonly':'')+'></td><td><input class="price-input" data-price="'+esc(m)+'" type="number" min="0" step="0.01" value="'+esc(p.PRICE)+'"></td><td><div class="row-actions"><button class="link-btn" data-edit="'+esc(m)+'">Edit</button><button class="link-btn danger" data-del="'+esc(m)+'">Delete</button></div></td></tr>'}).join(''):'<tr><td colspan="12" style="text-align:center;padding:40px;color:#999">No products found</td></tr>';attachDrag();}
-function attachDrag(){
-  var dragModel=null;
-  document.querySelectorAll('tr.prow').forEach(function(row){
-    row.addEventListener('dragstart',function(e){dragModel=row.getAttribute('data-model');row.classList.add('dragging');e.dataTransfer.effectAllowed='move'});
-    row.addEventListener('dragend',function(){row.classList.remove('dragging');document.querySelectorAll('tr.prow.drop-target').forEach(function(r){r.classList.remove('drop-target')})});
-    row.addEventListener('dragover',function(e){e.preventDefault();if(row.getAttribute('data-model')!==dragModel){document.querySelectorAll('tr.prow.drop-target').forEach(function(r){r.classList.remove('drop-target')});row.classList.add('drop-target')}});
-    row.addEventListener('drop',function(e){
-      e.preventDefault();
-      var targetModel=row.getAttribute('data-model');
-      row.classList.remove('drop-target');
-      if(!dragModel||dragModel===targetModel)return;
-      var visible=Array.from(document.querySelectorAll('tr.prow')).map(function(r){return r.getAttribute('data-model')});
-      var targetIdx=visible.indexOf(targetModel);
-      var targetProduct=filtered()[targetIdx];
-      var newPos=targetProduct?targetProduct.SORTORDER:1;
-      quickOrder(dragModel,newPos).catch(function(err){alert(err.message||err)});
-    });
-  });
-}
+function renderTable(){var all=filtered();renderPagination(all.length);var rows=all.slice((CURRENT_PAGE-1)*PAGE_SIZE,CURRENT_PAGE*PAGE_SIZE);$('tbody').innerHTML=rows.length?rows.map(function(p){var st=statusOf(p),m=modelOf(p);return '<tr class="prow" data-model="'+esc(m)+'"><td><input type="checkbox" class="row-ck" data-ck="'+esc(m)+'" '+(SELECTED_MODELS.has(m)?'checked':'')+'></td><td><input class="mini-input pos-input" data-pos="'+esc(m)+'" type="number" min="1" step="1" value="'+esc(p.SORTORDER)+'" title="Position (1 = top). Press Enter to apply."></td><td><img class="thumb" src="'+esc(imageOf(p))+'" alt="'+esc(p['PRODUCT NAME']||m)+'" onerror="this.style.visibility=\'hidden\'"></td><td><div class="name">'+esc(p['PRODUCT NAME'])+'</div><div class="muted mono">'+esc(p.SCALE)+'</div></td><td>'+esc(p.BRAND)+'</td><td>'+esc(p.CARBRAND||'-')+'</td><td class="mono">'+esc(m)+'</td><td>'+statusPill(st).replace('__MODEL__',esc(m))+'</td><td>'+esc(p.ETA||'-')+'</td><td><input class="mini-input qty-input" data-qty="'+esc(m)+'" type="number" min="0" step="1" value="'+esc(p.QTY)+'" '+(st==='sold'?'readonly':'')+'></td><td><input class="price-input" data-price="'+esc(m)+'" type="number" min="0" step="0.01" value="'+esc(p.PRICE)+'"></td><td><div class="row-actions"><button class="link-btn" data-edit="'+esc(m)+'">Edit</button><button class="link-btn danger" data-del="'+esc(m)+'">Delete</button></div></td></tr>'}).join(''):'<tr><td colspan="12" style="text-align:center;padding:40px;color:#999">No products found</td></tr>';}
 var SELECTED_MODELS = new Set();
 function updateBulkBar(){
   var visibleModels=Array.from(document.querySelectorAll('.row-ck')).map(function(c){return c.getAttribute('data-ck')});
@@ -353,7 +335,7 @@ async function bulkDelete(){
   toast('Deleted '+count+' product(s)');
 }
 function syncStatusQty(statusEl,qtyEl){var st=statusOf({STATUS:statusEl.value,QTY:qtyEl.value}); if(st==='sold'){qtyEl.value=0;qtyEl.readOnly=true;statusEl.value='sold';}else{qtyEl.readOnly=false;if(num(qtyEl.value,0)===0&&st!=='preorder'){statusEl.value='sold';qtyEl.readOnly=true;}}}
-function openEdit(model){var p=PRODUCTS.find(function(x){return modelOf(x)===model});$('modalTitle').textContent=p?'Edit Product':'Add Product';$('fOriginalModel').value=p?modelOf(p):'';$('fName').value=p?p['PRODUCT NAME']:'';$('fModel').value=p?modelOf(p):'';$('fBrand').value=p?p.BRAND:'';$('fCarbrand').value=p?p.CARBRAND:'';$('fStatus').value=p?statusOf(p):'currentstock';$('fEta').value=p?clean(p.ETA):'';$('fSort').value=p?p.SORTORDER:PRODUCTS.length+1;$('fQty').value=p?p.QTY:1;$('fPrice').value=p?p.PRICE:0;$('fOrigPrice').value=p?p.ORIGPRICE:0;$('fImg1').value=p?p.IMG1:'';$('fImg2').value=p?p.IMG2:'';$('fImg3').value=p?p.IMG3:'';$('fImg4').value=p?p.IMG4:'';$('fImageScale').value=p?p.IMAGE_SCALE:100;$('fNew').value=p?clean(p.NEW):'';$('fDescription').value=p?clean(p.DESCRIPTION):'';syncStatusQty($('fStatus'),$('fQty'));[1,2,3,4].forEach(function(n){updateImgThumb(n)});$('editModal').classList.add('open')}
+function openEdit(model){var p=PRODUCTS.find(function(x){return modelOf(x)===model});$('modalTitle').textContent=p?'Edit Product':'Add Product';$('fOriginalModel').value=p?modelOf(p):'';$('fName').value=p?p['PRODUCT NAME']:'';$('fModel').value=p?modelOf(p):'';$('fBrand').value=p?p.BRAND:'';$('fCarbrand').value=p?p.CARBRAND:'';$('fStatus').value=p?statusOf(p):'currentstock';$('fEta').value=p?clean(p.ETA):'';$('fSort').value=p?p.SORTORDER:1;$('fQty').value=p?p.QTY:1;$('fPrice').value=p?p.PRICE:0;$('fOrigPrice').value=p?p.ORIGPRICE:0;$('fImg1').value=p?p.IMG1:'';$('fImg2').value=p?p.IMG2:'';$('fImg3').value=p?p.IMG3:'';$('fImg4').value=p?p.IMG4:'';$('fImageScale').value=p?p.IMAGE_SCALE:100;$('fNew').value=p?clean(p.NEW):'';$('fDescription').value=p?clean(p.DESCRIPTION):'';syncStatusQty($('fStatus'),$('fQty'));[1,2,3,4].forEach(function(n){updateImgThumb(n)});$('editModal').classList.add('open')}
 function updateImgThumb(slot){var url=$('fImg'+slot).value;var thumb=$('fImg'+slot+'Thumb');if(url){thumb.src=url;thumb.classList.remove('hide')}else{thumb.classList.add('hide');thumb.src=''}}
 function handleImageFile(slot,file){
   if(!file)return;
@@ -417,7 +399,7 @@ async function saveProduct(){
   var list=PRODUCTS.slice();
   var idx=oldModel?list.findIndex(function(x){return modelOf(x)===oldModel}):-1;
   if(idx>=0)list[idx]=p; else list.push(p);
-  list=moveToPosition(list,modelOf(p),num($('fSort').value,list.length));
+  list=moveToPosition(list,modelOf(p),num($('fSort').value,idx>=0?list.length:1));
   var btn=$('saveProductBtn'); btn.disabled=true; var lbl=btn.textContent; btn.textContent='Saving...';
   try{
     await persistProducts(list);
@@ -438,6 +420,12 @@ async function updateOne(model,mutate){
   if(!p)throw new Error('Product not found: '+model);
   mutate(p);
   await persistProducts(list);
+}
+async function quickOrder(model,pos){
+  var p=Math.max(1,Math.floor(num(pos,1)));
+  var list=moveToPosition(PRODUCTS.slice(),model,p);
+  await persistProducts(list);
+  toast(model+' moved to #'+p);
 }
 async function quickQty(model,value){
   var q=Math.max(0,Math.floor(num(value,0)));
@@ -545,7 +533,7 @@ $('logoutBtn').onclick=function(){setToken('');location.href='/admin-8822'};$('r
 ['searchInput','brandFilter','carFilter','statusFilter'].forEach(function(id){$(id).addEventListener('input',function(){CURRENT_PAGE=1;renderTable()});$(id).addEventListener('change',function(){CURRENT_PAGE=1;renderTable()})});
 ['fStatus','fQty'].forEach(function(id){$(id).addEventListener('input',function(){syncStatusQty($('fStatus'),$('fQty'))});$(id).addEventListener('change',function(){syncStatusQty($('fStatus'),$('fQty'))})});
 document.body.addEventListener('click',function(e){var close=e.target.getAttribute('data-close');if(close)$(close).classList.remove('open');var edit=e.target.getAttribute('data-edit');if(edit)openEdit(edit);var del=e.target.getAttribute('data-del');if(del)deleteProduct(del).catch(function(err){alert(err.message||err)});var delSignup=e.target.getAttribute('data-del-signup');if(delSignup)removeCommunitySignup(delSignup).catch(function(err){alert(err.message||err)});var confirmOrderId=e.target.getAttribute('data-confirm-order');if(confirmOrderId)confirmOrder(confirmOrderId).catch(function(err){alert(err.message||err)});var rejectOrderId=e.target.getAttribute('data-reject-order');if(rejectOrderId)rejectOrder(rejectOrderId).catch(function(err){alert(err.message||err)});var statusCycle=e.target.getAttribute('data-status-cycle');if(statusCycle)quickStatusCycle(statusCycle).catch(function(err){alert(err.message||err)})});
-document.body.addEventListener('change',function(e){var m=e.target.getAttribute('data-qty');if(m)quickQty(m,e.target.value).catch(function(err){alert(err.message||err)});var pr=e.target.getAttribute('data-price');if(pr)quickPrice(pr,e.target.value).catch(function(err){alert(err.message||err)});var ck=e.target.getAttribute('data-ck');if(ck){if(e.target.checked)SELECTED_MODELS.add(ck);else SELECTED_MODELS.delete(ck);updateBulkBar()}});
+document.body.addEventListener('change',function(e){var po=e.target.getAttribute('data-pos');if(po){quickOrder(po,e.target.value).catch(function(err){alert(err.message||err)});return;}var m=e.target.getAttribute('data-qty');if(m)quickQty(m,e.target.value).catch(function(err){alert(err.message||err)});var pr=e.target.getAttribute('data-price');if(pr)quickPrice(pr,e.target.value).catch(function(err){alert(err.message||err)});var ck=e.target.getAttribute('data-ck');if(ck){if(e.target.checked)SELECTED_MODELS.add(ck);else SELECTED_MODELS.delete(ck);updateBulkBar()}});
 $('selectAllCk').addEventListener('change',function(){var boxes=document.querySelectorAll('.row-ck');boxes.forEach(function(c){var m=c.getAttribute('data-ck');c.checked=$('selectAllCk').checked;if($('selectAllCk').checked)SELECTED_MODELS.add(m);else SELECTED_MODELS.delete(m)});updateBulkBar()});
 $('bulkStatusBtn').onclick=function(){bulkSetStatus($('bulkStatusSel').value).catch(function(e){alert(e.message||e)})};
 $('bulkBrandBtn').onclick=function(){bulkSetText('BRAND',$('bulkBrandInp').value).then(function(){$('bulkBrandInp').value=''}).catch(function(e){alert(e.message||e)})};
