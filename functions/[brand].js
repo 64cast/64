@@ -20,7 +20,8 @@ const BRANDS = [
   { slug: "uniquemodel", name: "Unique Model", logo: "/assets/brands/unique-model.png" },
   { slug: "pgm", name: "PGM", logo: "/assets/brands/pgm.png" },
   { slug: "kyosho", name: "Kyosho", logo: "/assets/brands/kyosho.png" },
-  { slug: "bmcreations", name: "BM Creations", logo: "/assets/brands/bm-creations.png" }
+  { slug: "bmcreations", name: "BM Creations", logo: "/assets/brands/bm-creations.png" },
+  { slug: "works", name: "Works", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmgAot4hnZxs9Nm-zhdacIPU1PCinVrhIrYTivsypKGA&s" }
 ];
 
 // Matches /minigt, /MiniGT, /poprace, etc. at the root level (no hyphens).
