@@ -551,7 +551,7 @@ function renderDetailBody(card, name, imgs){
   });
   const shareBtn = document.getElementById('detailShareBtn');
   if (shareBtn) shareBtn.addEventListener('click', async () => {
-    const url = `${location.origin}/current-stock/?q=${encodeURIComponent(card.id||'')}`;
+    const url = `${location.origin}/product/${encodeURIComponent(card.id||'')}`;
     const imgUrl = imgs[0];
     let file = null;
     try {
