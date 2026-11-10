@@ -10,7 +10,7 @@ const BRANDS = [
   { slug: "kaidohouse", name: "Kaido House", logo: "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/kaidohouse.jpg" },
   { slug: "lego", name: "Lego", logo: "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/lego.jpg" },
   { slug: "motorhelix", name: "Motorhelix", logo: "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/motorhelix.jpg" },
-  { slug: "arbox", name: "ARbox", logo: "/assets/brands/arbox.png" },
+  { slug: "arbox", name: "AR Box", logo: "/assets/brands/arbox.png" },
   { slug: "trendshobby", name: "Trends Hobby", logo: "/assets/brands/trends-hobby.png" },
   { slug: "americandiorama", name: "American Diorama", logo: "/assets/brands/american-diorama.png" },
   { slug: "gcd", name: "GCD", logo: "/assets/brands/gcd.png" },
