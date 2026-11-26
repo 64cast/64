@@ -98,6 +98,7 @@ img{-webkit-user-drag:none;user-drag:none;-webkit-touch-callout:none;user-select
     </nav>
 
     <div id="stickyBar" style="display:flex;align-items:center;gap:10px;padding:14px 40px;background:#fff;border-bottom:1px solid rgba(0,0,0,.08);">
+      <button class="chip glossW" onclick="location.href='/new-arrivals/'">New Arrivals</button>
       <button class="chip glossO" onclick="location.href='https://64cast.com/current-stock/?status=currentstock'">Current Stock</button>
       <button class="chip glossW" onclick="location.href='https://64cast.com/current-stock/?status=preorder'">Pre-Order</button>
       <div style="position:relative;overflow:hidden;flex:1;display:flex;align-items:center;gap:8px;height:44px;border-radius:999px;padding:0 16px;background:rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.08);max-width:340px;margin-left:auto;">
@@ -198,7 +199,15 @@ img{-webkit-user-drag:none;user-drag:none;-webkit-touch-callout:none;user-select
   </div>
 
 
-  <div id="stock" style="padding:8px 5vw 10px;display:flex;align-items:baseline;justify-content:space-between;position:relative;z-index:1;">
+  <div id="newarrivals" style="padding:8px 5vw 10px;display:flex;align-items:baseline;justify-content:space-between;position:relative;z-index:1;">
+    <div style="font-size:1.3rem;letter-spacing:1px;text-transform:uppercase;font-weight:400;">New Arrivals</div>
+    <a href="/new-arrivals/" style="font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:#555;">View All →</a>
+  </div>
+  <div id="newArrivalsGrid" style="display:flex;gap:20px;overflow-x:auto;padding:8px 5vw 20px;position:relative;z-index:1;">
+    <div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div>
+  </div>
+
+  <div id="stock" style="padding:28px 5vw 10px;display:flex;align-items:baseline;justify-content:space-between;position:relative;z-index:1;">
     <div style="font-size:1.3rem;letter-spacing:1px;text-transform:uppercase;font-weight:400;">Current Stock</div>
     <a href="https://64cast.com/current-stock/" style="font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:#555;">View All →</a>
   </div>
@@ -271,6 +280,7 @@ img{-webkit-user-drag:none;user-drag:none;-webkit-touch-callout:none;user-select
         <input id="navSearchInput" placeholder="Search model, brand..." style="border:none;outline:none;background:none;font-family:var(--font);font-size:.75rem;color:#0a0a0a;width:100%;">
       </div>
       <a href="#" class="navlink" data-jump="top">Home</a>
+      <a href="/new-arrivals/" class="navlink">New Arrivals</a>
       <details style="border:none;">
         <summary class="navlink" style="cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;">Shop By Brand<svg viewBox="0 0 24 24" style="width:11px;height:11px;stroke:#888;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M6 9l6 6 6-6"></path></svg></summary>
         <div style="display:flex;flex-direction:column;max-height:260px;overflow-y:auto;"><a href="https://64cast.com/minigt" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Mini GT</a><a href="https://64cast.com/tarmacworks" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Tarmac Works</a><a href="https://64cast.com/inno64" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Inno64</a><a href="https://64cast.com/poprace" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">PopRace</a><a href="https://64cast.com/bburago" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Bburago</a><a href="https://64cast.com/bbrmodels" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">BBR Models</a><a href="https://64cast.com/cmmodel" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">CM Model</a><a href="https://64cast.com/hobbyjapan" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Hobby Japan</a><a href="https://64cast.com/kaidohouse" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Kaido House</a><a href="https://64cast.com/lego" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Lego</a><a href="https://64cast.com/motorhelix" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Motorhelix</a><a href="https://64cast.com/arbox" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">ARbox</a><a href="https://64cast.com/trendshobby" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Trends Hobby</a><a href="https://64cast.com/americandiorama" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">American Diorama</a><a href="https://64cast.com/gcd" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">GCD</a><a href="https://64cast.com/tiny" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Tiny</a><a href="https://64cast.com/sparkmodel" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Spark Model</a><a href="https://64cast.com/uniquemodel" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Unique Model</a><a href="https://64cast.com/pgm" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">PGM</a><a href="https://64cast.com/kyosho" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Kyosho</a><a href="https://64cast.com/bmcreations" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">BM Creations</a><a href="https://64cast.com/works" style="display:block;padding:9px 8px 9px 20px;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:#555;">Works</a></div>
@@ -408,6 +418,14 @@ function renderStock() {
   bindAdd(grid);
 }
 
+let newArrivalProducts = [];
+function renderNewArrivals() {
+  const grid = document.getElementById('newArrivalsGrid');
+  if (!grid) return;
+  grid.innerHTML = newArrivalProducts.map(cardHtml).join('');
+  bindAdd(grid);
+}
+
 function renderPreorder() {
   const grid = document.getElementById('preorderGrid');
   grid.innerHTML = preOrderProducts.map(cardHtml).join('');
@@ -420,12 +438,15 @@ fetch(API_URL, { method: 'GET', cache: 'no-store' })
     allProductsFull = products;
     allProducts = products.filter(p => p.status === 'currentstock').sort(bySortOrder).slice(0, 6);
     preOrderProducts = products.filter(p => p.status === 'preorder').sort(bySortOrder).slice(0, 6);
+    // New Arrivals: most recently added first (new products get position 1 in admin), any brand/status except sold
+    newArrivalProducts = products.filter(p => p.status !== 'sold').sort(bySortOrder).slice(0, 12);
+    renderNewArrivals();
     renderStock();
     renderPreorder();
   })
   .then(openRoutedProductIfAny)
   .catch(() => {
-    ['stockGrid','preorderGrid'].forEach(id => {
+    ['newArrivalsGrid','stockGrid','preorderGrid'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.innerHTML = '<div style="width:100%;text-align:center;padding:40px 0;color:#999;font-size:.85rem;">Could not load stock right now. Please refresh.</div>';
     });
