@@ -394,7 +394,7 @@ function cardHtml(p){
     <div class="product-card" data-product='${JSON.stringify(p).replace(/'/g,"&apos;")}' style="flex:0 0 220px;border-radius:18px;overflow:hidden;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.7);box-shadow:0 12px 30px rgba(0,0,0,.06);">
       <div style="position:relative;aspect-ratio:1/1;background:#fff;overflow:hidden;cursor:pointer;">
         <img src="${imgs[0]}" data-imgs='${JSON.stringify(imgs)}' data-cur="0" alt="${p.name}" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;touch-action:pan-y;" onerror="this.onerror=null;this.src='${fallbackImg}'"${imgs.length>1 ? ` onmouseenter="this.dataset.hoverCur=this.dataset.cur; this.dataset.cur=1; this.src=JSON.parse(this.dataset.imgs)[1];" onmouseleave="this.dataset.cur=this.dataset.hoverCur||0; this.src=JSON.parse(this.dataset.imgs)[Number(this.dataset.cur)];"` : ''}>
-        <div style="position:absolute;top:8px;left:8px;padding:3px 9px;border-radius:999px;font-size:.44rem;letter-spacing:1px;text-transform:uppercase;font-weight:550;background:rgba(255,255,255,.8);color:${p.badgeColor};">${p.badge}</div>
+        ${p.badge ? `<div style="position:absolute;top:8px;left:8px;padding:3px 9px;border-radius:999px;font-size:.44rem;letter-spacing:1px;text-transform:uppercase;font-weight:550;background:rgba(255,255,255,.8);color:${p.badgeColor};">${p.badge}</div>` : ''}
       </div>
       <div style="padding:12px 14px 14px;">
         <div style="font-size:.64rem;letter-spacing:1px;text-transform:uppercase;color:#555;">${p.brand}</div>
@@ -422,7 +422,7 @@ let newArrivalProducts = [];
 function renderNewArrivals() {
   const grid = document.getElementById('newArrivalsGrid');
   if (!grid) return;
-  grid.innerHTML = newArrivalProducts.map(cardHtml).join('');
+  grid.innerHTML = newArrivalProducts.map(p => cardHtml(p.status === 'preorder' ? p : Object.assign({}, p, { badge: '' }))).join('');
   bindAdd(grid);
 }
 
