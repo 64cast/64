@@ -363,10 +363,21 @@ function resolveImg2(p){
 function statusLabel(s){
   return { currentstock:'Current Stock', readytocollect:'Ready to Collect', instock:'Current Stock', preorder:'Pre-Order', sold:'Sold' }[s] || s;
 }
+// New Arrivals = the 60 most recently added products (lowest SORTORDER; admin puts new products at position 1).
+const NEW_ARRIVALS_LIMIT = 60;
+let NEW_ARRIVAL_IDS = new Set();
+function isSold(p){
+  const s = (p.STATUS||'').toLowerCase().replace(/[\s_-]+/g,'');
+  return s === 'sold' || s === 'soldout' || s === 'outofstock' || (Number(p.QTY||0) <= 0 && s !== 'preorder');
+}
+function computeNewArrivals(){
+  const latest = allProducts.filter(p => !isSold(p))
+    .sort((a,b) => (Number(a.SORTORDER)||999999) - (Number(b.SORTORDER)||999999))
+    .slice(0, NEW_ARRIVALS_LIMIT);
+  NEW_ARRIVAL_IDS = new Set(latest.map(p => p['MODEL NO.']));
+}
 function passesStatus(p){
-  const s = (p.STATUS||'').toLowerCase();
-  if (Number(p.QTY||0) <= 0 || s === 'sold') return false;
-  return !!p.NEW;
+  return NEW_ARRIVAL_IDS.has(p['MODEL NO.']);
 }
 
 function renderBrandRail(){
@@ -467,10 +478,9 @@ function renderGrid(){
     .filter(p => activeVehicleBrand === 'All' || p.CARBRAND === activeVehicleBrand)
     .filter(p => { const price = Number(p.PRICE||0); return price >= priceMin && price <= priceMax; })
     .filter(p => !q || (p['PRODUCT NAME']||'').toLowerCase().includes(q) || (p.BRAND||'').toLowerCase().includes(q) || (p.CARBRAND||'').toLowerCase().includes(q) || (p['MODEL NO.']||'').toLowerCase().includes(q));
-  filtered.sort((a,b) => (Number(a.QTY||0)<=0) - (Number(b.QTY||0)<=0));
-  if (sortMode === 'price-asc') filtered.sort((a,b) => (Number(a.QTY||0)<=0) - (Number(b.QTY||0)<=0) || Number(a.PRICE||0) - Number(b.PRICE||0));
-  else if (sortMode === 'price-desc') filtered.sort((a,b) => (Number(a.QTY||0)<=0) - (Number(b.QTY||0)<=0) || Number(b.PRICE||0) - Number(a.PRICE||0));
-  else filtered.sort((a,b) => (Number(a.QTY||0)<=0) - (Number(b.QTY||0)<=0) || Number(b.SORTORDER||0) - Number(a.SORTORDER||0));
+  if (sortMode === 'price-asc') filtered.sort((a,b) => Number(a.PRICE||0) - Number(b.PRICE||0));
+  else if (sortMode === 'price-desc') filtered.sort((a,b) => Number(b.PRICE||0) - Number(a.PRICE||0));
+  else filtered.sort((a,b) => (Number(a.SORTORDER)||999999) - (Number(b.SORTORDER)||999999));
   document.getElementById('resultCount').textContent = '(' + filtered.length + ')';
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   if (currentPage > totalPages) currentPage = totalPages;
@@ -510,7 +520,7 @@ function renderGrid(){
     const imgs = [...new Set([img, img2, resolveAny(p.IMG3), resolveAny(p.IMG4)].filter(Boolean))];
     const name = p['PRODUCT NAME'] || '';
     const qty = Number(p.QTY||0);
-    const disabled = qty <= 0;
+    const disabled = isSold(p);
     return `
     <div class="product-card" data-product='${JSON.stringify(p).replace(/'/g,"&apos;")}' style="border-radius:18px;overflow:hidden;background:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.8);box-shadow:0 12px 30px rgba(0,0,0,.06);">
       <div style="position:relative;aspect-ratio:1/1;background:#fff;overflow:hidden;cursor:pointer;">
@@ -825,6 +835,7 @@ document.getElementById('sendWhatsappBtn').addEventListener('click', () => {
 
 function applyProducts(rows){
   allProducts = Array.isArray(rows) ? rows : [];
+  computeNewArrivals();
   if (QS_BRAND) {
     const match = allProducts.find(p => (p.BRAND||'').trim().toLowerCase() === QS_BRAND.trim().toLowerCase());
     activeBrand = match ? match.BRAND : QS_BRAND;
