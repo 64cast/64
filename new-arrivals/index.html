@@ -348,7 +348,7 @@ if (QS_SEARCH) { document.getElementById('searchInput').value = QS_SEARCH; }
 let cart = [];
 try { cart = JSON.parse(localStorage.getItem('64cast_cart')||'[]'); } catch(e) { cart = []; }
 let currentPage = 1;
-const PAGE_SIZE = 25;
+const PAGE_SIZE = 50; // single page: all new arrivals shown at once
 
 function resolveImg(p){
   const raw = p['REF IMG'] || p.IMG1 || '';
@@ -363,8 +363,8 @@ function resolveImg2(p){
 function statusLabel(s){
   return { currentstock:'Current Stock', readytocollect:'Ready to Collect', instock:'Current Stock', preorder:'Pre-Order', sold:'Sold' }[s] || s;
 }
-// New Arrivals = the 60 most recently added products (lowest SORTORDER; admin puts new products at position 1).
-const NEW_ARRIVALS_LIMIT = 60;
+// New Arrivals = the 50 most recently added products (lowest SORTORDER; admin puts new products at position 1).
+const NEW_ARRIVALS_LIMIT = 50;
 let NEW_ARRIVAL_IDS = new Set();
 function isSold(p){
   const s = (p.STATUS||'').toLowerCase().replace(/[\s_-]+/g,'');
@@ -525,7 +525,7 @@ function renderGrid(){
     <div class="product-card" data-product='${JSON.stringify(p).replace(/'/g,"&apos;")}' style="border-radius:18px;overflow:hidden;background:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.8);box-shadow:0 12px 30px rgba(0,0,0,.06);">
       <div style="position:relative;aspect-ratio:1/1;background:#fff;overflow:hidden;cursor:pointer;">
         <img src="${imgs[0]}" data-imgs='${JSON.stringify(imgs)}' data-cur="0" alt="${name}" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;touch-action:pan-y;filter:${disabled?'grayscale(1)':'none'};" onerror="this.src='${fallbackImg}'"${imgs.length>1 ? ` onmouseenter="this.dataset.hoverCur=this.dataset.cur; this.dataset.cur=1; this.src=JSON.parse(this.dataset.imgs)[1];" onmouseleave="this.dataset.cur=this.dataset.hoverCur||0; this.src=JSON.parse(this.dataset.imgs)[Number(this.dataset.cur)];" ontouchstart="this.dataset.sx=event.touches[0].clientX" ontouchend="var im=JSON.parse(this.dataset.imgs);var dx=event.changedTouches[0].clientX-this.dataset.sx;if(Math.abs(dx)>30){var c=(Number(this.dataset.cur)+(dx<0?1:-1)+im.length)%im.length;this.dataset.cur=c;this.src=im[c];}"` : ''}>
-        <div style="position:absolute;top:8px;left:8px;padding:3px 9px;border-radius:999px;font-size:.44rem;letter-spacing:1px;text-transform:uppercase;font-weight:550;background:${disabled?'rgba(10,10,10,.75)':'#fbead9'};color:${disabled?'#fff':'#c1601a'};">${disabled ? 'Sold' : 'New'}</div>
+        ${(p.STATUS||'').toLowerCase().replace(/[\s_-]+/g,'') === 'preorder' ? `<div style="position:absolute;top:8px;left:8px;padding:3px 9px;border-radius:999px;font-size:.44rem;letter-spacing:1px;text-transform:uppercase;font-weight:550;background:rgba(255,255,255,.8);color:#0a0a0a;">Pre-Order</div>` : ''}
       </div>
       <div style="padding:12px 14px 14px;">
         <div style="font-size:.64rem;letter-spacing:1px;text-transform:uppercase;color:#555;">${p.BRAND||''}</div>
