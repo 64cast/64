@@ -73,5 +73,29 @@
         "logo": "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/events/sandbox-swapmeet-flag-day/partners/1795753751261_image.png"
       }
     ]
+  },
+  {
+    "title": "UAE Diecast Collector Grand Meetup",
+    "tag": "Collector Meetup",
+    "date": "2026-10-18",
+    "dateLabel": "17–18 October 2026",
+    "location": "B1 Mall, Al Barsha, Dubai",
+    "description": "By FairPrice Diecast Community x Sandbox Swapmeet",
+    "media": [
+      {
+        "type": "video",
+        "src": "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/events/grand-meetup-oct-2026/SaveClip.App_AQMW4adWGPRR65W5wkauN_P1opMpTN5BrKG0gYdmCpF3i-CotF9PzxlDeXnjfm9t5vBx8gpy19JGLaviLDywpwnz8VfAX9TwRlICCjE.mp4"
+      }
+    ],
+    "partners": [
+      {
+        "name": "Fair Price Diecast",
+        "logo": "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/events/sandbox-swapmeet-flag-day/partners/1795753487030_image.png"
+      },
+      {
+        "name": "Sandbox Swapmeet",
+        "logo": "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/events/sandbox-swapmeet-flag-day/partners/1795753639948_image.png"
+      }
+    ]
   }
 ]
