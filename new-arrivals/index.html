@@ -924,9 +924,16 @@ renderCart();
     'new arrivals': 'The 50 latest pieces added to 64CAST — fresh in-hand drops and newly opened pre-orders, newest first.',
     'inhand items': 'Pieces already in hand in Dubai, ready to collect or deliver. Order on WhatsApp and pick up this week.'
   };
+  var EV = 'https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/events/sandbox-swapmeet-flag-day/SaveClip.App_';
+  var PHOTO = {
+    'current stock': EV + '923374464_18054143504820115_8155343316355461799_n.jpg',
+    'pre-order': EV + '922617282_18054143576820115_7141916175741418759_n.jpg',
+    'new arrivals': EV + '914395134_18054143783820115_1540251949202830936_n.jpg',
+    'inhand items': EV + '914439898_18054143555820115_6310597584353879643_n.jpg'
+  };
   var hero = document.createElement('div'); hero.id = 'byHero';
   hero.innerHTML = '<div><h1><span id="byTitle"></span><sup id="byCount"></sup></h1><p id="byIntro"></p></div>' +
-    '<a class="ph" href="/events" aria-label="See our events" style="background-image:url(https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/events/sandbox-swapmeet-flag-day/SaveClip.App_923374464_18054143504820115_8155343316355461799_n.jpg)"><span>Events →</span></a>';
+    '<a class="ph" href="/events" aria-label="See our events"><span>Events →</span></a>';
   anchor.parentNode.insertBefore(hero, anchor);
   function sync(){
     var h = document.getElementById('pageHeading'), r = document.getElementById('resultCount');
@@ -934,6 +941,7 @@ renderCart();
     document.getElementById('byTitle').textContent = label;
     document.getElementById('byCount').textContent = (r && r.textContent.trim()) || '';
     document.getElementById('byIntro').textContent = INTRO[label.toLowerCase()] || INTRO['current stock'];
+    var ph = hero.querySelector('a.ph'); ph.style.backgroundImage = 'url(' + (PHOTO[label.toLowerCase()] || PHOTO['current stock']) + ')';
   }
   sync();
   ['pageHeading','resultCount'].forEach(function(id){ var el = document.getElementById(id); if (el) new MutationObserver(sync).observe(el, { childList:true, characterData:true, subtree:true }); });
