@@ -38,6 +38,14 @@ button{font-family:var(--font);cursor:pointer}
 .drawer-overlay{position:fixed;inset:0;z-index:200;background:rgba(10,10,10,.28);backdrop-filter:none;display:none;}
 .drawer-overlay.open{display:block;}
 .navlink{padding:12px 8px;font-size:.9rem;text-transform:uppercase;letter-spacing:1px;text-decoration:none;color:#0a0a0a;display:block;}
+.ev-team{position:relative;margin:0 0 48px;border-radius:26px;overflow:hidden;aspect-ratio:2.1/1;background:#111;}
+.ev-team .bg{position:absolute;inset:0;background:center/cover no-repeat;filter:sepia(.38) saturate(1.25) contrast(.95) brightness(1.02) hue-rotate(-8deg);}
+.ev-team .tone{position:absolute;inset:0;background:rgba(150,75,20,.14);mix-blend-mode:multiply;}
+.ev-team:after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(0,0,0,.55));}
+.ev-team .cap{position:absolute;left:28px;bottom:24px;z-index:1;color:#fff;}
+.ev-team .k{font-size:.58rem;letter-spacing:3px;text-transform:uppercase;opacity:.85;margin-bottom:6px;}
+.ev-team .t{font-size:1.2rem;letter-spacing:2px;text-transform:uppercase;}
+@media (max-width:760px){.ev-team{aspect-ratio:4/3;border-radius:18px;margin-bottom:32px;}.ev-team .cap{left:18px;bottom:16px;}.ev-team .t{font-size:.95rem;}}
 .ev-card{border-radius:26px;overflow:hidden;background:#fff;border:1px solid rgba(0,0,0,.06);box-shadow:0 16px 44px rgba(0,0,0,.07);display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);}
 .ev-card.no-media{grid-template-columns:1fr;}
 .ev-media{position:relative;background:#0a0a0a;}
@@ -115,6 +123,11 @@ button{font-family:var(--font);cursor:pointer}
       <h1 style="font-size:2rem;letter-spacing:2px;text-transform:uppercase;font-weight:400;margin:0;">Event Gallery</h1>
       <p style="font-size:.85rem;color:#666;max-width:520px;margin:12px auto 0;line-height:1.7;">Meetups, drops and collector days — moments from the 64CAST x FairPrice Diecast Community.</p>
     </div>
+    <section class="ev-team" aria-label="The 64CAST x FairPrice Diecast team">
+      <div class="bg" style="background-image:url(https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/events/team/IMG_20261122_204200.jpg.jpeg)"></div>
+      <div class="tone"></div>
+      <div class="cap"><div class="k">The Team</div><div class="t">64CAST x FairPrice Diecast Community</div></div>
+    </section>
     <div id="eventsList" style="display:flex;flex-direction:column;gap:48px;">
       <div class="ev-skel"></div>
     </div>
