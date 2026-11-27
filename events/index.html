@@ -45,6 +45,7 @@ button{font-family:var(--font);cursor:pointer}
 .ev-track{display:flex;height:100%;transition:transform .45s ease;}
 .ev-slide{flex:0 0 100%;height:100%;position:relative;}
 .ev-slide img,.ev-slide video{width:100%;height:100%;object-fit:cover;display:block;}
+.ev-slide video{object-fit:contain;background:#000;}
 .ev-slide iframe{width:100%;height:100%;border:0;}
 .ev-cap{position:absolute;left:0;right:0;bottom:0;padding:36px 20px 16px;font-size:.78rem;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.65));pointer-events:none;}
 .ev-nav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:999px;border:none;background:rgba(255,255,255,.88);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.25);z-index:2;}
@@ -213,7 +214,7 @@ document.getElementById('joinBtn').addEventListener('click', () => {
     const src = safeUrl(m.src); if (!src) return '';
     const cap = m.caption ? `<div class="ev-cap">${esc(m.caption)}</div>` : '';
     const type = (m.type || (/\.(mp4|webm|mov)(\?|$)/i.test(src) ? 'video' : /youtu/i.test(src) ? 'youtube' : 'image')).toLowerCase();
-    if (type === 'video') return `<div class="ev-slide"><video src="${esc(src)}" controls playsinline preload="metadata"></video>${cap}</div>`;
+    if (type === 'video') return `<div class="ev-slide"><video src="${esc(src)}#t=0.1" controls playsinline preload="metadata"></video>${cap}</div>`;
     if (type === 'youtube') { const id = ytId(src); return id ? `<div class="ev-slide"><iframe src="https://www.youtube-nocookie.com/embed/${id}" title="Event video" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>` : ''; }
     return `<div class="ev-slide"><img src="${esc(src)}" alt="${esc(m.caption||'Event photo')}" loading="lazy">${cap}</div>`;
   }
