@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Event Gallery — 64CAST</title>
+<meta name="description" content="Photos and videos from 64CAST diecast collector events in the UAE.">
+<meta property="og:title" content="Event Gallery — 64CAST">
+<meta property="og:url" content="https://64cast.com/events/">
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" href="https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/64_LOGO_Falcon.png" type="image/png">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--font:"Jost",sans-serif}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--font);font-weight:300;color:#0a0a0a;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+img{display:block;max-width:100%}
+a{color:#0a0a0a;text-decoration:none}
+a:hover{color:#f0701e}
+@media (max-width:760px){
+  nav{padding:0 16px!important;}
+  main{padding:40px 16px 70px!important;}
+  footer div[style*="grid-template-columns:1.3fr 1fr 1fr 1fr"]{grid-template-columns:1fr 1fr!important;gap:24px!important;padding:28px 24px!important;}
+}
+@media (max-width:480px){
+  footer div[style*="grid-template-columns:1.3fr 1fr 1fr 1fr"]{grid-template-columns:1fr!important;}
+}
+button{font-family:var(--font);cursor:pointer}
+::-webkit-scrollbar{display:none}
+.glossW{background:linear-gradient(180deg,#ffffff 0%,#f1f1f2 55%,#e3e4e6 100%);border:1px solid rgba(255,255,255,.9);box-shadow:0 6px 14px rgba(0,0,0,.14),inset 0 1px 1px rgba(255,255,255,.9),inset 0 -2px 3px rgba(0,0,0,.06);}
+.glossO{background:linear-gradient(180deg,#f9905a 0%,#ea6a1f 55%,#dd5912 100%);border:1px solid rgba(255,255,255,.5);box-shadow:0 6px 14px rgba(203,80,15,.35),inset 0 1px 1px rgba(255,255,255,.6),inset 0 -2px 3px rgba(0,0,0,.12);color:#fff;}
+.glasscard{background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.65);box-shadow:0 4px 18px rgba(0,0,0,.05),inset 0 1px 0 rgba(255,255,255,.85);backdrop-filter:none;-webkit-backdrop-filter:none;}
+.faq-item.open{box-shadow:0 16px 40px rgba(0,0,0,.12),inset 0 1px 0 rgba(255,255,255,.9);}
+.faq-item.open .faq-icon{background:#f0701e;}
+.faq-item.open .faq-icon svg{stroke:#fff;}
+.faq-item.open .faq-chevron{transform:rotate(180deg);stroke:#f0701e;}
+.drawer-overlay{position:fixed;inset:0;z-index:200;background:rgba(10,10,10,.28);backdrop-filter:none;display:none;}
+.drawer-overlay.open{display:block;}
+.navlink{padding:12px 8px;font-size:.9rem;text-transform:uppercase;letter-spacing:1px;text-decoration:none;color:#0a0a0a;display:block;}
+.ev-card{border-radius:26px;overflow:hidden;background:#fff;border:1px solid rgba(0,0,0,.06);box-shadow:0 16px 44px rgba(0,0,0,.07);}
+.ev-stage{position:relative;aspect-ratio:16/9;background:#0a0a0a;overflow:hidden;touch-action:pan-y;}
+.ev-track{display:flex;height:100%;transition:transform .45s ease;}
+.ev-slide{flex:0 0 100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative;}
+.ev-slide img,.ev-slide video{width:100%;height:100%;object-fit:contain;background:#0a0a0a;}
+.ev-slide iframe{width:100%;height:100%;border:0;}
+.ev-cap{position:absolute;left:0;right:0;bottom:0;padding:28px 20px 14px;font-size:.78rem;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.65));pointer-events:none;}
+.ev-nav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:999px;border:none;background:rgba(255,255,255,.85);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.25);z-index:2;}
+.ev-nav svg{width:16px;height:16px;stroke:#0a0a0a;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ev-prev{left:14px}.ev-next{right:14px}
+.ev-count{position:absolute;top:14px;right:14px;padding:4px 10px;border-radius:999px;background:rgba(0,0,0,.55);color:#fff;font-size:.62rem;letter-spacing:1px;z-index:2;}
+.ev-dots{display:flex;justify-content:center;gap:6px;padding:14px 0 0;}
+.ev-dots button{width:7px;height:7px;border-radius:999px;border:none;padding:0;background:#d6d6d6;}
+.ev-dots button.on{background:#f0701e;width:20px;}
+.ev-body{padding:20px 28px 28px;}
+.ev-meta{font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:6px;}
+.ev-title{font-size:1.25rem;letter-spacing:1px;text-transform:uppercase;font-weight:400;margin:0 0 10px;}
+.ev-desc{font-size:.88rem;line-height:1.75;color:#444;white-space:pre-line;margin:0;}
+.ev-skel{height:420px;border-radius:26px;background:linear-gradient(90deg,#f3f3f3,#fafafa,#f3f3f3);background-size:200% 100%;animation:evsk 1.2s infinite;}
+@keyframes evsk{to{background-position:-200% 0}}
+@media (max-width:760px){.ev-stage{aspect-ratio:4/5}.ev-body{padding:16px 18px 22px}.ev-nav{width:34px;height:34px}}
+</style>
+</head>
+<body>
+
+<div style="min-height:100vh;background:#fff;position:relative;">
+
+  <div id="stickyHeader" style="position:sticky;top:0;z-index:100;">
+    <div class="ann" style="text-align:center;padding:8px 16px;font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#fff;background:#0a0a0a;border-bottom:1px solid rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);">
+      <a href="https://chat.whatsapp.com/DFLnEWrKlQGKwrd01w2pOa" target="_blank" rel="noopener" style="color:inherit;">Join our <span style="text-decoration:underline;text-underline-offset:3px;font-weight:500;">WhatsApp Community</span> for the latest drops</a>
+    </div>
+
+    <nav style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:56px;padding:0 40px;background:#fff;border-bottom:1px solid rgba(0,0,0,.08);">
+      <button id="navToggle" aria-label="Open menu" style="justify-self:start;display:flex;align-items:center;gap:8px;background:none;border:none;padding:0;">
+        <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:#0a0a0a;fill:none;stroke-width:1.6;stroke-linecap:round"><line x1="3" x2="21" y1="6" y2="6"></line><line x1="3" x2="15" y1="12" y2="12"></line><line x1="3" x2="21" y1="18" y2="18"></line></svg>
+        <span style="font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:#0a0a0a;">Menu</span>
+      </button>
+      <a href="/" style="justify-self:center;line-height:0;">
+        <img src="https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/64CAST_LOGO_B.png" alt="64CAST" style="height:22px;width:auto;object-fit:contain;">
+      </a>
+      <button id="cartToggle" aria-label="Open cart" onclick="location.href='/current-stock'" style="justify-self:end;background:none;border:none;padding:0;font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:#0a0a0a;">
+        Cart
+      </button>
+    </nav>
+  </div>
+
+  <main style="max-width:1080px;margin:0 auto;padding:56px 24px 90px;position:relative;z-index:1;">
+    <div style="text-align:center;margin-bottom:40px;">
+      <div style="font-size:.62rem;letter-spacing:3px;text-transform:uppercase;color:#f0701e;margin-bottom:10px;">64CAST Community</div>
+      <h1 style="font-size:2rem;letter-spacing:2px;text-transform:uppercase;font-weight:400;margin:0;">Event Gallery</h1>
+      <p style="font-size:.85rem;color:#666;max-width:520px;margin:12px auto 0;line-height:1.7;">Meetups, drops and collector days — moments from the 64CAST community.</p>
+    </div>
+    <div id="eventsList" style="display:flex;flex-direction:column;gap:48px;">
+      <div class="ev-skel"></div>
+    </div>
+  </main>
+
+  <footer style="margin:20px 20px 20px;border-radius:34px;overflow:hidden;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.7);box-shadow:0 20px 60px rgba(0,0,0,.08),inset 0 1px 0 rgba(255,255,255,.9);backdrop-filter:none;-webkit-backdrop-filter:none;position:relative;z-index:1;">
+    <div style="padding:22px 48px;display:flex;justify-content:center;border-bottom:1px solid rgba(255,255,255,.5);">
+      <div style="display:flex;gap:26px;flex-wrap:wrap;justify-content:center;">
+        <span style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#0a0a0a;font-weight:700;opacity:.5;">Facebook</span>
+        <span style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#0a0a0a;font-weight:700;opacity:.5;">Instagram</span>
+        <a href="https://wa.me/971552112588" target="_blank" rel="noopener" style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#0a0a0a;font-weight:700;opacity:.5;">WhatsApp</a>
+        <span style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#0a0a0a;font-weight:700;opacity:.5;">TikTok</span>
+        <span style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#0a0a0a;font-weight:700;opacity:.5;">Snapchat</span>
+        <span style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#0a0a0a;font-weight:700;opacity:.5;">YouTube</span>
+      </div>
+    </div>
+    <div style="padding:40px 48px;display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:36px;">
+      <div>
+        <img src="https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/64CAST_LOGO_B.png" alt="64CAST" style="height:30px;width:auto;object-fit:contain;margin-bottom:18px;">
+        <div style="font-size:.55rem;letter-spacing:2.5px;text-transform:uppercase;color:#888;margin-bottom:10px;">Stay Updated</div>
+        <div style="display:flex;gap:8px;margin-bottom:10px;">
+          <input id="newsletterInput" placeholder="Your WhatsApp number" style="flex:1;height:42px;border-radius:999px;padding:0 18px;border:1px solid rgba(255,255,255,.7);background:rgba(255,255,255,.5);font-family:var(--font);font-size:.74rem;color:#0a0a0a;outline:none;">
+          <button id="joinBtn" class="glossO" style="height:42px;padding:0 22px;border-radius:999px;font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;">Join</button>
+        </div>
+        <div style="font-size:.72rem;color:#888;line-height:1.6;">Get new arrivals and limited model alerts.</div>
+      </div>
+      <div style="border-radius:22px;padding:22px;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.7);box-shadow:inset 0 1px 0 rgba(255,255,255,.9);align-self:start;">
+        <div style="font-size:.55rem;letter-spacing:2.5px;text-transform:uppercase;color:#888;margin-bottom:14px;">Contact</div>
+        <a href="https://wa.me/971552112588" class="glossO" style="display:inline-flex;align-items:center;height:42px;padding:0 20px;border-radius:999px;font-size:.6rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;margin-bottom:14px;">WhatsApp Us</a>
+        <div style="font-size:.76rem;color:#666;line-height:1.7;">Buy models directly via WhatsApp with product details pre-filled.</div>
+      </div>
+      <div>
+        <div style="font-size:.55rem;letter-spacing:2.5px;text-transform:uppercase;color:#888;margin-bottom:14px;">Explore</div>
+        <a href="/" style="display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.5px;color:#333;margin-bottom:12px;">Home</a>
+        <a href="/current-stock" style="display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.5px;color:#333;margin-bottom:12px;">Current Stocks</a>
+        <a href="/new-arrivals" style="display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.5px;color:#333;margin-bottom:12px;">New Arrivals</a>
+                <a href="/faq" style="display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.5px;color:#333;">FAQ</a>
+      </div>
+      <div>
+        <div style="font-size:.55rem;letter-spacing:2.5px;text-transform:uppercase;color:#888;margin-bottom:14px;">Collection</div>
+        <span style="display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.5px;color:#333;margin-bottom:12px;">No Upfront Payment</span>
+        <span style="display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.5px;color:#333;">WhatsApp Confirmation</span>
+      </div>
+    </div>
+    <div style="padding:18px 48px;text-align:center;border-top:1px solid rgba(255,255,255,.5);color:#999;font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;">© 2026 64CAST</div>
+  </footer>
+
+  <div id="navOverlay" class="drawer-overlay" style="z-index:200;">
+    <div style="position:absolute;top:0;left:0;bottom:0;width:290px;border-radius:0;overflow:hidden;background:rgba(255,255,255,.97);backdrop-filter:none;-webkit-backdrop-filter:none;border-right:1px solid rgba(255,255,255,.9);box-shadow:16px 0 70px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.9);padding:28px 26px;display:flex;flex-direction:column;gap:6px;">
+      <div style="position:absolute;top:0;left:0;right:0;height:45%;background:linear-gradient(180deg,rgba(255,255,255,.4),transparent);pointer-events:none;"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;position:relative;">
+        <div style="font-size:.62rem;letter-spacing:3px;text-transform:uppercase;color:#888;font-weight:600;">Menu</div>
+        <button id="navClose" class="glossW" style="width:30px;height:30px;border-radius:999px;display:flex;align-items:center;justify-content:center;">
+          <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:#0a0a0a;fill:none;stroke-width:1.6;stroke-linecap:round"><path d="M18 6 6 18M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      <a href="/" class="navlink">Home</a>
+      <a href="/new-arrivals" class="navlink">New Arrivals</a>
+      <a href="/current-stock" class="navlink">Current Stock</a>
+            <a href="/faq" class="navlink">FAQ</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+document.getElementById('navToggle').addEventListener('click', () => document.getElementById('navOverlay').classList.add('open'));
+document.getElementById('navClose').addEventListener('click', () => document.getElementById('navOverlay').classList.remove('open'));
+document.getElementById('navOverlay').addEventListener('click', e => { if (e.target.id === 'navOverlay') document.getElementById('navOverlay').classList.remove('open'); });
+
+
+document.getElementById('joinBtn').addEventListener('click', () => {
+  const num = document.getElementById('newsletterInput').value.trim();
+  if (!num) { alert('Please enter your WhatsApp number.'); return; }
+  fetch('https://64cast-products-api.trailsec5.workers.dev', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'join-community', phone: num }) })
+    .then(r => r.json()).then(() => { document.getElementById('newsletterInput').value=''; alert("Joined! You'll get alerts on WhatsApp."); })
+    .catch(() => window.open('https://wa.me/971552112588?text=' + encodeURIComponent('Hi! Please add ' + num + ' to the alerts list.'), '_blank'));
+});
+// ---- Event Gallery ----
+// Events are listed in /events/events.json (newest first by date). Each event:
+// { "title": "...", "date": "2026-11-20", "location": "...", "description": "...",
+//   "media": [ { "type": "image" | "video" | "youtube", "src": "https://...", "caption": "optional" } ] }
+(function(){
+  const list = document.getElementById('eventsList');
+  const esc = t => String(t == null ? '' : t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const safeUrl = u => /^https:\/\//i.test(String(u||'').trim()) ? String(u).trim() : '';
+  const fmtDate = d => { const x = new Date(d); return isNaN(x) ? esc(d) : x.toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' }); };
+  function ytId(u){ const m = String(u).match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([\w-]{11})/); return m ? m[1] : ''; }
+  function slideHtml(m){
+    const src = safeUrl(m.src); if (!src) return '';
+    const cap = m.caption ? `<div class="ev-cap">${esc(m.caption)}</div>` : '';
+    const type = (m.type || (/\.(mp4|webm|mov)(\?|$)/i.test(src) ? 'video' : /youtu/i.test(src) ? 'youtube' : 'image')).toLowerCase();
+    if (type === 'video') return `<div class="ev-slide"><video src="${esc(src)}" controls playsinline preload="metadata"></video>${cap}</div>`;
+    if (type === 'youtube') { const id = ytId(src); return id ? `<div class="ev-slide"><iframe src="https://www.youtube-nocookie.com/embed/${id}" title="Event video" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>` : ''; }
+    return `<div class="ev-slide"><img src="${esc(src)}" alt="${esc(m.caption||'Event photo')}" loading="lazy">${cap}</div>`;
+  }
+  function render(events){
+    events = (Array.isArray(events) ? events : []).filter(e => e && e.title);
+    events.sort((a,b) => (new Date(b.date)||0) - (new Date(a.date)||0));
+    if (!events.length) {
+      list.innerHTML = `<div style="text-align:center;padding:70px 24px;border-radius:26px;border:1px dashed rgba(0,0,0,.15);">
+        <div style="font-size:1rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">Events coming soon</div>
+        <div style="font-size:.85rem;color:#777;line-height:1.7;">Photos and videos from our next meetup will appear here.<br>Join our <a href="https://whatsapp.com/channel/0029VbCuMIU1dAw4M800JY0Y" target="_blank" rel="noopener" style="text-decoration:underline;">WhatsApp community</a> to hear about upcoming events.</div>
+      </div>`;
+      return;
+    }
+    list.innerHTML = events.map((e, i) => {
+      const slides = (e.media || []).map(slideHtml).filter(Boolean);
+      const multi = slides.length > 1;
+      const meta = [e.date ? fmtDate(e.date) : '', esc(e.location)].filter(Boolean).join(' · ');
+      return `<article class="ev-card" data-ev="${i}">
+        ${slides.length ? `<div class="ev-stage">
+          <div class="ev-track">${slides.join('')}</div>
+          ${multi ? `<button class="ev-nav ev-prev" aria-label="Previous"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <button class="ev-nav ev-next" aria-label="Next"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+          <div class="ev-count">1 / ${slides.length}</div>` : ''}
+        </div>${multi ? `<div class="ev-dots">${slides.map((_, k) => `<button aria-label="Go to slide ${k+1}" class="${k?'':'on'}"></button>`).join('')}</div>` : ''}` : ''}
+        <div class="ev-body">
+          ${meta ? `<div class="ev-meta">${meta}</div>` : ''}
+          <h2 class="ev-title">${esc(e.title)}</h2>
+          ${e.description ? `<p class="ev-desc">${esc(e.description)}</p>` : ''}
+        </div>
+      </article>`;
+    }).join('');
+    list.querySelectorAll('.ev-card').forEach(card => {
+      const track = card.querySelector('.ev-track'); if (!track) return;
+      const n = track.children.length; let cur = 0;
+      const dots = card.querySelectorAll('.ev-dots button'); const count = card.querySelector('.ev-count');
+      const go = k => {
+        cur = (k + n) % n;
+        track.style.transform = `translateX(-${cur*100}%)`;
+        dots.forEach((d, j) => d.classList.toggle('on', j === cur));
+        if (count) count.textContent = (cur+1) + ' / ' + n;
+        track.querySelectorAll('video').forEach(v => v.pause());
+      };
+      card.querySelector('.ev-prev')?.addEventListener('click', () => go(cur-1));
+      card.querySelector('.ev-next')?.addEventListener('click', () => go(cur+1));
+      dots.forEach((d, j) => d.addEventListener('click', () => go(j)));
+      let x0 = null;
+      track.addEventListener('touchstart', ev => { x0 = ev.touches[0].clientX; }, { passive:true });
+      track.addEventListener('touchend', ev => { if (x0 === null) return; const dx = ev.changedTouches[0].clientX - x0; if (Math.abs(dx) > 40) go(cur + (dx < 0 ? 1 : -1)); x0 = null; });
+    });
+  }
+  fetch('/events/events.json', { cache:'no-store' }).then(r => r.ok ? r.json() : []).then(render).catch(() => render([]));
+})();
+</script>
+<a id="waFloat" href="https://wa.me/971552112588" target="_blank" rel="noopener" aria-label="Chat with 64CAST on WhatsApp" title="Chat on WhatsApp" style="position:fixed;right:24px;bottom:24px;width:54px;height:54px;border-radius:999px;background:#25D366;display:flex;align-items:center;justify-content:center;z-index:150;box-shadow:0 8px 24px rgba(0,0,0,.22);transition:transform .2s ease;" onmouseenter="this.style.transform='scale(1.08)'" onmouseleave="this.style.transform='none'">
+  <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><path fill="#fff" d="M16.04 3C8.9 3 3.1 8.8 3.1 15.93c0 2.28.6 4.5 1.73 6.46L3 29l6.78-1.78a12.9 12.9 0 0 0 6.26 1.6h.01c7.13 0 12.94-5.8 12.94-12.93 0-3.46-1.35-6.7-3.79-9.15A12.85 12.85 0 0 0 16.04 3zm0 23.64h-.01a10.7 10.7 0 0 1-5.46-1.5l-.39-.23-4.02 1.06 1.07-3.92-.25-.4a10.67 10.67 0 0 1-1.64-5.71c0-5.92 4.82-10.73 10.75-10.73 2.87 0 5.57 1.12 7.6 3.15a10.66 10.66 0 0 1 3.14 7.59c0 5.92-4.82 10.73-10.79 10.73zm5.9-8.04c-.32-.16-1.91-.94-2.2-1.05-.3-.11-.51-.16-.73.16-.21.32-.83 1.05-1.02 1.26-.19.22-.38.24-.7.08-.32-.16-1.36-.5-2.59-1.6-.96-.85-1.6-1.9-1.79-2.22-.19-.32-.02-.5.14-.66.15-.14.32-.38.48-.56.16-.19.21-.32.32-.54.11-.21.05-.4-.03-.56-.08-.16-.73-1.75-1-2.4-.26-.63-.53-.54-.73-.55h-.62c-.21 0-.56.08-.86.4-.3.32-1.13 1.1-1.13 2.69s1.16 3.12 1.32 3.33c.16.22 2.28 3.48 5.52 4.88.77.33 1.37.53 1.84.68.77.25 1.48.21 2.03.13.62-.09 1.91-.78 2.18-1.53.27-.76.27-1.4.19-1.53-.08-.14-.3-.22-.62-.38z"/></svg>
+</a>
+</body>
+</html>
