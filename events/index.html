@@ -38,27 +38,41 @@ button{font-family:var(--font);cursor:pointer}
 .drawer-overlay{position:fixed;inset:0;z-index:200;background:rgba(10,10,10,.28);backdrop-filter:none;display:none;}
 .drawer-overlay.open{display:block;}
 .navlink{padding:12px 8px;font-size:.9rem;text-transform:uppercase;letter-spacing:1px;text-decoration:none;color:#0a0a0a;display:block;}
-.ev-card{border-radius:26px;overflow:hidden;background:#fff;border:1px solid rgba(0,0,0,.06);box-shadow:0 16px 44px rgba(0,0,0,.07);}
-.ev-stage{position:relative;aspect-ratio:16/9;background:#0a0a0a;overflow:hidden;touch-action:pan-y;}
+.ev-card{border-radius:26px;overflow:hidden;background:#fff;border:1px solid rgba(0,0,0,.06);box-shadow:0 16px 44px rgba(0,0,0,.07);display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);}
+.ev-card.no-media{grid-template-columns:1fr;}
+.ev-media{position:relative;background:#0a0a0a;}
+.ev-stage{position:relative;aspect-ratio:3/4;max-height:720px;width:100%;overflow:hidden;touch-action:pan-y;background:#0a0a0a;}
 .ev-track{display:flex;height:100%;transition:transform .45s ease;}
-.ev-slide{flex:0 0 100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative;}
-.ev-slide img,.ev-slide video{width:100%;height:100%;object-fit:contain;background:#0a0a0a;}
+.ev-slide{flex:0 0 100%;height:100%;position:relative;}
+.ev-slide img,.ev-slide video{width:100%;height:100%;object-fit:cover;display:block;}
 .ev-slide iframe{width:100%;height:100%;border:0;}
-.ev-cap{position:absolute;left:0;right:0;bottom:0;padding:28px 20px 14px;font-size:.78rem;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.65));pointer-events:none;}
-.ev-nav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:999px;border:none;background:rgba(255,255,255,.85);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.25);z-index:2;}
+.ev-cap{position:absolute;left:0;right:0;bottom:0;padding:36px 20px 16px;font-size:.78rem;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.65));pointer-events:none;}
+.ev-nav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:999px;border:none;background:rgba(255,255,255,.88);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.25);z-index:2;}
 .ev-nav svg{width:16px;height:16px;stroke:#0a0a0a;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .ev-prev{left:14px}.ev-next{right:14px}
 .ev-count{position:absolute;top:14px;right:14px;padding:4px 10px;border-radius:999px;background:rgba(0,0,0,.55);color:#fff;font-size:.62rem;letter-spacing:1px;z-index:2;}
-.ev-dots{display:flex;justify-content:center;gap:6px;padding:14px 0 0;}
-.ev-dots button{width:7px;height:7px;border-radius:999px;border:none;padding:0;background:#d6d6d6;}
-.ev-dots button.on{background:#f0701e;width:20px;}
-.ev-body{padding:20px 28px 28px;}
-.ev-meta{font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:6px;}
-.ev-title{font-size:1.25rem;letter-spacing:1px;text-transform:uppercase;font-weight:400;margin:0 0 10px;}
-.ev-desc{font-size:.88rem;line-height:1.75;color:#444;white-space:pre-line;margin:0;}
-.ev-skel{height:420px;border-radius:26px;background:linear-gradient(90deg,#f3f3f3,#fafafa,#f3f3f3);background-size:200% 100%;animation:evsk 1.2s infinite;}
+.ev-body{padding:36px 36px 30px;display:flex;flex-direction:column;min-width:0;}
+.ev-tag{align-self:flex-start;padding:4px 12px;border-radius:999px;background:#fbead9;color:#c1601a;font-size:.58rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:500;margin-bottom:14px;}
+.ev-meta{font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:8px;}
+.ev-title{font-size:1.5rem;letter-spacing:1px;text-transform:uppercase;font-weight:400;margin:0 0 14px;line-height:1.25;}
+.ev-desc{font-size:.9rem;line-height:1.8;color:#444;white-space:pre-line;margin:0 0 22px;}
+.ev-thumbs{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:auto;}
+.ev-thumbs button{padding:0;border:2px solid transparent;border-radius:10px;overflow:hidden;aspect-ratio:3/4;background:#eee;opacity:.6;transition:opacity .2s,border-color .2s;}
+.ev-thumbs button img{width:100%;height:100%;object-fit:cover;}
+.ev-thumbs button.on{opacity:1;border-color:#f0701e;}
+.ev-thumbs button:hover{opacity:1;}
+.ev-thumbs .vid{display:flex;align-items:center;justify-content:center;background:#0a0a0a;color:#fff;font-size:.55rem;letter-spacing:1px;}
+.ev-skel{height:520px;border-radius:26px;background:linear-gradient(90deg,#f3f3f3,#fafafa,#f3f3f3);background-size:200% 100%;animation:evsk 1.2s infinite;}
 @keyframes evsk{to{background-position:-200% 0}}
-@media (max-width:760px){.ev-stage{aspect-ratio:4/5}.ev-body{padding:16px 18px 22px}.ev-nav{width:34px;height:34px}}
+@media (max-width:860px){
+  .ev-card{grid-template-columns:1fr;}
+  .ev-stage{max-height:none;}
+  .ev-body{padding:20px 18px 22px;}
+  .ev-title{font-size:1.2rem;}
+  .ev-thumbs{display:flex;overflow-x:auto;gap:6px;margin:0 -18px;padding:0 18px;scroll-snap-type:x mandatory;}
+  .ev-thumbs button{flex:0 0 64px;scroll-snap-align:start;}
+  .ev-nav{width:34px;height:34px}
+}
 </style>
 </head>
 <body>
@@ -149,6 +163,7 @@ button{font-family:var(--font);cursor:pointer}
       <a href="/" class="navlink">Home</a>
       <a href="/new-arrivals" class="navlink">New Arrivals</a>
       <a href="/current-stock" class="navlink">Current Stock</a>
+      <a href="/events" class="navlink">Events</a>
             <a href="/faq" class="navlink">FAQ</a>
     </div>
   </div>
@@ -171,7 +186,7 @@ document.getElementById('joinBtn').addEventListener('click', () => {
 // ---- Event Gallery ----
 // Events are listed in /events/events.json (newest first by date). Each event:
 // { "title": "...", "date": "2026-11-20", "location": "...", "description": "...",
-//   "media": [ { "type": "image" | "video" | "youtube", "src": "https://...", "caption": "optional" } ] }
+//   "tag": "optional label", "dateLabel": "optional, e.g. 21–22 November 2026", "media": [ { "type": "image" | "video" | "youtube", "src": "https://...", "thumb": "optional small image", "caption": "optional" } ] }
 (function(){
   const list = document.getElementById('eventsList');
   const esc = t => String(t == null ? '' : t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -197,37 +212,46 @@ document.getElementById('joinBtn').addEventListener('click', () => {
       return;
     }
     list.innerHTML = events.map((e, i) => {
-      const slides = (e.media || []).map(slideHtml).filter(Boolean);
+      const media = (e.media || []).filter(m => safeUrl(m.src));
+      const slides = media.map(slideHtml).filter(Boolean);
       const multi = slides.length > 1;
-      const meta = [e.date ? fmtDate(e.date) : '', esc(e.location)].filter(Boolean).join(' · ');
-      return `<article class="ev-card" data-ev="${i}">
-        ${slides.length ? `<div class="ev-stage">
+      const meta = [e.dateLabel ? esc(e.dateLabel) : e.date ? fmtDate(e.date) : '', esc(e.location)].filter(Boolean).join(' \u00b7 ');
+      const thumbs = multi ? `<div class="ev-thumbs">${media.map((m, k) => {
+        const t = (m.type || '').toLowerCase();
+        return (t === 'video' || t === 'youtube') ? `<button class="vid ${k?'':'on'}" aria-label="Go to video ${k+1}">VIDEO</button>`
+          : `<button class="${k?'':'on'}" aria-label="Go to photo ${k+1}"><img src="${esc(safeUrl(m.thumb || m.src))}" alt="" loading="lazy"></button>`;
+      }).join('')}</div>` : '';
+      return `<article class="ev-card ${slides.length ? '' : 'no-media'}" data-ev="${i}">
+        ${slides.length ? `<div class="ev-media"><div class="ev-stage">
           <div class="ev-track">${slides.join('')}</div>
           ${multi ? `<button class="ev-nav ev-prev" aria-label="Previous"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
           <button class="ev-nav ev-next" aria-label="Next"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
           <div class="ev-count">1 / ${slides.length}</div>` : ''}
-        </div>${multi ? `<div class="ev-dots">${slides.map((_, k) => `<button aria-label="Go to slide ${k+1}" class="${k?'':'on'}"></button>`).join('')}</div>` : ''}` : ''}
+        </div></div>` : ''}
         <div class="ev-body">
+          ${e.tag ? `<div class="ev-tag">${esc(e.tag)}</div>` : ''}
           ${meta ? `<div class="ev-meta">${meta}</div>` : ''}
           <h2 class="ev-title">${esc(e.title)}</h2>
           ${e.description ? `<p class="ev-desc">${esc(e.description)}</p>` : ''}
+          ${thumbs}
         </div>
       </article>`;
     }).join('');
     list.querySelectorAll('.ev-card').forEach(card => {
       const track = card.querySelector('.ev-track'); if (!track) return;
       const n = track.children.length; let cur = 0;
-      const dots = card.querySelectorAll('.ev-dots button'); const count = card.querySelector('.ev-count');
+      const thumbs = card.querySelectorAll('.ev-thumbs button'); const count = card.querySelector('.ev-count');
       const go = k => {
         cur = (k + n) % n;
         track.style.transform = `translateX(-${cur*100}%)`;
-        dots.forEach((d, j) => d.classList.toggle('on', j === cur));
+        thumbs.forEach((d, j) => d.classList.toggle('on', j === cur));
+        if (thumbs[cur] && thumbs[cur].scrollIntoView && window.matchMedia('(max-width:860px)').matches) thumbs[cur].scrollIntoView({ block:'nearest', inline:'center', behavior:'smooth' });
         if (count) count.textContent = (cur+1) + ' / ' + n;
         track.querySelectorAll('video').forEach(v => v.pause());
       };
       card.querySelector('.ev-prev')?.addEventListener('click', () => go(cur-1));
       card.querySelector('.ev-next')?.addEventListener('click', () => go(cur+1));
-      dots.forEach((d, j) => d.addEventListener('click', () => go(j)));
+      thumbs.forEach((d, j) => d.addEventListener('click', () => go(j)));
       let x0 = null;
       track.addEventListener('touchstart', ev => { x0 = ev.touches[0].clientX; }, { passive:true });
       track.addEventListener('touchend', ev => { if (x0 === null) return; const dx = ev.changedTouches[0].clientX - x0; if (Math.abs(dx) > 40) go(cur + (dx < 0 ? 1 : -1)); x0 = null; });
