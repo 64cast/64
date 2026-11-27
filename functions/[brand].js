@@ -1,4 +1,5 @@
 const BRANDS = [
+  { slug: "hotwheels", name: "Hot Wheels", logo: "" },
   { slug: "minigt", name: "Mini GT", logo: "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/minigt.jpg" },
   { slug: "tarmacworks", name: "Tarmac Works", logo: "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/tarmacworks.jpg" },
   { slug: "inno64", name: "Inno64", logo: "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/PI/inno64.jpg" },
