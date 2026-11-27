@@ -436,10 +436,10 @@ fetch(API_URL, { method: 'GET', cache: 'no-store' })
   .then(rows => {
     const products = (Array.isArray(rows) ? rows : []).map(toCard);
     allProductsFull = products;
-    allProducts = products.filter(p => p.status === 'currentstock').sort(bySortOrder).slice(0, 6);
-    preOrderProducts = products.filter(p => p.status === 'preorder').sort(bySortOrder).slice(0, 6);
+    allProducts = products.filter(p => p.status === 'currentstock').sort(bySortOrder).slice(0, 12);
+    preOrderProducts = products.filter(p => p.status === 'preorder').sort(bySortOrder).slice(0, 12);
     // New Arrivals: most recently added first (new products get position 1 in admin), any brand/status except sold
-    newArrivalProducts = products.filter(p => p.status !== 'sold').sort(bySortOrder).slice(0, 50); // same 50 as /new-arrivals
+    newArrivalProducts = products.filter(p => p.status !== 'sold').sort(bySortOrder).slice(0, 12);
     renderNewArrivals();
     renderStock();
     renderPreorder();
