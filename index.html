@@ -763,7 +763,9 @@ renderCart();
     if (!evs.length) return;
     evs.sort(function(a,b){ return new Date(b.date) - new Date(a.date); });
     var e = evs[0];
-    var img = (e.media || []).filter(function(m){ return (m.type || 'image') === 'image' && /^https:\/\//.test(m.src || ''); })[0];
+    var heroEl = document.querySelector('.hmHero'); var heroImg = heroEl ? heroEl.style.backgroundImage : '';
+    var imgs = (e.media || []).filter(function(m){ return (m.type || 'image') === 'image' && /^https:\/\//.test(m.src || ''); });
+    var img = e.cover ? { src: e.cover } : (imgs.filter(function(m){ return heroImg.indexOf(m.src) < 0; })[0] || imgs[0]); // avoid repeating the hero photo
     var esc = function(t){ return String(t == null ? '' : t).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); };
     var meta = [e.dateLabel || e.date, e.location].filter(Boolean).join(' · ');
     var el = document.createElement('div'); el.className = 'hmEv';
