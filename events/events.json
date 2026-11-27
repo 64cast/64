@@ -50,6 +50,28 @@
         "type": "image",
         "src": "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/events/sandbox-swapmeet-flag-day/SaveClip.App_914395104_18054143558820115_2136793264228453908_n.jpg"
       }
+    ],
+    "partners": [
+      {
+        "name": "Fair Price Diecast",
+        "logo": "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/events/sandbox-swapmeet-flag-day/partners/1795753487030_image.png"
+      },
+      {
+        "name": "Sandbox Swapmeet",
+        "logo": "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/events/sandbox-swapmeet-flag-day/partners/1795753639948_image.png"
+      },
+      {
+        "name": "Sin Auction",
+        "logo": "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/events/sandbox-swapmeet-flag-day/partners/1795753651314_image.png"
+      },
+      {
+        "name": "B1 Mall",
+        "logo": "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/events/sandbox-swapmeet-flag-day/partners/1795753670948_image.png"
+      },
+      {
+        "name": "Fandom",
+        "logo": "https://pub-93350f16ecf844b7824fa0a683487d84.r2.dev/events/sandbox-swapmeet-flag-day/partners/1795753751261_image.png"
+      }
     ]
   }
 ]
