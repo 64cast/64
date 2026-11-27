@@ -907,8 +907,6 @@ renderCart();
 #stockGrid .cardTitle{text-transform:uppercase;font-size:.8rem!important;letter-spacing:.6px;font-weight:500!important;margin:4px 0 6px!important;}
 #stockGrid .product-card > div:nth-child(2) > div:last-child > div:first-child{font-size:.78rem!important;font-weight:400!important;}
 #stockGrid .addbtn{border:none!important;background:transparent!important;box-shadow:none!important;}
-.by-bar{position:absolute;left:0;right:0;bottom:0;height:2px;pointer-events:none;}
-.by-bar span{display:block;height:2px;background:#0a0a0a;}
 #byHero{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:40px;margin:8px 24px 20px;}
 #byHero h1{font-size:2.6rem;letter-spacing:4px;text-transform:uppercase;font-weight:400;margin:0 0 14px;line-height:1.1;}
 #byHero h1 sup{font-size:.9rem;letter-spacing:0;margin-left:6px;vertical-align:super;}
@@ -925,15 +923,6 @@ renderCart();
 <script>
 (function(){
   var grid = document.getElementById('stockGrid'); if (!grid) return;
-  function tweak(){
-    grid.querySelectorAll('.product-card').forEach(function(c){
-      if (c.dataset.by) return; c.dataset.by = '1';
-      var box = c.children[0]; if (!box) return;
-      var n = 1; try { var im = box.querySelector('img'); n = JSON.parse((im && im.dataset.imgs) || '[1]').length || 1; } catch(e) {}
-      var bar = document.createElement('div'); bar.className = 'by-bar'; bar.innerHTML = '<span style="width:' + (100/n) + '%"></span>'; box.appendChild(bar);
-    });
-  }
-  tweak(); new MutationObserver(tweak).observe(grid, { childList:true });
   if (window.__BRAND_ROUTE__) return; // brand pages keep their brand-logo header
   var anchor = document.getElementById('activeFiltersRow'); if (!anchor) return;
   var INTRO = {
